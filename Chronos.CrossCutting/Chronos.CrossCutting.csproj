@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Chronos.Domain\Chronos.Domain.csproj" />
+    <ProjectReference Include="..\Chronos.Services\Chronos.Services.csproj" />
+    <ProjectReference Include="..\Chronos.Data\Chronos.Data.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>
