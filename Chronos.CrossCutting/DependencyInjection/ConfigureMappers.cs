@@ -10,6 +10,7 @@ namespace Chronos.CrossCutting.DependencyInjection
             var configuration = new AutoMapper.MapperConfiguration(conf =>
             {
                 conf.AddProfile(new Usuario_ProjetoToContractMap());
+                conf.AddProfile(new UsuarioToContractMap());
             });
             var mapConfiguration = configuration.CreateMapper();
             serviceCollection.AddSingleton(mapConfiguration);
