@@ -1,8 +1,7 @@
 namespace Chronos.Domain.Entities;
 
-public class Tarefa
+public class Tarefa : BaseEntity
 {
-    public int TarefaId { get; set; }
     public int Usuario_ProjetoId { get; set; }
     public DateTime DataInicial { get; set; } = DateTime.Now;
     public DateTime? DataFinal { get; set; } = null;

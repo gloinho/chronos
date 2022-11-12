@@ -1,6 +1,4 @@
-﻿
-
-namespace Chronos.Domain.Contracts.Response
+﻿namespace Chronos.Domain.Contracts.Response
 {
     public class UsuarioResponse
     {
