@@ -1,3 +1,4 @@
+using Chronos.Domain.Settings;
 using Chronos.IoC;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 NativeInjectorBootStrapper.RegisterAppDependenciesContext(builder.Services, connectionString);
+
+var appSetting = builder.Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
+builder.Services.AddSingleton(appSetting);
+
+var mailSetting = builder.Configuration.GetSection(nameof(EmailSettings)).Get<EmailSettings>();
+builder.Services.AddSingleton(mailSetting);
 
 var app = builder.Build();
 
