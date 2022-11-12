@@ -1,8 +1,7 @@
 namespace Chronos.Domain.Entities;
 
-public class Projeto
+public class Projeto : BaseEntity
 {
-    public int ProjetoId { get; set; }
     public string Nome { get; set; }
     public DateTime DataInicio { get; set; }
     public DateTime DataFim { get; set; }

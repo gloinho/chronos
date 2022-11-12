@@ -1,10 +1,12 @@
+using Chronos.Domain.Contracts.Request;
 using Chronos.Domain.Interfaces.Repository;
+using Chronos.Domain.Interfaces.Services;
 using Chronos.Domain.Settings;
 using Chronos.Domain.Shared;
 
 namespace Chronos.Services
 {
-    public class AutenticacaoService
+    public class AutenticacaoService : IAutenticacaoService
     {
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly AppSettings _appSettings;
@@ -15,14 +17,14 @@ namespace Chronos.Services
             _appSettings = appSettings;
         }
 
-        public async Task<string> Login(string email, string senha)
+        public async Task<string> Login(LoginRequest request)
         {
-            var usuario = await _usuarioRepository.GetPorEmail(email);
+            var usuario = await _usuarioRepository.GetPorEmail(request.Email);
             if (usuario == null)
             {
                 throw new Exception("Usuário não cadastrado, ou email incorreto.");
             }
-            if (!BCrypt.Net.BCrypt.Verify(senha, usuario.Senha))
+            if (!BCrypt.Net.BCrypt.Verify(request.Senha, usuario.Senha))
             {
                 throw new Exception("Senha incorreta.");
             }
@@ -36,12 +38,12 @@ namespace Chronos.Services
 
         public async Task Confirmar(string token)
         {
-            var usuario = _usuarioRepository.GetPorToken(token);
+            var usuario = await _usuarioRepository.GetPorToken(token);
             if (usuario == null)
             {
                 throw new Exception("Algum erro ocorreu.");
             }
-            await _usuarioRepository.Confirmar(token);
+            await _usuarioRepository.Confirmar(usuario);
         }
     }
 }

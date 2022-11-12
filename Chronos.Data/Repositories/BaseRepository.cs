@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 using Chronos.Data.Context;
 using Chronos.Domain.Interfaces.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -11,18 +6,17 @@ namespace Chronos.Data.Repositories
 {
     public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
     {
-        private readonly ApplicationDbContext _context;
+        internal readonly ApplicationDbContext _context;
 
         public BaseRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<T> Cadastrar(T entidade)
+        public async Task Cadastrar(T entidade)
         {
             await _context.Set<T>().AddAsync(entidade);
             await _context.SaveChangesAsync();
-            return entidade;
         }
 
         public async Task<T> Editar(T entidade)
@@ -37,7 +31,6 @@ namespace Chronos.Data.Repositories
             _context.Set<T>().Remove(entidade);
             await _context.SaveChangesAsync();
             return entidade;
-
         }
 
         public async Task<T> GetPorId(int id)
@@ -47,7 +40,7 @@ namespace Chronos.Data.Repositories
 
         public async Task<ICollection<T>> Listar()
         {
-            return await _context.Set<T>().ToListAsync();
+            return await _context.Set<T>().AsNoTracking().ToListAsync();
         }
     }
 }

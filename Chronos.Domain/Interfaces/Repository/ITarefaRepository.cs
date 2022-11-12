@@ -2,11 +2,11 @@ using Chronos.Domain.Entities;
 
 namespace Chronos.Domain.Interfaces.Repository
 {
-    public interface ITarefaRepository : IBaseRepository<Tarefa> 
+    public interface ITarefaRepository : IBaseRepository<Tarefa>
     {
-        Task<Tarefa> GetTarefasMes(int usuarioId);
-        Task<Tarefa> GetTarefasDia(int usuarioId);
-        Task<Tarefa> GetTarefasSemana(int usuarioId);
-        Task<Tarefa> GetTarefasProjeto(int projetoId);
-     }
+        Task<List<Usuario_Projeto>> GetTarefasMes(int usuarioId);
+        Task<List<Usuario_Projeto>> GetTarefasDia(int usuarioId);
+        Task<List<Usuario_Projeto>> GetTarefasSemana(int usuarioId);
+        Task<List<Usuario_Projeto>> GetTarefasProjeto(int projetoId);
+    }
 }

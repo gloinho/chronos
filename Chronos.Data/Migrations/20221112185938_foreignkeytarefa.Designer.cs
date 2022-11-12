@@ -4,6 +4,7 @@ using Chronos.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chronos.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221112185938_foreignkeytarefa")]
+    partial class foreignkeytarefa
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,7 +32,7 @@ namespace Chronos.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime?>("DataAlteracao")
+                    b.Property<DateTime>("DataAlteracao")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DataFim")
@@ -59,7 +61,7 @@ namespace Chronos.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime?>("DataAlteracao")
+                    b.Property<DateTime>("DataAlteracao")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DataFinal")
@@ -98,7 +100,7 @@ namespace Chronos.Data.Migrations
                     b.Property<bool>("Confirmado")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("DataAlteracao")
+                    b.Property<DateTime>("DataAlteracao")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DataInclusao")
@@ -106,7 +108,7 @@ namespace Chronos.Data.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -128,9 +130,6 @@ namespace Chronos.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
-
                     b.ToTable("Usuarios");
                 });
 
@@ -142,7 +141,7 @@ namespace Chronos.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime?>("DataAlteracao")
+                    b.Property<DateTime>("DataAlteracao")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DataInclusao")
