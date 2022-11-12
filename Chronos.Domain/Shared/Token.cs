@@ -18,10 +18,29 @@ namespace Chronos.Domain.Shared
                     new Claim[]
                     {
                         new Claim(ClaimTypes.Email, usuario.Email),
+                        new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
                         new Claim(ClaimTypes.Role, usuario.Permissao.ToString()),
                     }
                 ),
                 Expires = DateTime.Now.AddDays(1),
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature
+                )
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+
+        public static string GenerateTokenRequest(Usuario usuario, string securityKey)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(securityKey);
+            var tokenDescriptor = new SecurityTokenDescriptor()
+            {
+                Subject = new ClaimsIdentity(
+                    new Claim[] { new Claim(ClaimTypes.Email, usuario.Email), }
+                ),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(key),
                     SecurityAlgorithms.HmacSha256Signature

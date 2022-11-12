@@ -13,11 +13,10 @@ namespace Chronos.Data.Repositories
             _context = context;
         }
 
-        public async Task<T> Cadastrar(T entidade)
+        public async Task Cadastrar(T entidade)
         {
             await _context.Set<T>().AddAsync(entidade);
             await _context.SaveChangesAsync();
-            return entidade;
         }
 
         public async Task<T> Editar(T entidade)
