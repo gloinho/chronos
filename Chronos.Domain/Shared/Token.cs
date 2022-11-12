@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Chronos.Domain.Contracts.Request;
 using Chronos.Domain.Entities;
 using Microsoft.IdentityModel.Tokens;
 

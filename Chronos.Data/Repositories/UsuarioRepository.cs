@@ -10,10 +10,10 @@ namespace Chronos.Data.Repositories
         public UsuarioRepository(ApplicationDbContext manutencaoContext) : base(manutencaoContext)
         { }
 
-        public async Task Confirmar(string token)
+        public async Task Confirmar(Usuario usuario)
         {
-            var usuario = await GetPorToken(token);
             usuario.Confirmado = true;
+            await Editar(usuario);
         }
 
         public async Task<Usuario> GetPorEmail(string email)

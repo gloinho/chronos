@@ -10,6 +10,7 @@ namespace Chronos.CrossCutting.DependencyInjection
         {
             serviceCollection.AddScoped<IEmailService, EmailService>();
             serviceCollection.AddScoped<IUsuarioService, UsuarioService>();
+            serviceCollection.AddScoped<IAutenticacaoService, AutenticacaoService>();
         }
     }
 }

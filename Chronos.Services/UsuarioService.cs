@@ -35,11 +35,30 @@ namespace Chronos.Services
         public async Task<Response> CadastrarUsuario(UsuarioRequest request)
         {
             validator.ValidateAndThrow(request);
+            await CheckSeJaEstaCadastrado(request.Email);
             var user = _mapper.Map<Usuario>(request);
             var token = Token.GenerateTokenRequest(user, _appSettings.SecurityKey);
             user.ConfirmacaoToken = token;
+            user.Senha = BCrypt.Net.BCrypt.HashPassword(
+                user.Senha,
+                BCrypt.Net.BCrypt.GenerateSalt()
+            );
             await _usuarioRepository.Cadastrar(user);
+            await _emailService.Send(
+                request.Email,
+                "Confirmação de Email Chronos",
+                $"Conclua a configuração da sua nova Conta Chronos com o token: {token}"
+            );
             return new Response { Mensagem = "Enviamos um e-mail para confirmar sua conta." };
+        }
+
+        private async Task CheckSeJaEstaCadastrado(string email)
+        {
+            var user = await _usuarioRepository.GetPorEmail(email);
+            if (user != null)
+            {
+                throw new Exception("Usuário com esse e-mail já está cadastrado.");
+            }
         }
     }
 }
