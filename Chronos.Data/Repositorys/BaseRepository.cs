@@ -7,13 +7,13 @@ using Chronos.Data.Context;
 using Chronos.Domain.Interfaces.Repository;
 using Microsoft.EntityFrameworkCore;
 
-namespace Chronos.Data
+namespace Chronos.Data.Repositories
 {
     public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
     {
-        private readonly ApplicationDbContext _context;   
-    
-    public BaseRepository(ApplicationDbContext context)
+        private readonly ApplicationDbContext _context;
+
+        public BaseRepository(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -34,7 +34,7 @@ namespace Chronos.Data
 
         public async Task<T> Excluir(T entidade)
         {
-           _context.Set<T>().Remove(entidade);
+            _context.Set<T>().Remove(entidade);
             await _context.SaveChangesAsync();
             return entidade;
 
