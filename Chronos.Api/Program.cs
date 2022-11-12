@@ -1,23 +1,18 @@
-using Chronos.Domain.Settings;
+using Chronos.IoC;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+var connectionString = builder.Configuration.GetConnectionString("ChronosDb");
 
 builder.Services.AddControllers();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-#region AppSettings
-var appSettings = builder.Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
-builder.Services.AddSingleton(appSettings);
-#endregion
+NativeInjectorBootStrapper.RegisterAppDependenciesContext(builder.Services, connectionString);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
