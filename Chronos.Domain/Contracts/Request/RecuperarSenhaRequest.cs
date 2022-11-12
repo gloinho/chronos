@@ -1,13 +1,11 @@
-﻿
-
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Chronos.Domain.Contracts.Request
 {
     public class RecuperarSenhaRequest
     {
         [Required]
-        public string email { get; set;}
+        public string Email { get; set;}
 
         [Required]
         public string Senha {get; set;}
