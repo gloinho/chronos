@@ -13,6 +13,9 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 
+#region HttpContext
+builder.Services.AddHttpContextAccessor();
+#endregion
 #region Swagger
 builder.Services.AddSwaggerGen(c =>
 {
