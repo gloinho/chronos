@@ -8,8 +8,13 @@ namespace Chronos.IoC
         public static void RegisterAppDependencies(this IServiceCollection services)
         {
             ConfigureServices.ConfigureDependenciesService(services);
+            ConfigureMappers.ConfigureDependenciesMappers(services);
         }
-        public static void RegisterAppDependenciesContext(this IServiceCollection services, string connectionString)
+
+        public static void RegisterAppDependenciesContext(
+            this IServiceCollection services,
+            string connectionString
+        )
         {
             ConfigureRepository.ConfigureDependenciesRepository(services, connectionString);
         }

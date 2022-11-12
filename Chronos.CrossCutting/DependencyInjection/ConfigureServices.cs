@@ -8,8 +8,8 @@ namespace Chronos.CrossCutting.DependencyInjection
     {
         public static void ConfigureDependenciesService(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddScoped<IEmailService, EmailService>();            
+            serviceCollection.AddScoped<IEmailService, EmailService>();
+            serviceCollection.AddScoped<IUsuarioService, UsuarioService>();
         }
-
     }
 }

@@ -11,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 NativeInjectorBootStrapper.RegisterAppDependenciesContext(builder.Services, connectionString);
+NativeInjectorBootStrapper.RegisterAppDependencies(builder.Services);
 
 var appSetting = builder.Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
 builder.Services.AddSingleton(appSetting);
