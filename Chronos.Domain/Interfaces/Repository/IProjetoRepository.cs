@@ -2,8 +2,5 @@ using Chronos.Domain.Entities;
 
 namespace Chronos.Domain.Interfaces.Repository
 {
-    public interface IProjetoRepository : IBaseRepository<Projeto>
-    {
-        Task<ICollection<Tarefa>> GetTarefas();
-    }
+    public interface IProjetoRepository : IBaseRepository<Projeto> { }
 }
