@@ -1,5 +1,6 @@
 using Chronos.Domain.Contracts.Request;
 using Chronos.Domain.Contracts.Response;
+using Chronos.Domain.Exceptions;
 using Chronos.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Chronos.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UsuarioController : ControllerBase
@@ -18,20 +20,14 @@ namespace Chronos.Api.Controllers
             _usuarioService = usuarioService;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> CadastrarAsync(UsuarioRequest request)
         {
-            await _usuarioService.CadastrarAsync(request);
-            return Ok(
-                new Response
-                {
-                    Mensagem =
-                        "Enviamos um token para seu email. Por favor, faça a confirmação."
-                }
-            );
+            var response = await _usuarioService.CadastrarAsync(request);
+            return Ok(response);
         }
 
-        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> ObterPorIdAsync([FromRoute] int id)
         {
@@ -39,15 +35,14 @@ namespace Chronos.Api.Controllers
             return Ok(usuario);
         }
 
-        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> AlterarAsync(
             [FromRoute] int id,
             [FromBody] UsuarioRequest request
         )
         {
-            await _usuarioService.AlterarAsync(id, request);
-            return Ok(new Response { Mensagem = "Usuario Editado." });
+            var response = await _usuarioService.AlterarAsync(id, request);
+            return Ok(response);
         }
     }
 }

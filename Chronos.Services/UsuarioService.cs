@@ -36,7 +36,7 @@ namespace Chronos.Services
             _mapper = mapper;
         }
 
-        public async Task CadastrarAsync(UsuarioRequest request)
+        public async Task<MensagemResponse> CadastrarAsync(UsuarioRequest request)
         {
             await validator.ValidateAndThrowAsync(request);
             await CheckSeJaEstaCadastrado(request.Email);
@@ -53,21 +53,36 @@ namespace Chronos.Services
                 "Confirmação de Email Chronos",
                 $"Conclua a configuração da sua nova Conta Chronos com o token: {token}"
             );
+            return new MensagemResponse
+            {
+                Codigo = StatusException.Nenhum,
+                Mensagens = new List<string> { "Enviamos um token para seu email. Por favor, faça a confirmação." }
+            };
         }
 
-        public async Task AlterarAsync(int id, UsuarioRequest request)
+        public async Task<MensagemResponse> AlterarAsync(int id, UsuarioRequest request)
         {
             var usuario = await CheckSeIdExiste(id);
             CheckPermissao(id);
             await validator.ValidateAndThrowAsync(request);
             usuario.DataAlteracao = DateTime.Now;
             await _usuarioRepository.Editar(_mapper.Map(request, usuario));
+            return new MensagemResponse
+            {
+                Codigo = StatusException.Nenhum,
+                Mensagens = new List<string> { "Alterado com Sucesso" }
+            };
         }
 
-        public async Task DeletarAsync(int id)
+        public async Task<MensagemResponse> DeletarAsync(int id)
         {
             var usuario = await CheckSeIdExiste(id);
             await _usuarioRepository.Excluir(usuario);
+            return new MensagemResponse
+            {
+                Codigo = StatusException.Nenhum,
+                Mensagens = new List<string> { "Deletado com Sucesso" }
+            };
         }
 
         public async Task<UsuarioResponse> ObterPorIdAsync(int id)
