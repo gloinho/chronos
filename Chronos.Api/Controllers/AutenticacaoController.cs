@@ -18,30 +18,16 @@ namespace Chronos.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfirmarUsuario([FromQuery] string token)
         {
-            try
-            {
-                await _autenticacaoService.Confirmar(token);
-                return Ok("Confirmação feita com sucesso.");
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            var response = await _autenticacaoService.Confirmar(token);
+            return Ok(response);
         }
 
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            try
-            {
-                var token = await _autenticacaoService.Login(request);
-                return Ok(token);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            var response = await _autenticacaoService.Login(request);
+            return Ok(response);
         }
     }
 }

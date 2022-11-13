@@ -27,13 +27,6 @@ namespace Chronos.Api.Filters
                 response.Mensagens = infoex.Errors.Select(p => p.ErrorMessage).ToList();
                 response.Detalhe = infoex.InnerException?.Message;
             }
-            else
-            {
-                response.Codigo = StatusException.Erro;
-                response.Mensagens = new List<string> { "Erro inesperado" };
-                response.Detalhe = context.Exception?.InnerException?.Message;
-            }
-
             context.Result = new ObjectResult(response)
             {
                 StatusCode = response.Codigo.GetStatusCode()
