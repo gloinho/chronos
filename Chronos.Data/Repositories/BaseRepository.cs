@@ -13,32 +13,32 @@ namespace Chronos.Data.Repositories
             _context = context;
         }
 
-        public async Task Cadastrar(T entidade)
+        public async Task CadastrarAsync(T entidade)
         {
             await _context.Set<T>().AddAsync(entidade);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<T> Editar(T entidade)
+        public async Task<T> AlterarAsync(T entidade)
         {
             _context.Set<T>().Update(entidade);
             await _context.SaveChangesAsync();
             return entidade;
         }
 
-        public async Task<T> Excluir(T entidade)
+        public async Task<T> DeletarAsync(T entidade)
         {
             _context.Set<T>().Remove(entidade);
             await _context.SaveChangesAsync();
             return entidade;
         }
 
-        public async Task<T> GetPorId(int id)
+        public async Task<T> ObterPorIdAsync(int id)
         {
             return await _context.Set<T>().FindAsync(id);
         }
 
-        public async Task<ICollection<T>> Listar()
+        public async Task<ICollection<T>> ObterTodosAsync()
         {
             return await _context.Set<T>().AsNoTracking().ToListAsync();
         }

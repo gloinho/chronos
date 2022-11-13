@@ -1,6 +1,6 @@
-using System.Security.Claims;
 using Chronos.Domain.Utils;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace Chronos.Services
 {

@@ -1,7 +1,6 @@
 using Chronos.Domain.Contracts.Request;
-using Chronos.Domain.Contracts.Response;
-using Chronos.Domain.Exceptions;
 using Chronos.Domain.Interfaces.Services;
+using Chronos.Domain.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -42,6 +41,22 @@ namespace Chronos.Api.Controllers
         )
         {
             var response = await _usuarioService.AlterarAsync(id, request);
+            return Ok(response);
+        }
+
+        [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
+        [HttpGet]
+        public async Task<IActionResult> ObterTodosAsync()
+        {
+            var response = await _usuarioService.ObterTodosAsync();
+            return Ok(response);
+        }
+
+        [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
+        [HttpDelete]
+        public async Task<IActionResult> DeletarAsync(int id)
+        {
+            var response = await _usuarioService.DeletarAsync(id);
             return Ok(response);
         }
     }

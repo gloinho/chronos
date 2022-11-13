@@ -47,7 +47,7 @@ namespace Chronos.Services
                 user.Senha,
                 BCrypt.Net.BCrypt.GenerateSalt()
             );
-            await _usuarioRepository.Cadastrar(user);
+            await _usuarioRepository.CadastrarAsync(user);
             await _emailService.Send(
                 request.Email,
                 "Confirmação de Email Chronos",
@@ -62,11 +62,11 @@ namespace Chronos.Services
 
         public async Task<MensagemResponse> AlterarAsync(int id, UsuarioRequest request)
         {
-            var usuario = await CheckSeIdExiste(id);
             CheckPermissao(id);
+            var usuario = await CheckSeIdExiste(id);
             await validator.ValidateAndThrowAsync(request);
             usuario.DataAlteracao = DateTime.Now;
-            await _usuarioRepository.Editar(_mapper.Map(request, usuario));
+            await _usuarioRepository.AlterarAsync(_mapper.Map(request, usuario));
             return new MensagemResponse
             {
                 Codigo = StatusException.Nenhum,
@@ -77,7 +77,7 @@ namespace Chronos.Services
         public async Task<MensagemResponse> DeletarAsync(int id)
         {
             var usuario = await CheckSeIdExiste(id);
-            await _usuarioRepository.Excluir(usuario);
+            await _usuarioRepository.DeletarAsync(usuario);
             return new MensagemResponse
             {
                 Codigo = StatusException.Nenhum,
@@ -87,16 +87,17 @@ namespace Chronos.Services
 
         public async Task<UsuarioResponse> ObterPorIdAsync(int id)
         {
-            var usuario = await CheckSeIdExiste(id);
             CheckPermissao(id);
+            var usuario = await CheckSeIdExiste(id);
             var result = _mapper.Map<UsuarioResponse>(usuario);
             return result;
         }
 
         public async Task<List<UsuarioResponse>> ObterTodosAsync()
         {
-            var usuarios = await _usuarioRepository.Listar();
-            return _mapper.Map<List<UsuarioResponse>>(usuarios);
+            var usuarios = await _usuarioRepository.ObterTodosAsync();
+            var usuariosOrdenados = _mapper.Map<List<UsuarioResponse>>(usuarios).OrderBy(u => u.Nome).ToList();
+            return usuariosOrdenados;
         }
 
         private async Task CheckSeJaEstaCadastrado(string email)
@@ -110,7 +111,7 @@ namespace Chronos.Services
 
         private async Task<Usuario> CheckSeIdExiste(int id)
         {
-            var usuario = await _usuarioRepository.GetPorId(id);
+            var usuario = await _usuarioRepository.ObterPorIdAsync(id);
             if (usuario == null)
             {
                 throw new BaseException(StatusException.NaoEncontrado, $"Usuário com o id {id} não cadastrado.");

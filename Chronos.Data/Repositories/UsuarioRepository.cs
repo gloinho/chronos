@@ -13,7 +13,7 @@ namespace Chronos.Data.Repositories
         public async Task Confirmar(Usuario usuario)
         {
             usuario.Confirmado = true;
-            await Editar(usuario);
+            await AlterarAsync(usuario);
         }
 
         public async Task<Usuario> GetPorEmail(string email)

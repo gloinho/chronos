@@ -3,27 +3,24 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chronos.Api", "Chronos.Api\Chronos.Api.csproj", "{F27FAA7F-A3E1-40D1-A648-288F5E16A8E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chronos.Api", "Chronos.Api\Chronos.Api.csproj", "{F27FAA7F-A3E1-40D1-A648-288F5E16A8E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chronos.CrossCutting", "Chronos.CrossCutting\Chronos.CrossCutting.csproj", "{87EBD09D-85B7-4B08-97D9-27E87DCB8796}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chronos.CrossCutting", "Chronos.CrossCutting\Chronos.CrossCutting.csproj", "{87EBD09D-85B7-4B08-97D9-27E87DCB8796}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chronos.Data", "Chronos.Data\Chronos.Data.csproj", "{272D0841-2D39-4F85-9A2C-C0FA5AD435B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chronos.Data", "Chronos.Data\Chronos.Data.csproj", "{272D0841-2D39-4F85-9A2C-C0FA5AD435B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chronos.Domain", "Chronos.Domain\Chronos.Domain.csproj", "{819073C5-A208-449A-8C39-D1159876BC16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chronos.Domain", "Chronos.Domain\Chronos.Domain.csproj", "{819073C5-A208-449A-8C39-D1159876BC16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chronos.IoC", "Chronos.IoC\Chronos.IoC.csproj", "{4636B05D-8A40-4564-89B3-E7DC419C46D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chronos.IoC", "Chronos.IoC\Chronos.IoC.csproj", "{4636B05D-8A40-4564-89B3-E7DC419C46D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chronos.Services", "Chronos.Services\Chronos.Services.csproj", "{0138F8AA-6862-48FE-B123-2BEAB2635F62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chronos.Services", "Chronos.Services\Chronos.Services.csproj", "{0138F8AA-6862-48FE-B123-2BEAB2635F62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chronos.Testes", "Chronos.Testes\Chronos.Testes.csproj", "{25EB6041-152D-43F6-8F3A-35B62A743CF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chronos.Testes", "Chronos.Testes\Chronos.Testes.csproj", "{25EB6041-152D-43F6-8F3A-35B62A743CF7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{F27FAA7F-A3E1-40D1-A648-288F5E16A8E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -54,5 +51,11 @@ Global
 		{25EB6041-152D-43F6-8F3A-35B62A743CF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25EB6041-152D-43F6-8F3A-35B62A743CF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25EB6041-152D-43F6-8F3A-35B62A743CF7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4F3B9C78-988C-4C26-9322-D56B6E6F508F}
 	EndGlobalSection
 EndGlobal

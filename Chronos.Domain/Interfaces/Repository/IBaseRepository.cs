@@ -2,10 +2,10 @@ namespace Chronos.Domain.Interfaces.Repository
 {
     public interface IBaseRepository<T> where T : class
     {
-        Task Cadastrar(T entidade);
-        Task<T> Editar(T entidade);
-        Task<ICollection<T>> Listar();
-        Task<T> GetPorId(int id);
-        Task<T> Excluir(T entidade);
+        Task CadastrarAsync(T entidade);
+        Task<T> AlterarAsync(T entidade);
+        Task<ICollection<T>> ObterTodosAsync();
+        Task<T> ObterPorIdAsync(int id);
+        Task<T> DeletarAsync(T entidade);
     }
 }
