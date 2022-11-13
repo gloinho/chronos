@@ -1,8 +1,8 @@
-using System.Linq.Expressions;
 using AutoMapper;
 using Chronos.Domain.Contracts.Request;
 using Chronos.Domain.Contracts.Response;
 using Chronos.Domain.Entities;
+using Chronos.Domain.Exceptions;
 using Chronos.Domain.Interfaces.Repository;
 using Chronos.Domain.Interfaces.Services;
 using Chronos.Domain.Settings;
@@ -89,7 +89,7 @@ namespace Chronos.Services
             var user = await _usuarioRepository.GetPorEmail(email);
             if (user != null)
             {
-                throw new Exception("Usuário com esse e-mail já está cadastrado.");
+                throw new BaseException(StatusException.Erro, "E-mail já cadastrado");
             }
         }
 
@@ -98,7 +98,7 @@ namespace Chronos.Services
             var usuario = await _usuarioRepository.GetPorId(id);
             if (usuario == null)
             {
-                throw new Exception("Usuario não cadastrado.");
+                throw new BaseException(StatusException.NaoEncontrado, $"Usuário com o id {id} não cadastrado.");
             }
             return usuario;
         }
@@ -107,7 +107,7 @@ namespace Chronos.Services
         {
             if (UsuarioPermissao == PermissaoUtil.PermissaoColaborador && id != UsuarioId)
             {
-                throw new Exception("Acesso Negado.");
+                throw new BaseException(StatusException.NaoAutorizado, $"Colaborador não pode acessar.");
             }
         }
     }

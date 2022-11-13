@@ -1,21 +1,31 @@
-using System.Text;
+using Chronos.Api.Filters;
+using Chronos.Api.Handlers;
 using Chronos.Domain.Settings;
 using Chronos.IoC;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
+
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddEndpointsApiExplorer();
 
 var connectionString = builder.Configuration.GetConnectionString("ChronosDb");
 
-builder.Services.AddControllers();
+#region Filters
 
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add(typeof(ExceptionFilter));
+});
+#endregion
 
 #region HttpContext
 builder.Services.AddHttpContextAccessor();
 #endregion
+
 #region Swagger
 builder.Services.AddSwaggerGen(c =>
 {
@@ -82,6 +92,15 @@ builder.Services
             ValidateAudience = false
         };
     });
+#endregion
+
+#region Authorization
+
+builder.Services.AddAuthorization(options =>
+{
+    options.InvokeHandlersAfterFailure = true;
+}).AddSingleton<IAuthorizationMiddlewareResultHandler, AuthorizationHandler>();
+
 #endregion
 
 var app = builder.Build();
