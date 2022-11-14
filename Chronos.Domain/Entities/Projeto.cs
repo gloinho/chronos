@@ -5,5 +5,5 @@ public class Projeto : BaseEntity
     public string Nome { get; set; }
     public DateTime DataInicio { get; set; }
     public DateTime DataFim { get; set; }
-    public ICollection<Usuario_Projeto> Usuarios { get; set; }
+    public virtual ICollection<Usuario_Projeto> Usuarios { get; set; }
 }

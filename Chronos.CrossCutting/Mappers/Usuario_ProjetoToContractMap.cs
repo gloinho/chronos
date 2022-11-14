@@ -9,7 +9,7 @@ namespace Chronos.CrossCutting.Mappers
         public Usuario_ProjetoToContractMap()
         {
             CreateMap<Usuario_Projeto, Usuario_ProjetoResponse>()
-                .ForMember(dst => dst.NomeDoProjeto, map => map.MapFrom(src => src.Projeto.Nome))
+                .ForMember(dst => dst.NomeDoUsuario, map => map.MapFrom(src => src.Usuario.Nome))
                 .ReverseMap();
         }
     }

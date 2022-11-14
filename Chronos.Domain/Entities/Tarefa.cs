@@ -6,5 +6,5 @@ public class Tarefa : BaseEntity
     public DateTime DataInicial { get; set; } = DateTime.Now;
     public DateTime? DataFinal { get; set; } = null;
     public TimeSpan TotalHoras { get; set; }
-    public Usuario_Projeto Usuario_Projeto { get; set; }
+    public virtual Usuario_Projeto Usuario_Projeto { get; set; }
 }
