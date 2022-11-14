@@ -8,7 +8,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
-
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 
@@ -96,10 +95,12 @@ builder.Services
 
 #region Authorization
 
-builder.Services.AddAuthorization(options =>
-{
-    options.InvokeHandlersAfterFailure = true;
-}).AddSingleton<IAuthorizationMiddlewareResultHandler, AuthorizationHandler>();
+builder.Services
+    .AddAuthorization(options =>
+    {
+        options.InvokeHandlersAfterFailure = true;
+    })
+    .AddSingleton<IAuthorizationMiddlewareResultHandler, AuthorizationHandler>();
 
 #endregion
 

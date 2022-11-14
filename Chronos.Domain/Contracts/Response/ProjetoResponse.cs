@@ -6,6 +6,6 @@ namespace Chronos.Domain.Contracts.Response
     {
         public int Id { get; set; }
         public string Nome { get; set; }
-        public List<Usuario> Usuarios { get; set; }
+        public ICollection<Usuario_ProjetoResponse> Usuarios { get; set; }
     }
 }

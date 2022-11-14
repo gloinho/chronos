@@ -1,4 +1,5 @@
 using Chronos.Data.Context;
+using Chronos.Domain.Entities;
 using Chronos.Domain.Interfaces.Repository;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,12 +34,12 @@ namespace Chronos.Data.Repositories
             return entidade;
         }
 
-        public async Task<T> ObterPorIdAsync(int id)
+        public virtual async Task<T> ObterPorIdAsync(int id)
         {
             return await _context.Set<T>().FindAsync(id);
         }
 
-        public async Task<ICollection<T>> ObterTodosAsync()
+        public virtual async Task<ICollection<T>> ObterTodosAsync()
         {
             return await _context.Set<T>().AsNoTracking().ToListAsync();
         }

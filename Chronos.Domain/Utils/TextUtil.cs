@@ -11,10 +11,13 @@ namespace Chronos.Domain.Utils
                 return result;
             return null;
         }
+
         public static int GetStatusCode(this StatusException status)
         {
             switch (status)
             {
+                case StatusException.Nenhum:
+                    return 200;
                 case StatusException.FormatoIncorreto:
                 case StatusException.Obrigatoriedade:
                     return 400;
@@ -30,6 +33,5 @@ namespace Chronos.Domain.Utils
                     return 500;
             }
         }
-
     }
 }
