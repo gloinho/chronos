@@ -12,6 +12,7 @@ namespace Chronos.CrossCutting.DependencyInjection
                 conf.AddProfile(new Usuario_ProjetoToContractMap());
                 conf.AddProfile(new UsuarioToContractMap());
                 conf.AddProfile(new ProjetoToContractMap());
+                conf.AddProfile(new TarefaToContractMap());
             });
             var mapConfiguration = configuration.CreateMapper();
             serviceCollection.AddSingleton(mapConfiguration);

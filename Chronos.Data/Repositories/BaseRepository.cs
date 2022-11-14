@@ -34,7 +34,7 @@ namespace Chronos.Data.Repositories
             return entidade;
         }
 
-        public async Task<T> ObterPorIdAsync(int id)
+        public virtual async Task<T> ObterPorIdAsync(int id)
         {
             return await _context.Set<T>().FindAsync(id);
         }

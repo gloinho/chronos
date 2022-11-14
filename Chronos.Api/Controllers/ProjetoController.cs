@@ -42,5 +42,29 @@ namespace Chronos.Api.Controllers
             var response = await _projetoService.ObterTodosAsync();
             return Ok(response);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> ObterPorIdAsync([FromRoute] int id)
+        {
+            var response = await _projetoService.ObterPorIdAsync(id);
+            return Ok(response);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> AlterarAsync(
+            [FromRoute] int id,
+            [FromBody] ProjetoRequest request
+        )
+        {
+            var response = await _projetoService.AlterarAsync(id, request);
+            return Ok(response);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletarAsync([FromRoute] int id)
+        {
+            var response = await _projetoService.DeletarAsync(id);
+            return Ok(response);
+        }
     }
 }
