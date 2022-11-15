@@ -84,6 +84,18 @@ namespace Chronos.Services
             return usuario_projeto;
         }
 
+        public async Task CheckSeProjetoExiste(int id)
+        {
+            var projeto = await _projetoRepository.ObterPorIdAsync(id);
+            if (projeto == null)
+            {
+                throw new BaseException(
+                    StatusException.NaoEncontrado,
+                    $"Projeto de id {id} não foi encontrado."
+                );
+            }
+        }
+
         private async Task CheckSeRelacaoJaExiste(Usuario_Projeto relacao)
         {
             var find = await _usuario_ProjetoRepository.ObterPorUsuarioIdProjetoId(
@@ -95,18 +107,6 @@ namespace Chronos.Services
                 throw new BaseException(
                     StatusException.Erro,
                     $"O usuario de id {relacao.UsuarioId} já faz parte do projeto {relacao.ProjetoId}"
-                );
-            }
-        }
-
-        private async Task CheckSeProjetoExiste(int id)
-        {
-            var projeto = await _projetoRepository.ObterPorIdAsync(id);
-            if (projeto == null)
-            {
-                throw new BaseException(
-                    StatusException.NaoEncontrado,
-                    $"Projeto de id {id} não foi encontrado."
                 );
             }
         }

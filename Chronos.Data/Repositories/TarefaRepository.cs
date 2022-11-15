@@ -41,6 +41,24 @@ namespace Chronos.Data.Repositories
             return tarefas;
         }
 
+        public async Task<List<Tarefa>> GetTarefasSemana(int usuarioId)
+        {
+            var tarefas = await _context.Usuarios_Projetos
+                .Where(up => up.UsuarioId == usuarioId)
+                .Include(up => up.Tarefas)
+                .ThenInclude(t => t.Usuario_Projeto)
+                .ThenInclude(up => up.Projeto)
+                .SelectMany(
+                    t =>
+                        t.Tarefas.Where(
+                            t => EF.Functions.DateDiffWeek(DateTime.Today, t.DataInclusao) == 0
+                        )
+                )
+                .ToListAsync();
+
+            return tarefas;
+        }
+
         public async Task<List<Tarefa>> GetTarefasMes(int usuarioId)
         {
             var tarefas = await _context.Usuarios_Projetos
@@ -58,26 +76,10 @@ namespace Chronos.Data.Repositories
             var tarefas = await _context.Usuarios_Projetos
                 .Where(u => u.ProjetoId == projetoId)
                 .Include(p => p.Tarefas)
-                .SelectMany(t => t.Tarefas)
-                .ToListAsync();
-            return tarefas;
-        }
-
-        public async Task<List<Tarefa>> GetTarefasSemana(int usuarioId)
-        {
-            var tarefas = await _context.Usuarios_Projetos
-                .Where(up => up.UsuarioId == usuarioId)
-                .Include(up => up.Tarefas)
                 .ThenInclude(t => t.Usuario_Projeto)
                 .ThenInclude(up => up.Projeto)
-                .SelectMany(
-                    t =>
-                        t.Tarefas.Where(
-                            t => EF.Functions.DateDiffWeek(DateTime.Today, t.DataInclusao) == 0
-                        )
-                )
+                .SelectMany(t => t.Tarefas)
                 .ToListAsync();
-
             return tarefas;
         }
     }

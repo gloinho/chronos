@@ -82,34 +82,74 @@ namespace Chronos.Services
         {
             var tarefa = await CheckSeIdExiste(id);
             await _usuario_ProjetoService.CheckPermissao(tarefa.Usuario_ProjetoId);
-            return _mapper.Map<TarefaResponse>(tarefa);
+            var response = ObterHorasTotais(tarefa);
+            return response;
         }
 
         public async Task<List<TarefaResponse>> ObterTodosAsync()
         {
             var tarefas = await _tarefaRepository.ObterTodosAsync();
-            return _mapper.Map<List<TarefaResponse>>(tarefas);
+            var response = ObterHorasTotais(tarefas);
+            return response;
         }
 
         public async Task<List<TarefaResponse>> ObterTarefasDoDia(int usuarioId)
         {
             CheckPermissao(usuarioId);
             var tarefas = await _tarefaRepository.GetTarefasDia(usuarioId);
-            return _mapper.Map<List<TarefaResponse>>(tarefas);
+            var response = ObterHorasTotais(tarefas);
+            return response;
         }
 
         public async Task<List<TarefaResponse>> ObterTarefasDoMes(int usuarioId)
         {
             CheckPermissao(usuarioId);
             var tarefas = await _tarefaRepository.GetTarefasMes(usuarioId);
-            return _mapper.Map<List<TarefaResponse>>(tarefas);
+            var response = ObterHorasTotais(tarefas);
+            return response;
         }
 
         public async Task<List<TarefaResponse>> ObterTarefasDaSemana(int usuarioId)
         {
             CheckPermissao(usuarioId);
             var tarefas = await _tarefaRepository.GetTarefasSemana(usuarioId);
-            return _mapper.Map<List<TarefaResponse>>(tarefas);
+            var response = ObterHorasTotais(tarefas);
+            return response;
+        }
+
+        public async Task<List<TarefaResponse>> ObterTarefasDoProjeto(int projetoId)
+        {
+            await _usuario_ProjetoService.CheckSeProjetoExiste(projetoId);
+            if (UsuarioPermissao == PermissaoUtil.PermissaoColaborador)
+            {
+                await _usuario_ProjetoService.CheckSeUsuarioFazParteDoProjeto(projetoId);
+            }
+            var tarefas = await _tarefaRepository.GetTarefasProjeto(projetoId);
+            var response = ObterHorasTotais(tarefas);
+            return response;
+        }
+
+        private TarefaResponse ObterHorasTotais(Tarefa tarefa)
+        {
+            var response = _mapper.Map<TarefaResponse>(tarefa);
+            if (tarefa.DataInicial != null && tarefa.DataFinal != null)
+            {
+                response.TotalHoras =
+                    tarefa.DataFinal.Value.TimeOfDay - tarefa.DataInicial.Value.TimeOfDay;
+                return response;
+            }
+            return response;
+        }
+
+        private List<TarefaResponse> ObterHorasTotais(ICollection<Tarefa> tarefas)
+        {
+            var responses = new List<TarefaResponse>();
+            foreach (var tarefa in tarefas)
+            {
+                var response = ObterHorasTotais(tarefa);
+                responses.Add(response);
+            }
+            return responses;
         }
 
         private void CheckPermissao(int usuarioId)

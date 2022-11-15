@@ -8,5 +8,6 @@ namespace Chronos.Domain.Interfaces.Services
         Task<List<TarefaResponse>> ObterTarefasDoDia(int usuarioId);
         Task<List<TarefaResponse>> ObterTarefasDoMes(int usuarioId);
         Task<List<TarefaResponse>> ObterTarefasDaSemana(int usuarioId);
+        Task<List<TarefaResponse>> ObterTarefasDoProjeto(int projetoId);
     }
 }
