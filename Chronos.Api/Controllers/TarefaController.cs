@@ -30,5 +30,15 @@ namespace Chronos.Api.Controllers
             var response = await _tarefaService.DeletarAsync(id);
             return Ok(response);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> AlterarAsync(
+            [FromRoute] int id,
+            [FromBody] TarefaRequest request
+        )
+        {
+            var response = await _tarefaService.AlterarAsync(id, request);
+            return Ok(response);
+        }
     }
 }

@@ -13,6 +13,11 @@ namespace Chronos.Services.Validators
             RuleFor(p => p.ProjetoId)
                 .NotEmpty()
                 .WithMessage("O campo 'ProjetoId' não pode estar vazio.");
+            RuleFor(p => p.DataFinal)
+                .GreaterThan(p => p.DataInicial)
+                .WithMessage(
+                    "O campo 'DataFim' precisa de uma data posterior ao campo 'DataInicio'."
+                );
         }
     }
 }

@@ -28,8 +28,8 @@ namespace Chronos.Services
 
         public async Task CadastrarAsync(Usuario_Projeto relacao)
         {
-            await CheckSeIdsExistem(relacao);
-            await CheckSeRelacaoExiste(relacao);
+            await CheckSeUsuarioExiste(relacao);
+            await CheckSeRelacaoJaExiste(relacao);
             await _usuario_ProjetoRepository.CadastrarAsync(relacao);
         }
 
@@ -60,12 +60,31 @@ namespace Chronos.Services
             {
                 throw new BaseException(
                     StatusException.NaoAutorizado,
-                    "Colaborador não pode deletar tarefas de outros colaboradores."
+                    "Colaborador não pode interagir com tarefas de outros colaboradores."
                 );
             }
         }
 
-        private async Task CheckSeRelacaoExiste(Usuario_Projeto relacao)
+        public async Task<Usuario_Projeto> CheckSePodeAlterarTarefa(int projetoId, Tarefa tarefa)
+        {
+            // preciso checar SE o ID do usuário LOGADO é igual ao ID do usuário que existe no Usuario_Projeto da TAREFA.
+            var usuario_projeto = await _usuario_ProjetoRepository.ObterPorIdAsync(
+                tarefa.Usuario_ProjetoId
+            );
+            if (UsuarioId != usuario_projeto.UsuarioId)
+            {
+                throw new BaseException(
+                    StatusException.NaoAutorizado,
+                    "Não é possivel alterar tarefas de outros usuários."
+                );
+            }
+            // após isso, verificar se o id do projeto existe e
+            // checar se o usuário faz parte do projeto em que ele quer alterar a tarefa.
+            await CheckSeUsuarioFazParteDoProjeto(projetoId);
+            return usuario_projeto;
+        }
+
+        private async Task CheckSeRelacaoJaExiste(Usuario_Projeto relacao)
         {
             var find = await _usuario_ProjetoRepository.ObterPorUsuarioIdProjetoId(
                 relacao.ProjetoId,
@@ -92,7 +111,7 @@ namespace Chronos.Services
             }
         }
 
-        private async Task CheckSeIdsExistem(Usuario_Projeto relacao)
+        private async Task CheckSeUsuarioExiste(Usuario_Projeto relacao)
         {
             var usuario = await _usuarioRepository.ObterPorIdAsync(relacao.UsuarioId);
             if (usuario == null)

@@ -31,9 +31,26 @@ namespace Chronos.Services
             _usuario_ProjetoService = usuario_ProjetoService;
         }
 
-        public Task<MensagemResponse> AlterarAsync(int id, TarefaRequest request)
+        public async Task<MensagemResponse> AlterarAsync(int id, TarefaRequest request)
         {
-            throw new NotImplementedException();
+            var tarefa = await CheckSeIdExiste(id); // checar se tarefa existe
+            CheckDataDeInclusao(tarefa); // verificação tanto pra admin quanto pra colab se tarefa tiver +2 dias inclusa.
+            // se o usuario logador for colaborador:
+            /// só pode alterar tarefa em que é dono
+            /// só pode alterar projeto em que faz parte
+            var usuario_projeto = await _usuario_ProjetoService.CheckSePodeAlterarTarefa(
+                request.ProjetoId,
+                tarefa
+            );
+            var editada = _mapper.Map(request, tarefa);
+            editada.Usuario_ProjetoId = usuario_projeto.Id;
+            editada.DataAlteracao = DateTime.Now;
+            await _tarefaRepository.AlterarAsync(editada);
+            return new MensagemResponse
+            {
+                Codigo = StatusException.Nenhum,
+                Mensagens = new List<string> { "Alterado com Sucesso" }
+            };
         }
 
         public async Task<MensagemResponse> CadastrarAsync(TarefaRequest request)
@@ -85,6 +102,17 @@ namespace Chronos.Services
                 );
             }
             return tarefa;
+        }
+
+        private void CheckDataDeInclusao(Tarefa tarefa)
+        {
+            if (tarefa.DataInclusao.AddDays(2) < DateTime.Now)
+            {
+                throw new BaseException(
+                    StatusException.NaoProcessado,
+                    $"O tempo de editar a tarefa expirou em {tarefa.DataInclusao.AddDays(2)}"
+                );
+            }
         }
     }
 }
