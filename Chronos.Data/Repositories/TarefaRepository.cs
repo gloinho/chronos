@@ -63,9 +63,22 @@ namespace Chronos.Data.Repositories
             return tarefas;
         }
 
-        public Task<List<Tarefa>> GetTarefasSemana(int usuarioId)
+        public async Task<List<Tarefa>> GetTarefasSemana(int usuarioId)
         {
-            throw new NotImplementedException();
+            var tarefas = await _context.Usuarios_Projetos
+                .Where(up => up.UsuarioId == usuarioId)
+                .Include(up => up.Tarefas)
+                .ThenInclude(t => t.Usuario_Projeto)
+                .ThenInclude(up => up.Projeto)
+                .SelectMany(
+                    t =>
+                        t.Tarefas.Where(
+                            t => EF.Functions.DateDiffWeek(DateTime.Today, t.DataInclusao) == 0
+                        )
+                )
+                .ToListAsync();
+
+            return tarefas;
         }
     }
 }

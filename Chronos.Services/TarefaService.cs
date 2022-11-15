@@ -105,6 +105,13 @@ namespace Chronos.Services
             return _mapper.Map<List<TarefaResponse>>(tarefas);
         }
 
+        public async Task<List<TarefaResponse>> ObterTarefasDaSemana(int usuarioId)
+        {
+            CheckPermissao(usuarioId);
+            var tarefas = await _tarefaRepository.GetTarefasSemana(usuarioId);
+            return _mapper.Map<List<TarefaResponse>>(tarefas);
+        }
+
         private void CheckPermissao(int usuarioId)
         {
             if (UsuarioPermissao == PermissaoUtil.PermissaoColaborador && UsuarioId != usuarioId)

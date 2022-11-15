@@ -70,5 +70,12 @@ namespace Chronos.Api.Controllers
             var response = await _tarefaService.ObterTarefasDoMes(usuarioId);
             return Ok(response);
         }
+
+        [HttpGet("{usuarioId}/semana")]
+        public async Task<IActionResult> ObterTarefasDaSemana([FromRoute] int usuarioId)
+        {
+            var response = await _tarefaService.ObterTarefasDaSemana(usuarioId);
+            return Ok(response);
+        }
     }
 }
