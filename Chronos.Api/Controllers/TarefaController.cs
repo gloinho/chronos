@@ -1,5 +1,6 @@
 ﻿using Chronos.Domain.Contracts.Request;
 using Chronos.Domain.Interfaces.Services;
+using Chronos.Domain.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,6 +39,35 @@ namespace Chronos.Api.Controllers
         )
         {
             var response = await _tarefaService.AlterarAsync(id, request);
+            return Ok(response);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> ObterPorIdAsync([FromRoute] int id)
+        {
+            var response = await _tarefaService.ObterPorIdAsync(id);
+            return Ok(response);
+        }
+
+        [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
+        [HttpGet]
+        public async Task<IActionResult> ObterTodosAsync()
+        {
+            var response = await _tarefaService.ObterTodosAsync();
+            return Ok(response);
+        }
+
+        [HttpGet("{usuarioId}/dia")]
+        public async Task<IActionResult> ObterTarefasDoDia([FromRoute] int usuarioId)
+        {
+            var response = await _tarefaService.ObterTarefasDoDia(usuarioId);
+            return Ok(response);
+        }
+
+        [HttpGet("{usuarioId}/mes")]
+        public async Task<IActionResult> ObterTarefasDoMes([FromRoute] int usuarioId)
+        {
+            var response = await _tarefaService.ObterTarefasDoMes(usuarioId);
             return Ok(response);
         }
     }

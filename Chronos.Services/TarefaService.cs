@@ -33,11 +33,8 @@ namespace Chronos.Services
 
         public async Task<MensagemResponse> AlterarAsync(int id, TarefaRequest request)
         {
-            var tarefa = await CheckSeIdExiste(id); // checar se tarefa existe
-            CheckDataDeInclusao(tarefa); // verificação tanto pra admin quanto pra colab se tarefa tiver +2 dias inclusa.
-            // se o usuario logador for colaborador:
-            /// só pode alterar tarefa em que é dono
-            /// só pode alterar projeto em que faz parte
+            var tarefa = await CheckSeIdExiste(id);
+            CheckDataDeInclusao(tarefa);
             var usuario_projeto = await _usuario_ProjetoService.CheckSePodeAlterarTarefa(
                 request.ProjetoId,
                 tarefa
@@ -81,14 +78,42 @@ namespace Chronos.Services
             };
         }
 
-        public Task<TarefaResponse> ObterPorIdAsync(int id)
+        public async Task<TarefaResponse> ObterPorIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var tarefa = await CheckSeIdExiste(id);
+            await _usuario_ProjetoService.CheckPermissao(tarefa.Usuario_ProjetoId);
+            return _mapper.Map<TarefaResponse>(tarefa);
         }
 
-        public Task<List<TarefaResponse>> ObterTodosAsync()
+        public async Task<List<TarefaResponse>> ObterTodosAsync()
         {
-            throw new NotImplementedException();
+            var tarefas = await _tarefaRepository.ObterTodosAsync();
+            return _mapper.Map<List<TarefaResponse>>(tarefas);
+        }
+
+        public async Task<List<TarefaResponse>> ObterTarefasDoDia(int usuarioId)
+        {
+            CheckPermissao(usuarioId);
+            var tarefas = await _tarefaRepository.GetTarefasDia(usuarioId);
+            return _mapper.Map<List<TarefaResponse>>(tarefas);
+        }
+
+        public async Task<List<TarefaResponse>> ObterTarefasDoMes(int usuarioId)
+        {
+            CheckPermissao(usuarioId);
+            var tarefas = await _tarefaRepository.GetTarefasMes(usuarioId);
+            return _mapper.Map<List<TarefaResponse>>(tarefas);
+        }
+
+        private void CheckPermissao(int usuarioId)
+        {
+            if (UsuarioPermissao == PermissaoUtil.PermissaoColaborador && UsuarioId != usuarioId)
+            {
+                throw new BaseException(
+                    StatusException.NaoAutorizado,
+                    "Colaborador não pode interagir com tarefas de outros colaboradores."
+                );
+            }
         }
 
         private async Task<Tarefa> CheckSeIdExiste(int id)
