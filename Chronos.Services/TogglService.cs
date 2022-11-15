@@ -1,7 +1,9 @@
 ﻿using Chronos.Domain.Contracts.Request;
 using Chronos.Domain.Contracts.Response;
 using Chronos.Domain.Interfaces.Services;
-using System.Text.Json;
+using Newtonsoft.Json;
+using System.Net.Http.Headers;
+using System.Text;
 
 namespace Chronos.Services
 {
@@ -14,15 +16,24 @@ namespace Chronos.Services
         }
         public async Task<TogglDetailedResponse> ObterHorasToggl(TogglDetailedRequest request)
         {
-            var httpCliente = _httpClientFactory.CreateClient();
+            string user = "c243dca599f88afd2ed63eeb13f155b0" + ":api_token";
+            user = Convert.ToBase64String(Encoding.ASCII.GetBytes(user));
+            var inicio = request.DataInicio.Date;
+            var fim = request.DataFim.Date;
+            string uri = $"https://api.track.toggl.com/reports/api/v2/details?workspace_id={request.Id}&since=2022-11-01&until=2022-11-15&user_agent=api_test";
 
-            //httpCliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue();
+            HttpClient httpClient = new HttpClient();
+            HttpRequestMessage req = new HttpRequestMessage();
 
-            var response = await httpCliente.GetAsync($"https://api.track.toggl.com/reports/api/v2/details?workspace_id={request.Id}&since={request.DataInicio}&until={request.DataFim}&user_agent=api_test");
+            req.RequestUri = new Uri(uri);
+            req.Method = HttpMethod.Get;
+            req.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
+            req.Headers.TryAddWithoutValidation("Authorization", "Basic " + user);
+            HttpResponseMessage response = await httpClient.SendAsync(req);
+           
+            var responseString = await response.Content.ReadAsStringAsync();
 
-            var content = await response.Content.ReadAsStringAsync();
-
-            var result = JsonSerializer.Deserialize<TogglDetailedResponse>(content);
+            var result = JsonConvert.DeserializeObject<TogglDetailedResponse>(responseString);
 
             return result;
         }

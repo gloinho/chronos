@@ -2,12 +2,12 @@
 {
     public class TogglDetailedResponse
     {
-        public int total_grand { get; set; }
-        public int total_billable { get; set; }
-        public int total_count { get; set; }
-        public int per_page { get; set; }
+        public ulong total_grand { get; set; }
+        public ulong total_billable { get; set; }
+        public ulong total_count { get; set; }
+        public ulong per_page { get; set; }
         public Total_Currencies[] total_currencies { get; set; }
-        public Datum[] data { get; set; }
+        public Data[] data { get; set; }
     }
 
     public class Total_Currencies
@@ -16,12 +16,12 @@
         public float amount { get; set; }
     }
 
-    public class Datum
+    public class Data
     {
-        public int id { get; set; }
-        public int pid { get; set; }
-        public int? tid { get; set; }
-        public int uid { get; set; }
+        public ulong id { get; set; }
+        public ulong? pid { get; set; }
+        public ulong? tid { get; set; }
+        public ulong uid { get; set; }
         public string description { get; set; }
         public DateTime start { get; set; }
         public DateTime end { get; set; }
