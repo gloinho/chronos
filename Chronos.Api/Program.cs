@@ -23,6 +23,7 @@ builder.Services.AddControllers(options =>
 
 #region HttpContext
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpClient();
 #endregion
 
 #region Swagger
