@@ -2,8 +2,8 @@
 {
     public class TogglDetailedRequest
     {
-        public string Token { get; set; }
-        public string Id { get; set; }
+        public string TokenToggl { get; set; }
+        public int Id { get; set; }
         public DateTime DataInicio { get; set; }
         public DateTime DataFim { get; set; }
 

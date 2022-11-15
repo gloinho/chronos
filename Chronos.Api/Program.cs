@@ -77,6 +77,11 @@ var mailSetting = builder.Configuration.GetSection(nameof(EmailSettings)).Get<Em
 builder.Services.AddSingleton(mailSetting);
 #endregion
 
+#region TogglSettings
+var togglSetting = builder.Configuration.GetSection("Toggl").Get<TogglSettings>();
+builder.Services.AddSingleton(togglSetting);
+#endregion
+
 #region Jwt
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
