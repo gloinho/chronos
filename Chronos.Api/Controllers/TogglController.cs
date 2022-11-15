@@ -16,8 +16,7 @@ namespace Chronos.Api.Controllers
             _togglService = togglService;   
         }
 
-        [HttpGet]
-        [Route("relatorio-de-horas")]
+        [HttpGet("relatorio-de-horas")]
         public async Task<TogglDetailedResponse> ObterHorasToggl([FromQuery]TogglDetailedRequest request)
         {
             return await _togglService.ObterHorasToggl(request);
