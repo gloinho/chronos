@@ -14,5 +14,6 @@ namespace Chronos.Domain.Interfaces.Services
             int projetoId,
             AdicionarColaboradoresRequest request
         );
+        Task<List<ProjetoResponse>> ObterPorUsuarioId(int usuarioId);
     }
 }

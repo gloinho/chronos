@@ -86,6 +86,14 @@ namespace Chronos.Services
             return response;
         }
 
+        public async Task<List<TarefaResponse>> ObterPorUsuarioId(int usuarioId)
+        {
+            await CheckPermissao(usuarioId);
+            var tarefas = await _tarefaRepository.ObterPorUsuarioIdAsync(usuarioId);
+            var response = ObterHorasTotais(tarefas);
+            return response;
+        }
+
         public async Task<List<TarefaResponse>> ObterTodosAsync()
         {
             var tarefas = await _tarefaRepository.ObterTodosAsync();
@@ -95,7 +103,7 @@ namespace Chronos.Services
 
         public async Task<List<TarefaResponse>> ObterTarefasDoDia(int usuarioId)
         {
-            CheckPermissao(usuarioId);
+            await CheckPermissao(usuarioId);
             var tarefas = await _tarefaRepository.GetTarefasDia(usuarioId);
             var response = ObterHorasTotais(tarefas);
             return response;
@@ -103,7 +111,7 @@ namespace Chronos.Services
 
         public async Task<List<TarefaResponse>> ObterTarefasDoMes(int usuarioId)
         {
-            CheckPermissao(usuarioId);
+            await CheckPermissao(usuarioId);
             var tarefas = await _tarefaRepository.GetTarefasMes(usuarioId);
             var response = ObterHorasTotais(tarefas);
             return response;
@@ -111,7 +119,7 @@ namespace Chronos.Services
 
         public async Task<List<TarefaResponse>> ObterTarefasDaSemana(int usuarioId)
         {
-            CheckPermissao(usuarioId);
+            await CheckPermissao(usuarioId);
             var tarefas = await _tarefaRepository.GetTarefasSemana(usuarioId);
             var response = ObterHorasTotais(tarefas);
             return response;
@@ -129,6 +137,49 @@ namespace Chronos.Services
             return response;
         }
 
+        public async Task<TarefaResponse> StartTarefa(int id)
+        {
+            var tarefa = await CheckSeIdExiste(id);
+            await _usuario_ProjetoService.CheckPermissao(tarefa.Usuario_ProjetoId);
+            if (tarefa.DataFinal != null || tarefa.DataInicial != null)
+            {
+                throw new BaseException(
+                    StatusException.NaoProcessado,
+                    $"Tarefa de id {id} já foi iniciada ou finalizada."
+                );
+            }
+            tarefa.DataInicial = DateTime.Now;
+            tarefa.DataAlteracao = DateTime.Now;
+            await _tarefaRepository.AlterarAsync(tarefa);
+            return _mapper.Map<TarefaResponse>(tarefa);
+        }
+
+        public async Task<TarefaResponse> StopTarefa(int id)
+        {
+            var tarefa = await CheckSeIdExiste(id);
+            await _usuario_ProjetoService.CheckPermissao(tarefa.Usuario_ProjetoId);
+
+            if (tarefa.DataInicial == null)
+            {
+                throw new BaseException(
+                    StatusException.NaoProcessado,
+                    $"Tarefa de id {id} ainda não foi iniciada"
+                );
+            }
+            if (tarefa.DataFinal != null)
+            {
+                throw new BaseException(
+                    StatusException.NaoProcessado,
+                    $"Tarefa de id {id} já foi finalizada."
+                );
+            }
+            tarefa.DataFinal = DateTime.Now;
+            tarefa.DataAlteracao = DateTime.Now;
+            await _tarefaRepository.AlterarAsync(tarefa);
+            var response = ObterHorasTotais(tarefa);
+            return response;
+        }
+
         private TarefaResponse ObterHorasTotais(Tarefa tarefa)
         {
             var response = _mapper.Map<TarefaResponse>(tarefa);
@@ -136,6 +187,11 @@ namespace Chronos.Services
             {
                 response.TotalHoras =
                     tarefa.DataFinal.Value.TimeOfDay - tarefa.DataInicial.Value.TimeOfDay;
+                return response;
+            }
+            if (tarefa.DataInicial != null)
+            {
+                response.TotalHoras = DateTime.Now.TimeOfDay - tarefa.DataInicial.Value.TimeOfDay;
                 return response;
             }
             return response;
@@ -152,8 +208,9 @@ namespace Chronos.Services
             return responses;
         }
 
-        private void CheckPermissao(int usuarioId)
+        private async Task CheckPermissao(int usuarioId)
         {
+            await _usuario_ProjetoService.CheckSeUsuarioExiste(usuarioId);
             if (UsuarioPermissao == PermissaoUtil.PermissaoColaborador && UsuarioId != usuarioId)
             {
                 throw new BaseException(

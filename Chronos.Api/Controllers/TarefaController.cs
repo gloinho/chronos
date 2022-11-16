@@ -1,4 +1,5 @@
 ﻿using Chronos.Domain.Contracts.Request;
+using Chronos.Domain.Contracts.Response;
 using Chronos.Domain.Interfaces.Services;
 using Chronos.Domain.Utils;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +9,13 @@ namespace Chronos.Api.Controllers
 {
     [Route("api/[controller]")]
     [Authorize]
+    [ProducesResponseType(typeof(MensagemResponse), 200)]
+    [ProducesResponseType(typeof(MensagemResponse), 201)]
+    [ProducesResponseType(typeof(MensagemResponse), 400)]
+    [ProducesResponseType(typeof(MensagemResponse), 401)]
+    [ProducesResponseType(typeof(MensagemResponse), 403)]
+    [ProducesResponseType(typeof(MensagemResponse), 404)]
+    [ProducesResponseType(typeof(MensagemResponse), 500)]
     [ApiController]
     public class TarefaController : ControllerBase
     {
@@ -22,6 +30,20 @@ namespace Chronos.Api.Controllers
         public async Task<IActionResult> CadastrarAsync([FromBody] TarefaRequest request)
         {
             var response = await _tarefaService.CadastrarAsync(request);
+            return Ok(response);
+        }
+
+        [HttpPatch("{id}/start")]
+        public async Task<IActionResult> StartTarefa([FromRoute] int id)
+        {
+            var response = await _tarefaService.StartTarefa(id);
+            return Ok(response);
+        }
+
+        [HttpPatch("{id}/stop")]
+        public async Task<IActionResult> StopTarefa([FromRoute] int id)
+        {
+            var response = await _tarefaService.StopTarefa(id);
             return Ok(response);
         }
 
@@ -46,6 +68,13 @@ namespace Chronos.Api.Controllers
         public async Task<IActionResult> ObterPorIdAsync([FromRoute] int id)
         {
             var response = await _tarefaService.ObterPorIdAsync(id);
+            return Ok(response);
+        }
+
+        [HttpGet("usuario/{usuarioId}")]
+        public async Task<IActionResult> ObterPorUsuarioIdAsync([FromRoute] int usuarioId)
+        {
+            var response = await _tarefaService.ObterPorUsuarioId(usuarioId);
             return Ok(response);
         }
 
@@ -79,7 +108,7 @@ namespace Chronos.Api.Controllers
         }
 
         [HttpGet("{projetoId}/projeto")]
-        public async Task<IActionResult> ObterTarefasDoProjeto([FromRoute] int projetoId)
+        public async Task<IActionResult> ObterTarefasDoProjeto(int projetoId)
         {
             var response = await _tarefaService.ObterTarefasDoProjeto(projetoId);
             return Ok(response);

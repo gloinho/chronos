@@ -28,7 +28,7 @@ namespace Chronos.Services
 
         public async Task CadastrarAsync(Usuario_Projeto relacao)
         {
-            await CheckSeUsuarioExiste(relacao);
+            await CheckSeUsuarioExiste(relacao.UsuarioId);
             await CheckSeRelacaoJaExiste(relacao);
             await _usuario_ProjetoRepository.CadastrarAsync(relacao);
         }
@@ -84,14 +84,27 @@ namespace Chronos.Services
             return usuario_projeto;
         }
 
-        public async Task CheckSeProjetoExiste(int id)
+        public async Task CheckSeUsuarioExiste(int usuarioId)
         {
-            var projeto = await _projetoRepository.ObterPorIdAsync(id);
+            var usuario = await _usuarioRepository.ObterPorIdAsync(usuarioId);
+            if (usuario == null)
+            {
+                throw new BaseException(
+                    StatusException.NaoEncontrado,
+                    $"O usuario de ID {usuarioId} não foi encontrado."
+                );
+            }
+            ;
+        }
+
+        public async Task CheckSeProjetoExiste(int projetoId)
+        {
+            var projeto = await _projetoRepository.ObterPorIdAsync(projetoId);
             if (projeto == null)
             {
                 throw new BaseException(
                     StatusException.NaoEncontrado,
-                    $"Projeto de id {id} não foi encontrado."
+                    $"Projeto de id {projetoId} não foi encontrado."
                 );
             }
         }
@@ -109,19 +122,6 @@ namespace Chronos.Services
                     $"O usuario de id {relacao.UsuarioId} já faz parte do projeto {relacao.ProjetoId}"
                 );
             }
-        }
-
-        private async Task CheckSeUsuarioExiste(Usuario_Projeto relacao)
-        {
-            var usuario = await _usuarioRepository.ObterPorIdAsync(relacao.UsuarioId);
-            if (usuario == null)
-            {
-                throw new BaseException(
-                    StatusException.NaoEncontrado,
-                    $"O usuario de ID {relacao.UsuarioId} não foi encontrado."
-                );
-            }
-            ;
         }
     }
 }

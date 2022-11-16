@@ -8,5 +8,6 @@ namespace Chronos.Domain.Interfaces.Repository
         Task<List<Tarefa>> GetTarefasDia(int usuarioId);
         Task<List<Tarefa>> GetTarefasSemana(int usuarioId);
         Task<List<Tarefa>> GetTarefasProjeto(int projetoId);
+        Task<List<Tarefa>> ObterPorUsuarioIdAsync(int usuarioId);
     }
 }

@@ -10,5 +10,6 @@ namespace Chronos.Domain.Interfaces.Services
         Task CheckPermissao(int usuario_projetoId);
         Task<Usuario_Projeto> CheckSePodeAlterarTarefa(int projetoId, Tarefa tarefa);
         Task CheckSeProjetoExiste(int id);
+        Task CheckSeUsuarioExiste(int usuarioId);
     }
 }

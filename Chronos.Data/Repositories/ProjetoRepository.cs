@@ -9,5 +9,13 @@ namespace Chronos.Data.Repositories
     {
         public ProjetoRepository(ApplicationDbContext manutencaoContext) : base(manutencaoContext)
         { }
+
+        public async Task<List<Projeto>> ObterPorUsuarioIdAsync(int usuarioId)
+        {
+            var projetos = await _context.Projetos
+                .Include(p => p.Usuarios.Where(up => up.UsuarioId == usuarioId))
+                .ToListAsync();
+            return projetos;
+        }
     }
 }

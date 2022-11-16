@@ -25,6 +25,20 @@ namespace Chronos.Data.Repositories
             var tarefas = await _context.Tarefas
                 .Include(p => p.Usuario_Projeto)
                 .ThenInclude(u => u.Projeto)
+                .AsNoTracking()
+                .ToListAsync();
+            return tarefas;
+        }
+
+        public async Task<List<Tarefa>> ObterPorUsuarioIdAsync(int usuarioId)
+        {
+            var tarefas = await _context.Usuarios_Projetos
+                .Where(up => up.UsuarioId == usuarioId)
+                .Include(up => up.Tarefas)
+                .ThenInclude(t => t.Usuario_Projeto)
+                .ThenInclude(up => up.Projeto)
+                .SelectMany(t => t.Tarefas)
+                .AsNoTracking()
                 .ToListAsync();
             return tarefas;
         }
@@ -37,6 +51,7 @@ namespace Chronos.Data.Repositories
                 .ThenInclude(t => t.Usuario_Projeto)
                 .ThenInclude(up => up.Projeto)
                 .SelectMany(t => t.Tarefas.Where(t => t.DataInclusao.Day == DateTime.Today.Day))
+                .AsNoTracking()
                 .ToListAsync();
             return tarefas;
         }
@@ -54,6 +69,7 @@ namespace Chronos.Data.Repositories
                             t => EF.Functions.DateDiffWeek(DateTime.Today, t.DataInclusao) == 0
                         )
                 )
+                .AsNoTracking()
                 .ToListAsync();
 
             return tarefas;
@@ -79,6 +95,7 @@ namespace Chronos.Data.Repositories
                 .ThenInclude(t => t.Usuario_Projeto)
                 .ThenInclude(up => up.Projeto)
                 .SelectMany(t => t.Tarefas)
+                .AsNoTracking()
                 .ToListAsync();
             return tarefas;
         }
