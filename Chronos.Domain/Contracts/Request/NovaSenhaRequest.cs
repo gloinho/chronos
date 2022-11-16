@@ -2,7 +2,7 @@
 
 namespace Chronos.Domain.Contracts.Request
 {
-    public class RecuperarSenhaRequest
+    public class NovaSenhaRequest
     {
         [Required]
         public string Codigo { get; set;}

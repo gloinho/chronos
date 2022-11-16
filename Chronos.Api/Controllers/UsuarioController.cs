@@ -68,17 +68,17 @@ namespace Chronos.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("Enviar-CodigoSenha")]
-        public async Task<IActionResult> SolicitarCodigoRecuperarSenha(CodigoRecuperarSenhaRequest request)
+        [HttpPost("senha")]
+        public async Task<IActionResult> EnviarCodigoResetSenha([FromBody] ResetSenhaRequest request)
         {
-            var response = await _usuarioService.EnviarCondigoRecuperarSenha(request);
+            var response = await _usuarioService.EnviarCodigoResetSenha(request);
             return Created(nameof(CadastrarAsync), response);
         }
 
-        // Confirmar se vai ficar so "Authorize" ou vai ter alguma Role
+        
         [Authorize]
-        [HttpPut("Alterar")]
-        public async Task<IActionResult> AlterarSenha(RecuperarSenhaRequest request)
+        [HttpPut("senha")]
+        public async Task<IActionResult> AlterarSenha([FromBody] NovaSenhaRequest request)
         {
             var response = await _usuarioService.AlterarSenha(request);
             return Created(nameof(CadastrarAsync), response);

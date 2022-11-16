@@ -63,8 +63,8 @@ namespace Chronos.Domain.Shared
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(key),
                     SecurityAlgorithms.HmacSha256Signature
-                ),
-                Expires = DateTime.Now.AddHours(2),
+                )//,
+               // Expires = DateTime.Now.AddHours(2),         PERGUNTAR PQ TA QUEBRANDO QUANDO COLOCO ISSO
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
