@@ -33,12 +33,14 @@ namespace Chronos.Services
             await _usuario_ProjetoRepository.CadastrarAsync(relacao);
         }
 
-        public async Task<Usuario_Projeto> CheckSeUsuarioFazParteDoProjeto(int projetoId)
+        public async Task<Usuario_Projeto> CheckSeUsuarioFazParteDoProjeto(
+            int projetoId,
+            int? usuarioId
+        )
         {
-            await CheckSeProjetoExiste(projetoId);
             var relacao = await _usuario_ProjetoRepository.ObterPorUsuarioIdProjetoId(
                 projetoId,
-                UsuarioId
+                usuarioId
             );
             if (relacao == null)
             {
@@ -67,10 +69,25 @@ namespace Chronos.Services
 
         public async Task<Usuario_Projeto> CheckSePodeAlterarTarefa(int projetoId, Tarefa tarefa)
         {
-            // preciso checar SE o ID do usuário LOGADO é igual ao ID do usuário que existe no Usuario_Projeto da TAREFA.
+            // Primeiro checar se o projeto existe:
+            await CheckSeProjetoExiste(projetoId);
+
+            // Depois obter a relação pela tarefa:
             var usuario_projeto = await _usuario_ProjetoRepository.ObterPorIdAsync(
                 tarefa.Usuario_ProjetoId
             );
+
+            // Se o usuário logado for admin, precisa checar se o dono da tarefa em que ele quer mudar faz parte do projeto em que ele quer colocar a tarefa
+            if (UsuarioPermissao == PermissaoUtil.PermissaoAdministrador)
+            {
+                var relacao = await CheckSeUsuarioFazParteDoProjeto(
+                    projetoId,
+                    usuario_projeto.UsuarioId
+                );
+                return relacao;
+            }
+            // Se o usuário logado for colaborador preciso checar SE o ID do usuário LOGADO é igual ao ID do usuário que existe no Usuario_Projeto da TAREFA.
+
             if (UsuarioId != usuario_projeto.UsuarioId)
             {
                 throw new BaseException(
@@ -78,9 +95,6 @@ namespace Chronos.Services
                     "Não é possivel alterar tarefas de outros usuários."
                 );
             }
-            // após isso, verificar se o id do projeto existe e
-            // checar se o usuário faz parte do projeto em que ele quer alterar a tarefa.
-            await CheckSeUsuarioFazParteDoProjeto(projetoId);
             return usuario_projeto;
         }
 
