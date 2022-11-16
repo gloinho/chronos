@@ -126,5 +126,77 @@ namespace Chronos.Services
                 throw new BaseException(StatusException.NaoAutorizado, $"Colaborador não pode acessar.");
             }
         }
+
+        private async Task<Usuario> CheckSeEmailExiste(string email)
+        {
+            var usuario = await _usuarioRepository.GetPorEmail(email);
+            if (usuario == null)
+            {
+                throw new BaseException(StatusException.NaoEncontrado, $"Usuário com o email {email} não cadastrado.");
+            }
+            return usuario;
+        }
+
+        public async Task<MensagemResponse> EnviarCondigoRecuperarSenha(CodigoRecuperarSenhaRequest request)
+        {
+            var user = await CheckSeEmailExiste(request.Email);
+            var codigo = Token.GenerateCodigo();
+            var token = Token.GenerateTokenRequest(user, _appSettings.SecurityKey, codigo);
+
+            user.ResetSenhaToken = BCrypt.Net.BCrypt.HashPassword(
+                codigo,
+                BCrypt.Net.BCrypt.GenerateSalt()
+            );
+
+
+            await _usuarioRepository.AlterarAsync(user);
+
+            await _emailService.Send(
+            request.Email,
+            $"Codigo:  {codigo}" ,
+            $"Token: {token}"
+            );
+
+            return new MensagemResponse
+            {
+                Codigo = StatusException.Nenhum,
+                Mensagens = new List<string> { "Enviamos um token e Codigo para seu email. Por favor, faça a alteração." }
+            };
+        }
+
+        public async Task<MensagemResponse> AlterarSenha(RecuperarSenhaRequest request)
+        {
+            var codigoCrip = BCrypt.Net.BCrypt.HashPassword(
+                request.Codigo,
+                BCrypt.Net.BCrypt.GenerateSalt()
+            );
+
+            var user = await _usuarioRepository.GetPorCodigo(codigoCrip);
+
+            if(user == null)
+            {
+                throw new BaseException(StatusException.NaoEncontrado, $"Codigo invalido.");
+            }
+
+            if(request.Senha != request.ConfirmacaoSenha)
+            {
+                
+                throw new BaseException(StatusException.FormatoIncorreto, $"Senhas digitadas as diferentes .");
+                
+            }
+
+            user.Senha = BCrypt.Net.BCrypt.HashPassword(
+                request.Senha,
+                BCrypt.Net.BCrypt.GenerateSalt()
+            );
+
+            await _usuarioRepository.AlterarAsync(user);
+
+            return new MensagemResponse
+            {
+                Codigo = StatusException.Nenhum,
+                Mensagens = new List<string> { "Senha alterada com sucesso." }
+            };
+        }
     }
 }

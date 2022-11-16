@@ -6,6 +6,7 @@ namespace Chronos.Domain.Interfaces.Repository
     {
         Task<Usuario> GetPorEmail(string email);
         Task<Usuario> GetPorToken(string token);
+        Task<Usuario> GetPorCodigo(string codigo);
         Task Confirmar(Usuario usuario);
     }
 }

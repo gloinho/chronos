@@ -25,5 +25,10 @@ namespace Chronos.Data.Repositories
         {
             return await base._context.Usuarios.FirstOrDefaultAsync(user => user.ConfirmacaoToken == token);
         }
+
+        public async Task<Usuario> GetPorCodigo(string codigo)
+        {
+            return await base._context.Usuarios.FirstOrDefaultAsync(user => user.ResetSenhaToken == codigo);
+        }
     }
 }

@@ -66,5 +66,22 @@ namespace Chronos.Api.Controllers
             var response = await _usuarioService.DeletarAsync(id);
             return Ok(response);
         }
+
+        [AllowAnonymous]
+        [HttpPost("Enviar-CodigoSenha")]
+        public async Task<IActionResult> SolicitarCodigoRecuperarSenha(CodigoRecuperarSenhaRequest request)
+        {
+            var response = await _usuarioService.EnviarCondigoRecuperarSenha(request);
+            return Created(nameof(CadastrarAsync), response);
+        }
+
+        // Quando Coloco uma autorização, esta dando falha.
+        [AllowAnonymous]
+        [HttpPut("Alterar")]
+        public async Task<IActionResult> AlterarSenha(RecuperarSenhaRequest request)
+        {
+            var response = await _usuarioService.AlterarSenha(request);
+            return Created(nameof(CadastrarAsync), response);
+        }
     }
 }
