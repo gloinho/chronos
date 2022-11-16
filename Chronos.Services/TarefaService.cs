@@ -236,12 +236,15 @@ namespace Chronos.Services
 
         private void CheckDataDeInclusao(Tarefa tarefa)
         {
-            if (tarefa.DataInclusao.AddDays(2) < DateTime.Now)
+            if (UsuarioPermissao == PermissaoUtil.PermissaoColaborador)
             {
-                throw new BaseException(
-                    StatusException.NaoProcessado,
-                    $"O tempo de editar a tarefa expirou em {tarefa.DataInclusao.AddDays(2)}"
-                );
+                if (tarefa.DataInclusao.AddDays(2) < DateTime.Now)
+                {
+                    throw new BaseException(
+                        StatusException.NaoProcessado,
+                        $"O tempo de editar a tarefa expirou em {tarefa.DataInclusao.AddDays(2)}"
+                    );
+                }
             }
         }
     }
