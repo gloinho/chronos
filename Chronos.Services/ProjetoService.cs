@@ -5,6 +5,7 @@ using Chronos.Domain.Entities;
 using Chronos.Domain.Exceptions;
 using Chronos.Domain.Interfaces.Repository;
 using Chronos.Domain.Interfaces.Services;
+using Chronos.Domain.Utils;
 using Chronos.Services.Validators;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
@@ -100,6 +101,13 @@ namespace Chronos.Services
             return result;
         }
 
+        public async Task<List<ProjetoResponse>> ObterPorUsuarioId(int usuarioId)
+        {
+            await CheckPermissao(usuarioId);
+            var projetos = await _projetoRepository.ObterPorUsuarioIdAsync(usuarioId);
+            return _mapper.Map<List<ProjetoResponse>>(projetos);
+        }
+
         public async Task<List<ProjetoResponse>> ObterTodosAsync()
         {
             var projetos = await _projetoRepository.ObterTodosAsync();
@@ -121,6 +129,18 @@ namespace Chronos.Services
                 );
             }
             return projeto;
+        }
+
+        private async Task CheckPermissao(int usuarioId)
+        {
+            await _usuario_projetoService.CheckSeUsuarioExiste(usuarioId);
+            if (UsuarioPermissao == PermissaoUtil.PermissaoColaborador && UsuarioId != usuarioId)
+            {
+                throw new BaseException(
+                    StatusException.NaoAutorizado,
+                    "Colaborador não pode interagir com projetos de outros colaboradores."
+                );
+            }
         }
     }
 }

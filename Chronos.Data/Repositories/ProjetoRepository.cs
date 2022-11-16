@@ -10,24 +10,12 @@ namespace Chronos.Data.Repositories
         public ProjetoRepository(ApplicationDbContext manutencaoContext) : base(manutencaoContext)
         { }
 
-        public override async Task<ICollection<Projeto>> ObterTodosAsync()
+        public async Task<List<Projeto>> ObterPorUsuarioIdAsync(int usuarioId)
         {
-            return await base._context
-                .Set<Projeto>()
-                .Include(p => p.Usuarios)
-                .ThenInclude(p => p.Usuario)
-                .AsNoTracking()
+            var projetos = await _context.Projetos
+                .Include(p => p.Usuarios.Where(up => up.UsuarioId == usuarioId))
                 .ToListAsync();
-        }
-
-        public override async Task<Projeto> ObterPorIdAsync(int id)
-        {
-            return await base._context
-                .Set<Projeto>()
-                .Include(p => p.Usuarios)
-                .ThenInclude(p => p.Usuario)
-                .Where(p => p.Id == id)
-                .FirstOrDefaultAsync();
+            return projetos;
         }
     }
 }
