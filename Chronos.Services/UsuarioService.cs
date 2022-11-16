@@ -196,6 +196,11 @@ namespace Chronos.Services
                 );
             }
 
+            if(BCrypt.Net.BCrypt.Verify(request.Senha, user.Senha))
+            {
+                throw new BaseException(StatusException.Erro, "Nova senha deve ser diferente da senha atual");
+            }
+
             user.Senha = BCrypt.Net.BCrypt.HashPassword(
                 request.Senha,
                 BCrypt.Net.BCrypt.GenerateSalt()

@@ -75,8 +75,8 @@ namespace Chronos.Api.Controllers
             return Created(nameof(CadastrarAsync), response);
         }
 
-        // Quando Coloco uma autorização, esta dando falha.
-        [AllowAnonymous]
+        // Confirmar se vai ficar so "Authorize" ou vai ter alguma Role
+        [Authorize]
         [HttpPut("Alterar")]
         public async Task<IActionResult> AlterarSenha(RecuperarSenhaRequest request)
         {
