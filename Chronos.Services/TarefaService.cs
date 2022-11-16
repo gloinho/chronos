@@ -54,7 +54,8 @@ namespace Chronos.Services
         {
             await _validator.ValidateAndThrowAsync(request);
             var usuario_projeto = await _usuario_ProjetoService.CheckSeUsuarioFazParteDoProjeto(
-                request.ProjetoId
+                request.ProjetoId,
+                UsuarioId
             );
             var tarefa = _mapper.Map<Tarefa>(request);
             tarefa.Usuario_ProjetoId = usuario_projeto.Id;
@@ -130,7 +131,7 @@ namespace Chronos.Services
             await _usuario_ProjetoService.CheckSeProjetoExiste(projetoId);
             if (UsuarioPermissao == PermissaoUtil.PermissaoColaborador)
             {
-                await _usuario_ProjetoService.CheckSeUsuarioFazParteDoProjeto(projetoId);
+                await _usuario_ProjetoService.CheckSeUsuarioFazParteDoProjeto(projetoId, UsuarioId);
             }
             var tarefas = await _tarefaRepository.GetTarefasProjeto(projetoId);
             var response = ObterHorasTotais(tarefas);
