@@ -9,7 +9,17 @@ namespace Chronos.Domain.Utils
             var claim = httpContext?.User?.Claims;
 
             if (claim != null && claim.Any())
-                return claim.FirstOrDefault(x => x.Type.Equals(claimTypes)).Value;
+            {
+                try
+                {
+                    var value = claim.FirstOrDefault(x => x.Type.Equals(claimTypes)).Value;
+                    return value;
+                }
+                catch (Exception e)
+                {
+                    return string.Empty;
+                }
+            }
 
             return null;
         }

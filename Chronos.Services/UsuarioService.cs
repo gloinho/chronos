@@ -56,7 +56,10 @@ namespace Chronos.Services
             return new MensagemResponse
             {
                 Codigo = StatusException.Nenhum,
-                Mensagens = new List<string> { "Enviamos um token para seu email. Por favor, faça a confirmação." }
+                Mensagens = new List<string>
+                {
+                    "Enviamos um token para seu email. Por favor, faça a confirmação."
+                }
             };
         }
 
@@ -96,7 +99,10 @@ namespace Chronos.Services
         public async Task<List<UsuarioResponse>> ObterTodosAsync()
         {
             var usuarios = await _usuarioRepository.ObterTodosAsync();
-            var usuariosOrdenados = _mapper.Map<List<UsuarioResponse>>(usuarios).OrderBy(u => u.Nome).ToList();
+            var usuariosOrdenados = _mapper
+                .Map<List<UsuarioResponse>>(usuarios)
+                .OrderBy(u => u.Nome)
+                .ToList();
             return usuariosOrdenados;
         }
 
@@ -114,7 +120,10 @@ namespace Chronos.Services
             var usuario = await _usuarioRepository.ObterPorIdAsync(id);
             if (usuario == null)
             {
-                throw new BaseException(StatusException.NaoEncontrado, $"Usuário com o id {id} não cadastrado.");
+                throw new BaseException(
+                    StatusException.NaoEncontrado,
+                    $"Usuário com o id {id} não cadastrado."
+                );
             }
             return usuario;
         }
@@ -123,7 +132,10 @@ namespace Chronos.Services
         {
             if (UsuarioPermissao == PermissaoUtil.PermissaoColaborador && id != UsuarioId)
             {
-                throw new BaseException(StatusException.NaoAutorizado, $"Colaborador não pode acessar.");
+                throw new BaseException(
+                    StatusException.NaoAutorizado,
+                    $"Colaborador não pode acessar."
+                );
             }
         }
 
@@ -132,12 +144,17 @@ namespace Chronos.Services
             var usuario = await _usuarioRepository.GetPorEmail(email);
             if (usuario == null)
             {
-                throw new BaseException(StatusException.NaoEncontrado, $"Usuário com o email {email} não cadastrado.");
+                throw new BaseException(
+                    StatusException.NaoEncontrado,
+                    $"Usuário com o email {email} não cadastrado."
+                );
             }
             return usuario;
         }
 
-        public async Task<MensagemResponse> EnviarCondigoRecuperarSenha(CodigoRecuperarSenhaRequest request)
+        public async Task<MensagemResponse> EnviarCondigoRecuperarSenha(
+            CodigoRecuperarSenhaRequest request
+        )
         {
             var user = await CheckSeEmailExiste(request.Email);
             var codigo = Token.GenerateCodigo();
@@ -148,41 +165,35 @@ namespace Chronos.Services
                 BCrypt.Net.BCrypt.GenerateSalt()
             );
 
-
             await _usuarioRepository.AlterarAsync(user);
 
-            await _emailService.Send(
-            request.Email,
-            $"Codigo:  {codigo}" ,
-            $"Token: {token}"
-            );
+            await _emailService.Send(request.Email, $"Codigo:  {codigo}", $"Token: {token}");
 
             return new MensagemResponse
             {
                 Codigo = StatusException.Nenhum,
-                Mensagens = new List<string> { "Enviamos um token e Codigo para seu email. Por favor, faça a alteração." }
+                Mensagens = new List<string>
+                {
+                    "Enviamos um token e Codigo para seu email. Por favor, faça a alteração."
+                }
             };
         }
 
         public async Task<MensagemResponse> AlterarSenha(RecuperarSenhaRequest request)
         {
-            var codigoCrip = BCrypt.Net.BCrypt.HashPassword(
-                request.Codigo,
-                BCrypt.Net.BCrypt.GenerateSalt()
-            );
+            var user = await _usuarioRepository.GetPorEmail(UsuarioEmail);
 
-            var user = await _usuarioRepository.GetPorCodigo(codigoCrip);
-
-            if(user == null)
+            if (!BCrypt.Net.BCrypt.Verify(request.Codigo, user.ResetSenhaToken))
             {
-                throw new BaseException(StatusException.NaoEncontrado, $"Codigo invalido.");
+                throw new BaseException(StatusException.Erro, "Código incorreto.");
             }
-
-            if(request.Senha != request.ConfirmacaoSenha)
+            ;
+            if (request.Senha != request.ConfirmacaoSenha)
             {
-                
-                throw new BaseException(StatusException.FormatoIncorreto, $"Senhas digitadas as diferentes .");
-                
+                throw new BaseException(
+                    StatusException.FormatoIncorreto,
+                    $"Senhas digitadas as diferentes ."
+                );
             }
 
             user.Senha = BCrypt.Net.BCrypt.HashPassword(
