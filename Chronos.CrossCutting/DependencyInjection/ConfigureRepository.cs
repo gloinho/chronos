@@ -21,6 +21,7 @@ namespace Chronos.CrossCutting.DependencyInjection
             serviceCollection.AddScoped<IUsuarioRepository, UsuarioRepository>();
             serviceCollection.AddScoped<IProjetoRepository, ProjetoRepository>();
             serviceCollection.AddScoped<IUsuario_ProjetoRepository, Usuario_ProjetoRepository>();
+            serviceCollection.AddScoped<ITarefaRepository, TarefaRepository>();
         }
     }
 }
