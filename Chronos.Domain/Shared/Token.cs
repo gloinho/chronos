@@ -40,7 +40,7 @@ namespace Chronos.Domain.Shared
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
                 Subject = new ClaimsIdentity(
-                    new Claim[] { new Claim(ClaimTypes.Email, usuario.Email), }
+                    new Claim[] { new Claim(ClaimTypes.Email, usuario.Email)}
                 ),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(key),
@@ -49,6 +49,35 @@ namespace Chronos.Domain.Shared
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public static string GenerateTokenRequest(Usuario usuario, string securityKey, string codigo)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(securityKey);
+            var tokenDescriptor = new SecurityTokenDescriptor()
+            {
+                Subject = new ClaimsIdentity(
+                    new Claim[] { new Claim(ClaimTypes.Email, usuario.Email), new Claim(ClaimTypes.NameIdentifier, codigo) }
+                ),              
+                Expires = DateTime.UtcNow.AddHours(2),
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature
+                ),
+                        
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+
+
+        public static string GenerateCodigo()
+        {
+            var random = new Random();
+            var codigo = random.Next(111111, 999999);
+
+            return codigo.ToString();
         }
     }
 }

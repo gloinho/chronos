@@ -66,5 +66,22 @@ namespace Chronos.Api.Controllers
             var response = await _usuarioService.DeletarAsync(id);
             return Ok(response);
         }
+
+        [AllowAnonymous]
+        [HttpPost("senha")]
+        public async Task<IActionResult> EnviarCodigoResetSenha([FromBody] ResetSenhaRequest request)
+        {
+            var response = await _usuarioService.EnviarCodigoResetSenha(request);
+            return Created(nameof(CadastrarAsync), response);
+        }
+
+        
+        [Authorize]
+        [HttpPut("senha")]
+        public async Task<IActionResult> AlterarSenha([FromBody] NovaSenhaRequest request)
+        {
+            var response = await _usuarioService.AlterarSenha(request);
+            return Created(nameof(CadastrarAsync), response);
+        }
     }
 }
