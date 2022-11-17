@@ -4,10 +4,16 @@ using FluentValidation;
 
 namespace Chronos.Services.Validators
 {
-    public class RecuperarSenhaRequestValidador : AbstractValidator<NovaSenhaRequest>
+    public class RecuperarSenhaRequestValidator : AbstractValidator<NovaSenhaRequest>
     {
-        public RecuperarSenhaRequestValidador()
+        public RecuperarSenhaRequestValidator()
         {
+            RuleFor(p => p.Codigo)
+                .NotEmpty()
+                .WithMessage("O campo 'Codigo' não pode ser vazio.")
+                .Length(6)
+                .WithMessage("O campo 'Codigo' precisa ter 6 números.");
+
             RuleFor(p => p.Senha)
                 .NotEmpty()
                 .WithMessage("O campo 'Senha' não pode ser vazio.")

@@ -111,13 +111,13 @@ namespace Chronos.Services
         {
             var user = await _usuarioRepository.GetPorEmail(UsuarioEmail);
 
+            await validatorNovaSenha.ValidateAndThrowAsync(request);
+
             if (!BCrypt.Net.BCrypt.Verify(request.Codigo, user.ResetSenhaToken))
             {
                 throw new BaseException(StatusException.Erro, "Código incorreto.");
             }
-
-            await validatorNovaSenha.ValidateAndThrowAsync(request);
-
+      
             if (request.Senha != request.ConfirmacaoSenha)
             {
                 throw new BaseException(

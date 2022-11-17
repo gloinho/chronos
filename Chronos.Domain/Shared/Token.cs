@@ -59,12 +59,13 @@ namespace Chronos.Domain.Shared
             {
                 Subject = new ClaimsIdentity(
                     new Claim[] { new Claim(ClaimTypes.Email, usuario.Email), new Claim(ClaimTypes.NameIdentifier, codigo) }
-                ),
+                ),              
+                Expires = DateTime.UtcNow.AddHours(2),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(key),
                     SecurityAlgorithms.HmacSha256Signature
-                )//,
-               // Expires = DateTime.Now.AddHours(2),         PERGUNTAR PQ TA QUEBRANDO QUANDO COLOCO ISSO
+                ),
+                        
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
