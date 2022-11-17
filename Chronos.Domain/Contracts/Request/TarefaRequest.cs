@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Chronos.Domain.Contracts.Request
 {
@@ -9,5 +10,11 @@ namespace Chronos.Domain.Contracts.Request
 
         [Required]
         public int ProjetoId { get; set; }
+
+        [DefaultValue(null)]
+        public DateTime? DataInicial { get; set; }
+
+        [DefaultValue(null)]
+        public DateTime? DataFinal { get; set; }
     }
 }

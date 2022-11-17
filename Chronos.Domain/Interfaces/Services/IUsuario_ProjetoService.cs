@@ -1,9 +1,15 @@
-﻿using Chronos.Domain.Entities;
+﻿using Chronos.Domain.Contracts.Request;
+using Chronos.Domain.Entities;
 
 namespace Chronos.Domain.Interfaces.Services
 {
     public interface IUsuario_ProjetoService
     {
         Task CadastrarAsync(Usuario_Projeto relacao);
+        Task<Usuario_Projeto> CheckSeUsuarioFazParteDoProjeto(int projetoId, int? usuarioId);
+        Task CheckPermissao(int usuario_projetoId);
+        Task<Usuario_Projeto> CheckSePodeAlterarTarefa(int projetoId, Tarefa tarefa);
+        Task CheckSeProjetoExiste(int id);
+        Task CheckSeUsuarioExiste(int usuarioId);
     }
 }

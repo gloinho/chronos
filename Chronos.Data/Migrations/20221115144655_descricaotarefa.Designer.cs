@@ -4,6 +4,7 @@ using Chronos.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chronos.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221115144655_descricaotarefa")]
+    partial class descricaotarefa
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,6 +77,9 @@ namespace Chronos.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<TimeSpan>("TotalHoras")
+                        .HasColumnType("time");
+
                     b.Property<int>("Usuario_ProjetoId")
                         .HasColumnType("int");
 
@@ -119,6 +124,9 @@ namespace Chronos.Data.Migrations
 
                     b.Property<string>("ResetSenhaToken")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ResetSenhaVencimento")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Senha")
                         .IsRequired()
