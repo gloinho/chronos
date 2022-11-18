@@ -76,6 +76,10 @@ namespace Chronos.Services
 
             await _logService.LogAsync(nameof(UsuarioService),nameof(AlterarAsync), id);
 
+            request.Senha = BCrypt.Net.BCrypt.HashPassword(
+                request.Senha,
+                BCrypt.Net.BCrypt.GenerateSalt()
+            );
             await _usuarioRepository.AlterarAsync(_mapper.Map(request, usuario));
             return new MensagemResponse
             {
