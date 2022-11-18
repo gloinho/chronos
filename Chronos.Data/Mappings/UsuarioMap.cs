@@ -17,5 +17,7 @@ public class UsuarioMap : IEntityTypeConfiguration<Usuario>
                 prop => prop.ToString(),
                 prop => (Permissao)Enum.Parse(typeof(Permissao), prop)
             );
+
+        builder.HasMany(prop => prop.Logs).WithOne(prop => prop.Responsavel);
     }
 }
