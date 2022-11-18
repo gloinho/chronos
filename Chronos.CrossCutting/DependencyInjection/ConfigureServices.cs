@@ -15,6 +15,8 @@ namespace Chronos.CrossCutting.DependencyInjection
             serviceCollection.AddScoped<IUsuario_ProjetoService, Usuario_ProjetoService>();
             serviceCollection.AddScoped<ITarefaService, TarefaService>();
             serviceCollection.AddScoped<ITogglService, TogglService>();
+            serviceCollection.AddScoped<ILogService, LogService>();
+           
         }
     }
 }

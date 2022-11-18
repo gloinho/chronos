@@ -17,6 +17,7 @@ namespace Chronos.Services
     public class UsuarioService : BaseService, IUsuarioService
     {
         private readonly IUsuarioRepository _usuarioRepository;
+        private readonly ILogService _logService;
         private readonly IEmailService _emailService;
         private readonly UsuarioRequestValidator validator = new UsuarioRequestValidator();
         private readonly RecuperarSenhaRequestValidator validatorNovaSenha = new RecuperarSenhaRequestValidator();
@@ -25,6 +26,7 @@ namespace Chronos.Services
 
         public UsuarioService(
             IUsuarioRepository usuarioRepository,
+            ILogService logService,
             IEmailService emailService,
             AppSettings appSettings,
             IMapper mapper,
@@ -32,6 +34,7 @@ namespace Chronos.Services
         ) : base(httpContextAccessor)
         {
             _usuarioRepository = usuarioRepository;
+            _logService = logService;
             _emailService = emailService;
             _appSettings = appSettings;
             _mapper = mapper;
@@ -70,6 +73,9 @@ namespace Chronos.Services
             var usuario = await CheckSeIdExiste(id);
             await validator.ValidateAndThrowAsync(request);
             usuario.DataAlteracao = DateTime.Now;
+
+            await _logService.LogAsync(nameof(UsuarioService),nameof(AlterarAsync), id);
+
             await _usuarioRepository.AlterarAsync(_mapper.Map(request, usuario));
             return new MensagemResponse
             {
@@ -81,6 +87,9 @@ namespace Chronos.Services
         public async Task<MensagemResponse> DeletarAsync(int id)
         {
             var usuario = await CheckSeIdExiste(id);
+
+            await _logService.LogAsync(nameof(UsuarioService), nameof(DeletarAsync), id);
+
             await _usuarioRepository.DeletarAsync(usuario);
             return new MensagemResponse
             {
@@ -134,7 +143,7 @@ namespace Chronos.Services
             user.Senha = BCrypt.Net.BCrypt.HashPassword(
                 request.Senha,
                 BCrypt.Net.BCrypt.GenerateSalt()
-            );
+            );           
 
             await _usuarioRepository.AlterarAsync(user);
 

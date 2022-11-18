@@ -15,6 +15,7 @@ namespace Chronos.Services
     public class ProjetoService : BaseService, IProjetoService
     {
         private readonly IProjetoRepository _projetoRepository;
+        private readonly ILogService _logService;
         private readonly IUsuario_ProjetoService _usuario_projetoService;
         private readonly ProjetoRequestValidator _validator = new ProjetoRequestValidator();
         private readonly AdicionarColaboradorRequestValidator _validatorColab =
@@ -24,11 +25,13 @@ namespace Chronos.Services
         public ProjetoService(
             IHttpContextAccessor httpContextAccessor,
             IProjetoRepository projetoRepository,
+            ILogService logService,
             IMapper mapper,
             IUsuario_ProjetoService usuario_ProjetoService
         ) : base(httpContextAccessor)
         {
             _projetoRepository = projetoRepository;
+            _logService = logService;
             _mapper = mapper;
             _usuario_projetoService = usuario_ProjetoService;
         }
@@ -62,6 +65,9 @@ namespace Chronos.Services
             var projeto = await CheckSeIdExiste(id);
             await _validator.ValidateAndThrowAsync(request);
             projeto.DataAlteracao = DateTime.Now;
+
+            await _logService.LogAsync(nameof(ProjetoService), nameof(AlterarAsync), id);
+
             await _projetoRepository.AlterarAsync(_mapper.Map(request, projeto));
             return new MensagemResponse
             {
@@ -86,6 +92,9 @@ namespace Chronos.Services
         public async Task<MensagemResponse> DeletarAsync(int id)
         {
             var projeto = await CheckSeIdExiste(id);
+
+            await _logService.LogAsync(nameof(TarefaService), nameof(DeletarAsync), id);
+
             await _projetoRepository.DeletarAsync(projeto);
             return new MensagemResponse
             {
