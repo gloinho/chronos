@@ -1,30 +1,113 @@
-﻿using Chronos.Testes.Settings;
+﻿using Chronos.Testes.Fakers;
+using Chronos.Testes.Settings;
 using Microsoft.EntityFrameworkCore;
-using Moq.EntityFrameworkCore;
 
 namespace Chronos.Testes.Repositories
 {
     [TestClass]
     public class TarefaRepositoryTest
     {
-        private readonly Mock<ApplicationDbContext> _mockContext;
-        private readonly Fixture _fixture;
+        private readonly ApplicationDbContext _context;
 
         public TarefaRepositoryTest()
         {
-            _mockContext = new Mock<ApplicationDbContext>();
-            _fixture = FixtureConfig.Get();
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: "MockDB")
+                .Options;
+
+            _context = new ApplicationDbContext(options);
+            _context.Database.EnsureCreated();
+            // Arrange -> Popular o banco de dados com uma entidade de cada tipo.
+            var usuario = UsuarioFaker.GetUsuario();
+            var projeto = ProjetoFaker.GetProjeto();
+            _context.Usuarios.Add(usuario);
+            _context.Projetos.Add(projeto);
+            _context.SaveChanges();
+            var usuario_projeto = Usuario_ProjetoFaker.GetRelacao(
+                _context.Projetos.First(),
+                _context.Usuarios.First()
+            );
+            _context.Usuarios_Projetos.Add(usuario_projeto);
+            _context.SaveChanges();
+            var tarefas = new List<Tarefa>()
+            {
+                TarefaFaker.GetTarefa(usuario_projeto.Id), // dia + semana
+                TarefaFaker.GetTarefaAddTresDias(usuario_projeto.Id), // semana
+                TarefaFaker.GetTarefaAntiga(usuario_projeto.Id) // nenhum dos dois
+            };
+            _context.Tarefas.AddRange(tarefas);
+            _context.SaveChanges();
+        }
+
+        [TestMethod]
+        public async Task TestObterPorIdAsync()
+        {
+            var repository = new TarefaRepository(_context);
+            var result = await repository.ObterPorIdAsync(1);
+            Assert.AreEqual(1, result.Id);
+            Assert.AreEqual(1, result.Usuario_Projeto.Id);
+            Assert.AreEqual(1, result.Usuario_Projeto.Projeto.Id);
+        }
+
+        [TestMethod]
+        public async Task TestObterTodosAsync()
+        {
+            var repository = new TarefaRepository(_context);
+            var result = await repository.ObterTodosAsync();
+            Assert.IsNotNull(result);
+            Assert.AreEqual(3, result.Count);
+        }
+
+        [TestMethod]
+        public async Task TestObterPorUsuarioIdAsync()
+        {
+            var repository = new TarefaRepository(_context);
+            var result = await repository.ObterPorUsuarioIdAsync(1);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(3, result.Count);
+        }
+
+        // EF DateDiff não é suportado pelo In Memory Database :
+        // https://github.com/dotnet/efcore/issues/22566
+        // https://github.com/dotnet/efcore/issues/22566#issuecomment-693552960
+
+        //[TestMethod]
+        //public async Task TestGetTarefasDia()
+        //{
+        //    var repository = new TarefaRepository(_context);
+        //    var result = await repository.GetTarefasDia(1);
+        //    Assert.AreEqual(1, result.Count);
+        //}
+
+        //[TestMethod]
+        //public async Task TestGetTarefasSemana()
+        //{
+        //    var repository = new TarefaRepository(_context);
+        //    var result = await repository.GetTarefasSemana(1);
+        //    Assert.AreEqual(2, result.Count);
+        //}
+
+        //[TestMethod]
+        //public async Task TestGetTarefasMes()
+        //{
+        //    var repository = new TarefaRepository(_context);
+        //    var result = await repository.GetTarefasMes(1);
+        //    Assert.AreEqual(2, result.Count);
+        //}
+
+        [TestMethod]
+        public async Task TestGetTarefasPorProjeto()
+        {
+            var repository = new TarefaRepository(_context);
+            var result = await repository.GetTarefasProjeto(1);
+            Assert.AreEqual(3, result.Count);
         }
 
         [TestMethod]
         public async Task TestCadastrarAsync()
         {
-            var tarefa = _fixture.Create<Tarefa>();
-            _mockContext
-                .Setup(mock => mock.Set<Tarefa>())
-                .ReturnsDbSet(new List<Tarefa> { tarefa });
-
-            var repository = new TarefaRepository(_mockContext.Object);
+            var tarefa = TarefaFaker.GetTarefa(1);
+            var repository = new TarefaRepository(_context);
 
             var result = repository.CadastrarAsync(tarefa);
             Assert.AreEqual(Task.CompletedTask, result);
@@ -33,12 +116,8 @@ namespace Chronos.Testes.Repositories
         [TestMethod]
         public async Task TestAlterarAsync()
         {
-            var tarefa = _fixture.Create<Tarefa>();
-
-            _mockContext
-                .Setup(mock => mock.Set<Tarefa>())
-                .ReturnsDbSet(new List<Tarefa> { tarefa });
-            var repository = new TarefaRepository(_mockContext.Object);
+            var tarefa = _context.Tarefas.Last();
+            var repository = new TarefaRepository(_context);
 
             var result = await repository.AlterarAsync(tarefa);
             Assert.AreEqual(tarefa.Id, result.Id);
@@ -47,73 +126,27 @@ namespace Chronos.Testes.Repositories
         [TestMethod]
         public async Task TestDeletarAsync()
         {
-            var tarefa = _fixture.Create<Tarefa>();
-
-            _mockContext.Setup(mock => mock.Set<Tarefa>()).ReturnsDbSet(new List<Tarefa>());
-            var repository = new TarefaRepository(_mockContext.Object);
+            var tarefa = _context.Tarefas.Last();
+            var repository = new TarefaRepository(_context);
 
             var result = repository.DeletarAsync(tarefa);
             Assert.AreEqual(Task.CompletedTask, result);
         }
 
-        //[TestMethod]
-        //public async Task TestObterPorIdAsync()
-        //{
-        //    var tarefa = _fixture.Create<Tarefa>();
-        //    var usuario_projeto = _fixture.Create<Usuario_Projeto>();
-        //    tarefa.Usuario_Projeto = usuario_projeto;
-        //    usuario_projeto.Tarefas.Add(tarefa);
+        [TestMethod]
+        public async Task TestObterAsync()
+        {
+            var tarefa = _context.Tarefas.Last();
+            var repository = new TarefaRepository(_context);
 
-        //    var tarefas = new List<Tarefa>() { tarefa }.AsQueryable();
-        //    var usuarios_projetos = new List<Usuario_Projeto>() { usuario_projeto }.AsQueryable();
+            var result = await repository.ObterAsync(t => t.Id == tarefa.Id);
+            Assert.AreEqual(tarefa, result);
+        }
 
-        //    var mockTarefas = new Mock<DbSet<Tarefa>>();
-
-        //    mockTarefas.As<IQueryable<Tarefa>>().Setup(m => m.Provider).Returns(tarefas.Provider);
-        //    mockTarefas
-        //        .As<IQueryable<Tarefa>>()
-        //        .Setup(m => m.Expression)
-        //        .Returns(tarefas.Expression);
-        //    mockTarefas
-        //        .As<IQueryable<Tarefa>>()
-        //        .Setup(m => m.ElementType)
-        //        .Returns(tarefas.ElementType);
-        //    mockTarefas
-        //        .As<IQueryable<Tarefa>>()
-        //        .Setup(m => m.GetEnumerator())
-        //        .Returns(tarefas.GetEnumerator());
-
-        //    var mockusuarios_projetos = new Mock<DbSet<Usuario_Projeto>>();
-
-        //    mockusuarios_projetos
-        //        .As<IQueryable<Usuario_Projeto>>()
-        //        .Setup(m => m.Provider)
-        //        .Returns(usuarios_projetos.Provider);
-        //    mockusuarios_projetos
-        //        .As<IQueryable<Usuario_Projeto>>()
-        //        .Setup(m => m.Expression)
-        //        .Returns(usuarios_projetos.Expression);
-        //    mockusuarios_projetos
-        //        .As<IQueryable<Usuario_Projeto>>()
-        //        .Setup(m => m.ElementType)
-        //        .Returns(usuarios_projetos.ElementType);
-        //    mockusuarios_projetos
-        //        .As<IQueryable<Usuario_Projeto>>()
-        //        .Setup(m => m.GetEnumerator())
-        //        .Returns(usuarios_projetos.GetEnumerator());
-
-        //    var mockContext = new Mock<ApplicationDbContext>(MockBehavior.Loose);
-        //    mockTarefas.Setup(p => p.Include(It.IsAny<string>())).Returns(mockTarefas.Object);
-        //    mockusuarios_projetos
-        //        .Setup(p => p.Include(It.IsAny<string>()))
-        //        .Returns(mockusuarios_projetos.Object);
-
-        //    mockContext.Setup(p => p.Set<Tarefa>()).Returns(mockTarefas.Object);
-
-        //    var list = mockContext.Object.Tarefas
-        //        .Include(p => p.Usuario_Projeto)
-        //        .Select(p => p)
-        //        .ToList();
-        //}
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            _context.Database.EnsureDeleted();
+        }
     }
 }
