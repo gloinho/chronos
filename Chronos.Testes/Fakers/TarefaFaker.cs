@@ -4,42 +4,29 @@
     {
         private static Faker faker = new Faker();
 
-        public static Tarefa GetTarefaAntiga(int id)
+        public static Tarefa GetTarefaDeHoje(int id)
         {
             return new Tarefa
             {
                 Usuario_ProjetoId = id,
                 Descricao = faker.Random.String(),
-                DataInicial = faker.Date.Past(),
-                DataFinal = null,
-                DataAlteracao = faker.Date.Past(),
-                DataInclusao = faker.Date.Past(1),
-            };
-        }
-
-        public static Tarefa GetTarefa(int id)
-        {
-            return new Tarefa
-            {
-                Usuario_ProjetoId = id,
-                Descricao = faker.Random.String(),
-                DataInicial = faker.Date.Past(),
-                DataFinal = null,
+                DataInicial = DateTime.Today,
+                DataFinal = DateTime.Today,
                 DataAlteracao = faker.Date.Past(),
                 DataInclusao = DateTime.Today,
             };
         }
 
-        public static Tarefa GetTarefaAddTresDias(int id)
+        public static Tarefa GetTarefaDeAmanha(int id)
         {
             return new Tarefa
             {
                 Usuario_ProjetoId = id,
                 Descricao = faker.Random.String(),
-                DataInicial = faker.Date.Past(),
-                DataFinal = null,
+                DataInicial = DateTime.Today.AddDays(1),
+                DataFinal = DateTime.Today.AddDays(1),
                 DataAlteracao = faker.Date.Past(),
-                DataInclusao = DateTime.Today.AddDays(3),
+                DataInclusao = DateTime.Today,
             };
         }
     }

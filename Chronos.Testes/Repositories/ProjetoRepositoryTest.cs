@@ -1,4 +1,6 @@
-﻿using Chronos.Testes.Settings;
+﻿using Chronos.Testes.Fakers;
+using Chronos.Testes.Settings;
+using Microsoft.EntityFrameworkCore;
 using Moq.EntityFrameworkCore;
 
 namespace Chronos.Testes.Repositories
@@ -96,6 +98,36 @@ namespace Chronos.Testes.Repositories
 
             var result = await repository.ObterAsync(u => u.Id == projeto.Id);
             Assert.AreEqual(projeto, result);
+        }
+
+        [TestMethod]
+        public async Task TestObterPorUsuarioIdAsync()
+        {
+            var context = new InMemoryContext().GetContext();
+
+            // Arrange
+            var usuario = UsuarioFaker.GetUsuario();
+            var projeto = ProjetoFaker.GetProjeto();
+            context.Usuarios.Add(usuario);
+            context.Projetos.Add(projeto);
+            context.SaveChanges();
+            var usuario_projeto = Usuario_ProjetoFaker.GetRelacao(
+                context.Projetos.First(),
+                context.Usuarios.First()
+            );
+            context.Usuarios_Projetos.Add(usuario_projeto);
+            context.SaveChanges();
+            var tarefas = new List<Tarefa>() { TarefaFaker.GetTarefaDeHoje(usuario_projeto.Id), };
+            context.Tarefas.AddRange(tarefas);
+            context.SaveChanges();
+
+            // Act
+            var repository = new ProjetoRepository(context);
+            var result = await repository.ObterPorUsuarioIdAsync(1);
+
+            // Assert
+            Assert.AreEqual(1, result.Count);
+            Assert.IsTrue(result.Contains(projeto));
         }
     }
 }

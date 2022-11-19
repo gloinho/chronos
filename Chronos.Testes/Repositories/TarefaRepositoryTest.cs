@@ -11,12 +11,8 @@ namespace Chronos.Testes.Repositories
 
         public TarefaRepositoryTest()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(databaseName: "MockDB")
-                .Options;
+            _context = new InMemoryContext().GetContext();
 
-            _context = new ApplicationDbContext(options);
-            _context.Database.EnsureCreated();
             // Arrange -> Popular o banco de dados com uma entidade de cada tipo.
             var usuario = UsuarioFaker.GetUsuario();
             var projeto = ProjetoFaker.GetProjeto();
@@ -31,9 +27,9 @@ namespace Chronos.Testes.Repositories
             _context.SaveChanges();
             var tarefas = new List<Tarefa>()
             {
-                TarefaFaker.GetTarefa(usuario_projeto.Id), // dia + semana
-                TarefaFaker.GetTarefaAddTresDias(usuario_projeto.Id), // semana
-                TarefaFaker.GetTarefaAntiga(usuario_projeto.Id) // nenhum dos dois
+                TarefaFaker.GetTarefaDeHoje(usuario_projeto.Id),
+                TarefaFaker.GetTarefaDeHoje(usuario_projeto.Id),
+                TarefaFaker.GetTarefaDeAmanha(usuario_projeto.Id),
             };
             _context.Tarefas.AddRange(tarefas);
             _context.SaveChanges();
@@ -67,17 +63,18 @@ namespace Chronos.Testes.Repositories
             Assert.AreEqual(3, result.Count);
         }
 
+        [TestMethod]
+        public async Task TestGetTarefasDia()
+        {
+            var repository = new TarefaRepository(_context);
+            var result = await repository.GetTarefasDia(1);
+            Assert.AreEqual(2, result.Count);
+        }
+
         // EF DateDiff não é suportado pelo In Memory Database :
         // https://github.com/dotnet/efcore/issues/22566
         // https://github.com/dotnet/efcore/issues/22566#issuecomment-693552960
 
-        //[TestMethod]
-        //public async Task TestGetTarefasDia()
-        //{
-        //    var repository = new TarefaRepository(_context);
-        //    var result = await repository.GetTarefasDia(1);
-        //    Assert.AreEqual(1, result.Count);
-        //}
 
         //[TestMethod]
         //public async Task TestGetTarefasSemana()
@@ -106,7 +103,7 @@ namespace Chronos.Testes.Repositories
         [TestMethod]
         public async Task TestCadastrarAsync()
         {
-            var tarefa = TarefaFaker.GetTarefa(1);
+            var tarefa = TarefaFaker.GetTarefaDeHoje(1);
             var repository = new TarefaRepository(_context);
 
             var result = repository.CadastrarAsync(tarefa);
