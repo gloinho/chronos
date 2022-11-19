@@ -11,12 +11,5 @@ namespace Chronos.Data.Repositories
     {
         public Usuario_ProjetoRepository(ApplicationDbContext manutencaoContext)
             : base(manutencaoContext) { }
-
-        public async Task<Usuario_Projeto> ObterPorUsuarioIdProjetoId(int projetoId, int? usuarioId)
-        {
-            return await _context.Usuarios_Projetos.FirstOrDefaultAsync(
-                p => p.ProjetoId == projetoId && p.UsuarioId == usuarioId
-            );
-        }
     }
 }
