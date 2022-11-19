@@ -50,7 +50,14 @@ namespace Chronos.Data.Repositories
                 .Include(up => up.Tarefas)
                 .ThenInclude(t => t.Usuario_Projeto)
                 .ThenInclude(up => up.Projeto)
-                .SelectMany(t => t.Tarefas.Where(t => t.DataInclusao.Day == DateTime.Today.Day))
+                .SelectMany(
+                    t =>
+                        t.Tarefas.Where(
+                            t =>
+                                t.DataInicial.Value.Date == DateTime.Today
+                                && DateTime.Today == t.DataFinal.Value.Date
+                        )
+                )
                 .AsNoTracking()
                 .ToListAsync();
             return tarefas;
@@ -66,7 +73,11 @@ namespace Chronos.Data.Repositories
                 .SelectMany(
                     t =>
                         t.Tarefas.Where(
-                            t => EF.Functions.DateDiffWeek(DateTime.Today, t.DataInclusao) == 0
+                            t =>
+                                EF.Functions.DateDiffWeek(DateTime.Today, t.DataInicial.Value.Date)
+                                    == 0
+                                && EF.Functions.DateDiffWeek(DateTime.Today, t.DataFinal.Value.Date)
+                                    == 0
                         )
                 )
                 .AsNoTracking()
@@ -82,7 +93,18 @@ namespace Chronos.Data.Repositories
                 .Include(up => up.Tarefas)
                 .ThenInclude(t => t.Usuario_Projeto)
                 .ThenInclude(up => up.Projeto)
-                .SelectMany(t => t.Tarefas.Where(t => t.DataInclusao.Month == DateTime.Today.Month))
+                .SelectMany(
+                    t =>
+                        t.Tarefas.Where(
+                            t =>
+                                EF.Functions.DateDiffMonth(DateTime.Today, t.DataInicial.Value.Date)
+                                    == 0
+                                && EF.Functions.DateDiffMonth(
+                                    DateTime.Today,
+                                    t.DataFinal.Value.Date
+                                ) == 0
+                        )
+                )
                 .ToListAsync();
             return tarefas;
         }

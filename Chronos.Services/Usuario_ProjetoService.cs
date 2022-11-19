@@ -38,9 +38,8 @@ namespace Chronos.Services
             int? usuarioId
         )
         {
-            var relacao = await _usuario_ProjetoRepository.ObterPorUsuarioIdProjetoId(
-                projetoId,
-                usuarioId
+            var relacao = await _usuario_ProjetoRepository.ObterAsync(
+                p => p.ProjetoId == projetoId && p.UsuarioId == usuarioId
             );
             if (relacao == null)
             {
@@ -125,9 +124,8 @@ namespace Chronos.Services
 
         private async Task CheckSeRelacaoJaExiste(Usuario_Projeto relacao)
         {
-            var find = await _usuario_ProjetoRepository.ObterPorUsuarioIdProjetoId(
-                relacao.ProjetoId,
-                relacao.UsuarioId
+            var find = await _usuario_ProjetoRepository.ObterAsync(
+                p => p.ProjetoId == relacao.ProjetoId && p.UsuarioId == relacao.UsuarioId
             );
             if (find != null)
             {

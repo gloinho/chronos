@@ -19,7 +19,8 @@ namespace Chronos.Services
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IEmailService _emailService;
         private readonly UsuarioRequestValidator validator = new UsuarioRequestValidator();
-        private readonly RecuperarSenhaRequestValidator validatorNovaSenha = new RecuperarSenhaRequestValidator();
+        private readonly RecuperarSenhaRequestValidator validatorNovaSenha =
+            new RecuperarSenhaRequestValidator();
         private readonly AppSettings _appSettings;
         private readonly IMapper _mapper;
 
@@ -109,7 +110,7 @@ namespace Chronos.Services
 
         public async Task<MensagemResponse> AlterarSenha(NovaSenhaRequest request)
         {
-            var user = await _usuarioRepository.GetPorEmail(UsuarioEmail);
+            var user = await _usuarioRepository.ObterAsync(u => u.Email == UsuarioEmail);
 
             await validatorNovaSenha.ValidateAndThrowAsync(request);
 
@@ -117,7 +118,7 @@ namespace Chronos.Services
             {
                 throw new BaseException(StatusException.Erro, "Código incorreto.");
             }
-      
+
             if (request.Senha != request.ConfirmacaoSenha)
             {
                 throw new BaseException(
@@ -126,9 +127,12 @@ namespace Chronos.Services
                 );
             }
 
-            if(BCrypt.Net.BCrypt.Verify(request.Senha, user.Senha))
+            if (BCrypt.Net.BCrypt.Verify(request.Senha, user.Senha))
             {
-                throw new BaseException(StatusException.Erro, "Nova senha deve ser diferente da senha atual");
+                throw new BaseException(
+                    StatusException.Erro,
+                    "Nova senha deve ser diferente da senha atual"
+                );
             }
 
             user.Senha = BCrypt.Net.BCrypt.HashPassword(
@@ -144,9 +148,8 @@ namespace Chronos.Services
                 Mensagens = new List<string> { "Senha alterada com sucesso." }
             };
         }
-        public async Task<MensagemResponse> EnviarCodigoResetSenha(
-            ResetSenhaRequest request
-        )
+
+        public async Task<MensagemResponse> EnviarCodigoResetSenha(ResetSenhaRequest request)
         {
             var user = await CheckSeEmailExiste(request.Email);
             var codigo = Token.GenerateCodigo();
@@ -170,9 +173,10 @@ namespace Chronos.Services
                 }
             };
         }
+
         private async Task CheckSeJaEstaCadastrado(string email)
         {
-            var user = await _usuarioRepository.GetPorEmail(email);
+            var user = await _usuarioRepository.ObterAsync(u => u.Email == email);
             if (user != null)
             {
                 throw new BaseException(StatusException.Erro, "E-mail já cadastrado");
@@ -205,7 +209,7 @@ namespace Chronos.Services
 
         private async Task<Usuario> CheckSeEmailExiste(string email)
         {
-            var usuario = await _usuarioRepository.GetPorEmail(email);
+            var usuario = await _usuarioRepository.ObterAsync(u => u.Email == email);
             if (usuario == null)
             {
                 throw new BaseException(
@@ -215,7 +219,5 @@ namespace Chronos.Services
             }
             return usuario;
         }
-
-
     }
 }
