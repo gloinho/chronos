@@ -2,6 +2,7 @@ using Chronos.Data.Context;
 using Chronos.Domain.Entities;
 using Chronos.Domain.Interfaces.Repository;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Chronos.Data.Repositories
 {
@@ -27,11 +28,10 @@ namespace Chronos.Data.Repositories
             return entidade;
         }
 
-        public async Task<T> DeletarAsync(T entidade)
+        public async Task DeletarAsync(T entidade)
         {
             _context.Set<T>().Remove(entidade);
             await _context.SaveChangesAsync();
-            return entidade;
         }
 
         public virtual async Task<T> ObterPorIdAsync(int id)
@@ -42,6 +42,11 @@ namespace Chronos.Data.Repositories
         public virtual async Task<ICollection<T>> ObterTodosAsync()
         {
             return await _context.Set<T>().AsNoTracking().ToListAsync();
+        }
+
+        public async Task<T> ObterAsync(Expression<Func<T, bool>> expression)
+        {
+            return await _context.Set<T>().FirstOrDefaultAsync(expression);
         }
     }
 }
