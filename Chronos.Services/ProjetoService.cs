@@ -105,6 +105,7 @@ namespace Chronos.Services
         {
             await CheckPermissao(usuarioId);
             var projetos = await _projetoRepository.ObterPorUsuarioIdAsync(usuarioId);
+
             return _mapper.Map<List<ProjetoResponse>>(projetos);
         }
 

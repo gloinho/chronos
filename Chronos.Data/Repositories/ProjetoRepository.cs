@@ -12,9 +12,12 @@ namespace Chronos.Data.Repositories
 
         public async Task<List<Projeto>> ObterPorUsuarioIdAsync(int usuarioId)
         {
-            var projetos = await _context.Projetos
-                .Include(p => p.Usuarios.Where(up => up.UsuarioId == usuarioId))
+            var projetos = await _context.Usuarios_Projetos
+                .Where(up => up.UsuarioId == usuarioId)
+                .Include(p => p.Projeto)
+                .Select(p => p.Projeto)
                 .ToListAsync();
+
             return projetos;
         }
     }
