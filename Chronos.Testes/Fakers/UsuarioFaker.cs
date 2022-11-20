@@ -44,6 +44,27 @@ namespace Chronos.Testes.Fakers
             };
         }
 
+        public static Usuario GetUsuario(Permissao permissao)
+        {
+            return new Usuario()
+            {
+                Id = fake.UniqueIndex,
+                Nome = fake.Person.FullName,
+                DataAlteracao = fake.Date.Recent(),
+                DataInclusao = fake.Date.Recent(),
+                ConfirmacaoToken = fake.Random.String(),
+                Confirmado = fake.Random.Bool(),
+                Email = fake.Person.Email,
+                Permissao = permissao,
+                Senha = fake.Internet.Password(
+                    8,
+                    true,
+                    @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
+                ),
+                ResetSenhaToken = fake.Random.String(),
+            };
+        }
+
         public static List<Usuario> GetUsuarios()
         {
             var lista = new List<Usuario>();
