@@ -17,8 +17,8 @@ namespace Chronos.Services
         private readonly IProjetoRepository _projetoRepository;
         private readonly IUsuario_ProjetoService _usuario_projetoService;
         private readonly ProjetoRequestValidator _validator = new ProjetoRequestValidator();
-        private readonly AdicionarColaboradorRequestValidator _validatorColab =
-            new AdicionarColaboradorRequestValidator();
+        private readonly AdicionarColaboradoresRequestValidator _validatorColab =
+            new AdicionarColaboradoresRequestValidator();
         private readonly IMapper _mapper;
 
         public ProjetoService(

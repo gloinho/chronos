@@ -19,8 +19,8 @@ namespace Chronos.Services
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IEmailService _emailService;
         private readonly UsuarioRequestValidator validator = new UsuarioRequestValidator();
-        private readonly RecuperarSenhaRequestValidator validatorNovaSenha =
-            new RecuperarSenhaRequestValidator();
+        private readonly NovaSenhaRequestValidator validatorNovaSenha =
+            new NovaSenhaRequestValidator();
         private readonly AppSettings _appSettings;
         private readonly IMapper _mapper;
 

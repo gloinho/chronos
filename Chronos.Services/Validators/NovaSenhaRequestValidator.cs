@@ -4,9 +4,9 @@ using FluentValidation;
 
 namespace Chronos.Services.Validators
 {
-    public class RecuperarSenhaRequestValidator : AbstractValidator<NovaSenhaRequest>
+    public class NovaSenhaRequestValidator : AbstractValidator<NovaSenhaRequest>
     {
-        public RecuperarSenhaRequestValidator()
+        public NovaSenhaRequestValidator()
         {
             RuleFor(p => p.Codigo)
                 .NotEmpty()
