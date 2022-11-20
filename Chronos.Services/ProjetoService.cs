@@ -5,6 +5,7 @@ using Chronos.Domain.Entities;
 using Chronos.Domain.Exceptions;
 using Chronos.Domain.Interfaces.Repository;
 using Chronos.Domain.Interfaces.Services;
+using Chronos.Domain.Shared;
 using Chronos.Domain.Utils;
 using Chronos.Services.Validators;
 using FluentValidation;
@@ -20,6 +21,7 @@ namespace Chronos.Services
         private readonly AdicionarColaboradoresRequestValidator _validatorColab =
             new AdicionarColaboradoresRequestValidator();
         private readonly IMapper _mapper;
+        private readonly Verificador<Projeto> _verificador;
 
         public ProjetoService(
             IHttpContextAccessor httpContextAccessor,
@@ -31,6 +33,7 @@ namespace Chronos.Services
             _projetoRepository = projetoRepository;
             _mapper = mapper;
             _usuario_projetoService = usuario_ProjetoService;
+            _verificador = new Verificador<Projeto>(_projetoRepository);
         }
 
         public async Task<MensagemResponse> AdicionarColaboradores(
@@ -38,7 +41,7 @@ namespace Chronos.Services
             AdicionarColaboradoresRequest request
         )
         {
-            await CheckSeIdExiste(projetoId);
+            await _verificador.Id(projetoId);
             await _validatorColab.ValidateAndThrowAsync(request);
             foreach (int usuarioId in request.Usuarios)
             {
@@ -59,7 +62,7 @@ namespace Chronos.Services
 
         public async Task<MensagemResponse> AlterarAsync(int id, ProjetoRequest request)
         {
-            var projeto = await CheckSeIdExiste(id);
+            var projeto = await _verificador.Id(id);
             await _validator.ValidateAndThrowAsync(request);
             projeto.DataAlteracao = DateTime.Now;
             await _projetoRepository.AlterarAsync(_mapper.Map(request, projeto));
@@ -85,7 +88,7 @@ namespace Chronos.Services
 
         public async Task<MensagemResponse> DeletarAsync(int id)
         {
-            var projeto = await CheckSeIdExiste(id);
+            var projeto = await _verificador.Id(id);
             await _projetoRepository.DeletarAsync(projeto);
             return new MensagemResponse
             {
@@ -96,7 +99,7 @@ namespace Chronos.Services
 
         public async Task<ProjetoResponse> ObterPorIdAsync(int id)
         {
-            var projeto = await CheckSeIdExiste(id);
+            var projeto = await _verificador.Id(id);
             var result = _mapper.Map<ProjetoResponse>(projeto);
             return result;
         }
@@ -117,19 +120,6 @@ namespace Chronos.Services
                 .OrderBy(u => u.Nome)
                 .ToList();
             return projetosOrdenados;
-        }
-
-        private async Task<Projeto> CheckSeIdExiste(int id)
-        {
-            var projeto = await _projetoRepository.ObterPorIdAsync(id);
-            if (projeto == null)
-            {
-                throw new BaseException(
-                    StatusException.NaoEncontrado,
-                    $"Projeto com o id {id} não cadastrado."
-                );
-            }
-            return projeto;
         }
 
         private async Task CheckPermissao(int usuarioId)

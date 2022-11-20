@@ -1,4 +1,6 @@
-﻿namespace Chronos.Testes.Fakers
+﻿using Org.BouncyCastle.Asn1.Ocsp;
+
+namespace Chronos.Testes.Fakers
 {
     public static class UsuarioFaker
     {
@@ -21,6 +23,23 @@
                     true,
                     @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
                 ),
+                ResetSenhaToken = fake.Random.String(),
+            };
+        }
+
+        public static Usuario GetUsuarioSenhaEncriptada(string senha)
+        {
+            return new Usuario()
+            {
+                Id = fake.UniqueIndex,
+                Nome = fake.Person.FullName,
+                DataAlteracao = fake.Date.Recent(),
+                DataInclusao = fake.Date.Recent(),
+                ConfirmacaoToken = fake.Random.String(),
+                Confirmado = fake.Random.Bool(),
+                Email = fake.Person.Email,
+                Permissao = fake.PickRandom<Permissao>(),
+                Senha = BCrypt.Net.BCrypt.HashPassword(senha, BCrypt.Net.BCrypt.GenerateSalt()),
                 ResetSenhaToken = fake.Random.String(),
             };
         }
