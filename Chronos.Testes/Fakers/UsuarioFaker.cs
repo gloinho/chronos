@@ -16,7 +16,11 @@
                 Confirmado = fake.Random.Bool(),
                 Email = fake.Person.Email,
                 Permissao = fake.PickRandom<Permissao>(),
-                Senha = fake.Internet.Password(8, true, @"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"),
+                Senha = fake.Internet.Password(
+                    8,
+                    true,
+                    @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
+                ),
                 ResetSenhaToken = fake.Random.String(),
             };
         }

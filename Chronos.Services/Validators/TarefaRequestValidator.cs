@@ -16,7 +16,7 @@ namespace Chronos.Services.Validators
             RuleFor(p => p.DataFinal)
                 .GreaterThan(p => p.DataInicial)
                 .WithMessage(
-                    "O campo 'DataFim' precisa de uma data posterior ao campo 'DataInicio'."
+                    "O campo 'DataFinal' precisa de uma data posterior ao campo 'DataInicial'."
                 );
         }
     }
