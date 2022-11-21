@@ -29,5 +29,43 @@
                 DataInclusao = DateTime.Today,
             };
         }
+
+        public static Tarefa GetTarefa()
+        {
+            return new Tarefa
+            {
+                Id = faker.Random.Int(),
+                Usuario_ProjetoId = faker.Random.Int(),
+                Descricao = faker.Random.String(),
+                DataInicial = DateTime.Today,
+                DataFinal = DateTime.Today.AddHours(1),
+                DataAlteracao = faker.Date.Past(),
+                DataInclusao = DateTime.Today,
+            };
+        }
+
+        public static Tarefa GetTarefaAntiga()
+        {
+            return new Tarefa
+            {
+                Id = faker.Random.Int(),
+                Usuario_ProjetoId = faker.Random.Int(),
+                Descricao = faker.Random.String(),
+                DataInicial = DateTime.Today,
+                DataFinal = DateTime.Today.AddHours(1),
+                DataAlteracao = faker.Date.Past(),
+                DataInclusao = faker.Date.Past(1),
+            };
+        }
+
+        public static List<Tarefa> GetTarefas()
+        {
+            var lista = new List<Tarefa>();
+            for (int i = 0; i < 5; i++)
+            {
+                lista.Add(GetTarefa());
+            }
+            return lista;
+        }
     }
 }

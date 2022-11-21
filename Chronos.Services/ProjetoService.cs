@@ -6,7 +6,6 @@ using Chronos.Domain.Exceptions;
 using Chronos.Domain.Interfaces.Repository;
 using Chronos.Domain.Interfaces.Services;
 using Chronos.Domain.Shared;
-using Chronos.Domain.Utils;
 using Chronos.Services.Validators;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
@@ -33,7 +32,12 @@ namespace Chronos.Services
             _projetoRepository = projetoRepository;
             _mapper = mapper;
             _usuario_projetoService = usuario_ProjetoService;
-            _verificador = new Verificador<Projeto>(_projetoRepository);
+            _verificador = new Verificador<Projeto>(
+                _projetoRepository,
+                _usuario_projetoService,
+                UsuarioPermissao,
+                UsuarioId
+            );
         }
 
         public async Task<MensagemResponse> AdicionarColaboradores(
@@ -106,7 +110,7 @@ namespace Chronos.Services
 
         public async Task<List<ProjetoResponse>> ObterPorUsuarioId(int usuarioId)
         {
-            await CheckPermissao(usuarioId);
+            await _verificador.Permissao(usuarioId);
             var projetos = await _projetoRepository.ObterPorUsuarioIdAsync(usuarioId);
 
             return _mapper.Map<List<ProjetoResponse>>(projetos);
@@ -120,18 +124,6 @@ namespace Chronos.Services
                 .OrderBy(u => u.Nome)
                 .ToList();
             return projetosOrdenados;
-        }
-
-        private async Task CheckPermissao(int usuarioId)
-        {
-            await _usuario_projetoService.CheckSeUsuarioExiste(usuarioId);
-            if (UsuarioPermissao == PermissaoUtil.PermissaoColaborador && UsuarioId != usuarioId)
-            {
-                throw new BaseException(
-                    StatusException.NaoAutorizado,
-                    "Colaborador não pode interagir com projetos de outros colaboradores."
-                );
-            }
         }
     }
 }

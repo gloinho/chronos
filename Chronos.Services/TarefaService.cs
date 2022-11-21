@@ -5,6 +5,7 @@ using Chronos.Domain.Entities;
 using Chronos.Domain.Exceptions;
 using Chronos.Domain.Interfaces.Repository;
 using Chronos.Domain.Interfaces.Services;
+using Chronos.Domain.Shared;
 using Chronos.Domain.Utils;
 using Chronos.Services.Validators;
 using FluentValidation;
@@ -18,6 +19,7 @@ namespace Chronos.Services
         private readonly IUsuario_ProjetoService _usuario_ProjetoService;
         private readonly IMapper _mapper;
         private readonly TarefaRequestValidator _validator = new TarefaRequestValidator();
+        private readonly Verificador<Tarefa> _verificador;
 
         public TarefaService(
             IHttpContextAccessor httpContextAccessor,
@@ -29,11 +31,18 @@ namespace Chronos.Services
             _tarefaRepository = tarefaRepository;
             _mapper = mapper;
             _usuario_ProjetoService = usuario_ProjetoService;
+            _verificador = new Verificador<Tarefa>(
+                _tarefaRepository,
+                _usuario_ProjetoService,
+                UsuarioPermissao,
+                UsuarioId
+            );
         }
 
         public async Task<MensagemResponse> AlterarAsync(int id, TarefaRequest request)
         {
-            var tarefa = await CheckSeIdExiste(id);
+            var tarefa = await _verificador.Id(id);
+            await _validator.ValidateAndThrowAsync(request);
             CheckDataDeInclusao(tarefa);
             var usuario_projeto = await _usuario_ProjetoService.CheckSePodeAlterarTarefa(
                 request.ProjetoId,
@@ -69,7 +78,7 @@ namespace Chronos.Services
 
         public async Task<MensagemResponse> DeletarAsync(int id)
         {
-            var tarefa = await CheckSeIdExiste(id);
+            var tarefa = await _verificador.Id(id);
             await _usuario_ProjetoService.CheckPermissao(tarefa.Usuario_ProjetoId);
             await _tarefaRepository.DeletarAsync(tarefa);
             return new MensagemResponse()
@@ -81,7 +90,7 @@ namespace Chronos.Services
 
         public async Task<TarefaResponse> ObterPorIdAsync(int id)
         {
-            var tarefa = await CheckSeIdExiste(id);
+            var tarefa = await _verificador.Id(id);
             await _usuario_ProjetoService.CheckPermissao(tarefa.Usuario_ProjetoId);
             var response = ObterHorasTotais(tarefa);
             return response;
@@ -89,7 +98,7 @@ namespace Chronos.Services
 
         public async Task<List<TarefaResponse>> ObterPorUsuarioId(int usuarioId)
         {
-            await CheckPermissao(usuarioId);
+            await _verificador.Permissao(usuarioId);
             var tarefas = await _tarefaRepository.ObterPorUsuarioIdAsync(usuarioId);
             var response = ObterHorasTotais(tarefas);
             return response;
@@ -104,7 +113,7 @@ namespace Chronos.Services
 
         public async Task<List<TarefaResponse>> ObterTarefasDoDia(int usuarioId)
         {
-            await CheckPermissao(usuarioId);
+            await _verificador.Permissao(usuarioId);
             var tarefas = await _tarefaRepository.GetTarefasDia(usuarioId);
             var response = ObterHorasTotais(tarefas);
             return response;
@@ -112,7 +121,7 @@ namespace Chronos.Services
 
         public async Task<List<TarefaResponse>> ObterTarefasDoMes(int usuarioId)
         {
-            await CheckPermissao(usuarioId);
+            await _verificador.Permissao(usuarioId);
             var tarefas = await _tarefaRepository.GetTarefasMes(usuarioId);
             var response = ObterHorasTotais(tarefas);
             return response;
@@ -120,7 +129,7 @@ namespace Chronos.Services
 
         public async Task<List<TarefaResponse>> ObterTarefasDaSemana(int usuarioId)
         {
-            await CheckPermissao(usuarioId);
+            await _verificador.Permissao(usuarioId);
             var tarefas = await _tarefaRepository.GetTarefasSemana(usuarioId);
             var response = ObterHorasTotais(tarefas);
             return response;
@@ -140,7 +149,7 @@ namespace Chronos.Services
 
         public async Task<TarefaResponse> StartTarefa(int id)
         {
-            var tarefa = await CheckSeIdExiste(id);
+            var tarefa = await _verificador.Id(id);
             await _usuario_ProjetoService.CheckPermissao(tarefa.Usuario_ProjetoId);
             if (tarefa.DataFinal != null || tarefa.DataInicial != null)
             {
@@ -157,7 +166,7 @@ namespace Chronos.Services
 
         public async Task<TarefaResponse> StopTarefa(int id)
         {
-            var tarefa = await CheckSeIdExiste(id);
+            var tarefa = await _verificador.Id(id);
             await _usuario_ProjetoService.CheckPermissao(tarefa.Usuario_ProjetoId);
 
             if (tarefa.DataInicial == null)
@@ -190,11 +199,6 @@ namespace Chronos.Services
                     tarefa.DataFinal.Value.TimeOfDay - tarefa.DataInicial.Value.TimeOfDay;
                 return response;
             }
-            if (tarefa.DataInicial != null)
-            {
-                response.TotalHoras = DateTime.Now.TimeOfDay - tarefa.DataInicial.Value.TimeOfDay;
-                return response;
-            }
             return response;
         }
 
@@ -207,31 +211,6 @@ namespace Chronos.Services
                 responses.Add(response);
             }
             return responses;
-        }
-
-        private async Task CheckPermissao(int usuarioId)
-        {
-            await _usuario_ProjetoService.CheckSeUsuarioExiste(usuarioId);
-            if (UsuarioPermissao == PermissaoUtil.PermissaoColaborador && UsuarioId != usuarioId)
-            {
-                throw new BaseException(
-                    StatusException.NaoAutorizado,
-                    "Colaborador não pode interagir com tarefas de outros colaboradores."
-                );
-            }
-        }
-
-        private async Task<Tarefa> CheckSeIdExiste(int id)
-        {
-            var tarefa = await _tarefaRepository.ObterPorIdAsync(id);
-            if (tarefa == null)
-            {
-                throw new BaseException(
-                    StatusException.NaoEncontrado,
-                    $"Tarefa com o id {id} não cadastrado."
-                );
-            }
-            return tarefa;
         }
 
         private void CheckDataDeInclusao(Tarefa tarefa)

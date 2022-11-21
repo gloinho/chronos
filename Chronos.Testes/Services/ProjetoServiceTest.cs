@@ -183,10 +183,7 @@ namespace Chronos.Testes.Services
             var result = await Assert.ThrowsExceptionAsync<BaseException>(
                 () => service.ObterPorUsuarioId(outroUsuario.Id)
             );
-            Assert.AreEqual(
-                "Colaborador não pode interagir com projetos de outros colaboradores.",
-                result.Mensagens[0]
-            );
+            Assert.AreEqual("Acesso não permitido.", result.Mensagens[0]);
         }
 
         [TestMethod]
