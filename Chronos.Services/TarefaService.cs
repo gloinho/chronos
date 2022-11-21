@@ -15,6 +15,7 @@ namespace Chronos.Services
     public class TarefaService : BaseService, ITarefaService
     {
         private readonly ITarefaRepository _tarefaRepository;
+        private readonly ILogService _logService;
         private readonly IUsuario_ProjetoService _usuario_ProjetoService;
         private readonly IMapper _mapper;
         private readonly TarefaRequestValidator _validator = new TarefaRequestValidator();
@@ -23,12 +24,14 @@ namespace Chronos.Services
             IHttpContextAccessor httpContextAccessor,
             IUsuario_ProjetoService usuario_ProjetoService,
             ITarefaRepository tarefaRepository,
+            ILogService logService,
             IMapper mapper
         ) : base(httpContextAccessor)
         {
             _tarefaRepository = tarefaRepository;
             _mapper = mapper;
             _usuario_ProjetoService = usuario_ProjetoService;
+            _logService = logService;
         }
 
         public async Task<MensagemResponse> AlterarAsync(int id, TarefaRequest request)
@@ -42,6 +45,9 @@ namespace Chronos.Services
             var editada = _mapper.Map(request, tarefa);
             editada.Usuario_ProjetoId = usuario_projeto.Id;
             editada.DataAlteracao = DateTime.Now;
+
+            await _logService.LogAsync(nameof(TarefaService), nameof(AlterarAsync), id);
+
             await _tarefaRepository.AlterarAsync(editada);
             return new MensagemResponse
             {
@@ -71,6 +77,7 @@ namespace Chronos.Services
         {
             var tarefa = await CheckSeIdExiste(id);
             await _usuario_ProjetoService.CheckPermissao(tarefa.Usuario_ProjetoId);
+            await _logService.LogAsync(nameof(TarefaService), nameof(DeletarAsync), id);
             await _tarefaRepository.DeletarAsync(tarefa);
             return new MensagemResponse()
             {

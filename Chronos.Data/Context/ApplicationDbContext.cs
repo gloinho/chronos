@@ -10,6 +10,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Usuario_Projeto> Usuarios_Projetos { get; set; }
     public DbSet<Tarefa> Tarefas { get; set; }
     public DbSet<Projeto> Projetos { get; set; }
+    public DbSet<Log> Logs { get; set; }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
 
@@ -25,5 +26,7 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Projeto>(new ProjetoMap().Configure);
         modelBuilder.Entity<Tarefa>(new TarefaMap().Configure);
         modelBuilder.Entity<Usuario_Projeto>(new Usuario_ProjetoMap().Configure);
+
+        modelBuilder.Entity<Log>(new LogMap().Configure);
     }
 }
