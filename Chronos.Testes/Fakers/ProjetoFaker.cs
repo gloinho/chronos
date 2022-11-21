@@ -10,7 +10,6 @@
             {
                 DataFim = fake.Date.Recent(),
                 DataInicio = fake.Date.Recent(),
-                DataAlteracao = fake.Date.Recent(),
                 DataInclusao = fake.Date.Recent(),
                 Nome = fake.Name.JobTitle(),
             };

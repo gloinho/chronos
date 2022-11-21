@@ -64,7 +64,6 @@ namespace Chronos.Services
         {
             var projeto = await CheckSeIdExiste(id);
             await _validator.ValidateAndThrowAsync(request);
-            projeto.DataAlteracao = DateTime.Now;
 
             await _logService.LogAsync(nameof(ProjetoService), nameof(AlterarAsync), id);
 

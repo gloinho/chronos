@@ -44,7 +44,6 @@ namespace Chronos.Services
             );
             var editada = _mapper.Map(request, tarefa);
             editada.Usuario_ProjetoId = usuario_projeto.Id;
-            editada.DataAlteracao = DateTime.Now;
 
             await _logService.LogAsync(nameof(TarefaService), nameof(AlterarAsync), id);
 
@@ -157,7 +156,7 @@ namespace Chronos.Services
                 );
             }
             tarefa.DataInicial = DateTime.Now;
-            tarefa.DataAlteracao = DateTime.Now;
+
             await _tarefaRepository.AlterarAsync(tarefa);
             return _mapper.Map<TarefaResponse>(tarefa);
         }
@@ -182,7 +181,7 @@ namespace Chronos.Services
                 );
             }
             tarefa.DataFinal = DateTime.Now;
-            tarefa.DataAlteracao = DateTime.Now;
+
             await _tarefaRepository.AlterarAsync(tarefa);
             var response = ObterHorasTotais(tarefa);
             return response;

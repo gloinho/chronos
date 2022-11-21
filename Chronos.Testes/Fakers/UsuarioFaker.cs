@@ -10,7 +10,6 @@
             {
                 Id = fake.UniqueIndex,
                 Nome = fake.Person.FullName,
-                DataAlteracao = fake.Date.Recent(),
                 DataInclusao = fake.Date.Recent(),
                 ConfirmacaoToken = fake.Random.String(),
                 Confirmado = fake.Random.Bool(),

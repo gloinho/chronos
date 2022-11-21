@@ -73,9 +73,8 @@ namespace Chronos.Services
             CheckPermissao(id);
             var usuario = await CheckSeIdExiste(id);
             await validator.ValidateAndThrowAsync(request);
-            usuario.DataAlteracao = DateTime.Now;
 
-            await _logService.LogAsync(nameof(UsuarioService),nameof(AlterarAsync), id);
+            await _logService.LogAsync(nameof(UsuarioService), nameof(AlterarAsync), id);
 
             request.Senha = BCrypt.Net.BCrypt.HashPassword(
                 request.Senha,
@@ -151,7 +150,7 @@ namespace Chronos.Services
             user.Senha = BCrypt.Net.BCrypt.HashPassword(
                 request.Senha,
                 BCrypt.Net.BCrypt.GenerateSalt()
-            );           
+            );
 
             await _usuarioRepository.AlterarAsync(user);
 
