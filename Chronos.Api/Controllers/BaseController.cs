@@ -32,10 +32,10 @@ namespace Chronos.Api.Controllers
         /// Através dessa rota você será capaz de cadastrar um registro no banco
         /// </summary>
         /// <returns></returns>
-        /// <response code="201">Sucesso, </response>
+        /// <response code="200">Sucesso, </response>
         [Authorize]
         [HttpPost]
-        [ProducesResponseType(201)]
+        [ProducesResponseType(200)]
         public virtual async Task<IActionResult> CadastrarAsync([FromBody] KRequest request)
         {
             var response = await _service.CadastrarAsync(request);

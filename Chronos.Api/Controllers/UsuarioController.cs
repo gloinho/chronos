@@ -32,7 +32,7 @@ namespace Chronos.Api.Controllers
         }
 
         /// <summary>
-        /// Através dessa rota você enviará um codigo para seu email, para alterar senha.
+        /// Atráves dessa rota será enviado um código para resetar sua senha.
         /// </summary>
         /// <returns></returns>
         /// <response code="201">Mensagem: "Enviamos o código de alteração de senha para seu e-mail. Este código 

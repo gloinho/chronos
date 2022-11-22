@@ -25,7 +25,7 @@
             Através dessa rota você será capaz de cadastrar um registro no banco
             </summary>
             <returns></returns>
-            <response code="201">Sucesso, </response>
+            <response code="200">Sucesso, </response>
         </member>
         <member name="M:Chronos.Api.Controllers.BaseController`3.AlterarAsync(System.Int32,`1)">
             <summary>
@@ -99,6 +99,76 @@
             <returns></returns>
             <response code="200">Sucesso, e retorna a mensagem "Alterado com Sucesso" </response>
         </member>
+        <member name="M:Chronos.Api.Controllers.TarefaController.StartTarefa(System.Int32)">
+            <summary>
+            Através dessa rota você será capaz de iniciar uma tarefa.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <response code="200">Retorna a tarefa que foi iniciada</response>
+        </member>
+        <member name="M:Chronos.Api.Controllers.TarefaController.StopTarefa(System.Int32)">
+            <summary>
+            Através dessa rota você será capaz de finalizar uma tarefa.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <response code="200">Retorna a tarefa que foi pausada, com o total de horas.</response>
+        </member>
+        <member name="M:Chronos.Api.Controllers.TarefaController.DeleteAsync(System.Int32)">
+            <summary>
+            Através dessa rota você será capaz de deletar uma tarefa do banco de dados.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <response code="200">Sucesso, e retorna a mensagem  "Deletado com Sucesso"  </response>
+        </member>
+        <member name="M:Chronos.Api.Controllers.TarefaController.ObterPorUsuarioIdAsync(System.Int32)">
+            <summary>
+            Através dessa rota você será capaz de obter uma lista de tarefas de um usuario pelo seu Id.
+            </summary>
+            <param name="usuarioId"></param>
+            <returns></returns>
+            <response code="200">retorna uma lista de tarefas"  </response>
+        </member>
+        <member name="M:Chronos.Api.Controllers.TarefaController.ObterTarefasDoDia(System.Int32)">
+            <summary>
+            atravez dessa rota você será capaz de obter todas as tarefas de um usuario que foram concluidas no dia.
+            </summary>
+            <param name="usuarioId"></param>
+            <returns></returns>
+            <response code="200">
+            retorna uma lista de tarefas do dia" 
+            </response>
+        </member>
+        <member name="M:Chronos.Api.Controllers.TarefaController.ObterTarefasDoMes(System.Int32)">
+            <summary>
+            atravez dessa rota você será capaz de obter todas as tarefas de um usuario que foram concluidas no mês.
+            </summary>
+            <param name="usuarioId"></param>
+            <returns></returns>
+            <response code="200">
+            retorna uma lista de tarefas do mês" 
+            </response>
+        </member>
+        <member name="M:Chronos.Api.Controllers.TarefaController.ObterTarefasDaSemana(System.Int32)">
+            <summary>
+            atravez dessa rota você será capaz de obter todas as tarefas de um usuario que foram concluidas na semana
+            </summary>
+            <param name="usuarioId"></param>
+            <returns></returns>
+            <response code="200"
+            >retorna uma lista de tarefas da semana" 
+            </response>
+        </member>
+        <member name="M:Chronos.Api.Controllers.TarefaController.ObterTarefasDoProjeto(System.Int32)">
+            <summary>
+            Através dessa rota você será capaz de obter uma lista de tarefas de um projeto, usando projetoId
+            </summary>
+            <param name="projetoId"></param>
+            <returns></returns>
+            <response code="200">retorna uma lista de tarefas"</response>
+        </member>
         <member name="M:Chronos.Api.Controllers.UsuarioController.CadastrarAsync(Chronos.Domain.Contracts.Request.UsuarioRequest)">
             <summary>
             Através dessa rota você será capaz de cadastrar um Usuario no banco de dados
@@ -108,7 +178,7 @@
         </member>
         <member name="M:Chronos.Api.Controllers.UsuarioController.EnviarCodigoResetSenha(Chronos.Domain.Contracts.Request.ResetSenhaRequest)">
             <summary>
-            Através dessa rota você enviará um codigo para seu email, para alterar senha.
+            Atráves dessa rota será enviado um código para resetar sua senha.
             </summary>
             <returns></returns>
             <response code="201">Mensagem: "Enviamos o código de alteração de senha para seu e-mail. Este código 
