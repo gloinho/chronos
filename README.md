@@ -22,6 +22,7 @@
 - [Controllers](#controllers)
 - [Desafios e Proximos Passos](#desafios-e-proximos-passos)
 - [Requirements](#requirements)
+- [Get Started](#get-started)
 - [Agradecimentos](#agradecimentos)
 - [Desenvolvedores](#desenvolvedores)
 
@@ -50,6 +51,8 @@ O projeto foi realizado utilizando a plataforma de desenvolvimento open source [
 
 A solução de banco de dados relacional utilizada foi o [Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads).
 
+A comunicação com o serviço Toggl foi feita por meio da integração com o [Toggl Api](https://github.com/toggl/toggl_api_docs/blob/master/reports/detailed.md).  
+
 Para facilitar a persistência dos dados e comunicação com o banco de dados, utilizamos a biblioteca O/RM [Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/)
 
 Algumas outras bibliotecas externas utilizadas ao longo do desenvolvimento: 
@@ -63,25 +66,7 @@ Algumas outras bibliotecas externas utilizadas ao longo do desenvolvimento:
 - Moq.EntityFrameworkCore v6.0.1.4
 - NetCORE.MailKit v2.1.0
 
-# Modelagens
-## Diagrama Entidade-Relacionamento
-## Diagrama de Classes
-# Camadas da Aplicação
-## Chronos.Api
-## Chronos.Crosscutting
-## Chronos.Data
-## Chronos.Domain
-## Chronos.IoC
-## Chronos.Services
-## Chronos.Testes
-# Desafios e Proximos Passos
-# Requirements
-# Get Started
-# Agradecimentos
-# Desenvolvedores
-
 # Glossário
-
 - Usuário: qualquer pessoa cadastrada na solução Chronos. Um usuário pode ser Colaborador e Administrador.
 - Projeto: Representação do projeto na solução. Um Usuário participar de nenhum ou vários projetos. Um projeto pode ter nenhum ou vários usuários inseridos.
 - Usuario_Projeto: Representação da relação entre projeto e usuário. Obrigatoriamente precisa ter um projeto e um usuário. Uma relação Usuario_Projeto pode ter zero ou várias tarefas.
@@ -108,6 +93,26 @@ Algumas outras bibliotecas externas utilizadas ao longo do desenvolvimento:
     - Um usuário administrador pode ver todos os relatório de horas, editar, ver, iniciar, parar e excluir as tarefas de todos os usuários.
     - Uma tarefa só pode ser iniciada se não tiver sido iniciada ou finalizada.
     - Uma tarefa só pode ser finalizada se não tiver sido finalizada e já tiver sido iniciada.
+
+# Modelagens
+## Diagrama Entidade-Relacionamento
+## Diagrama de Classes
+# Camadas da Aplicação
+## Chronos.Api
+- Camada responsável por fazer a aplicação se comunicar diretamente com o domínio. Nela, são construídas as classes que serão necessárias para a aplicação. A construção dessas classes, feitas por meio de injeção de dependencias com o intuito de reduzir o acomplamento da aplicação, é realizado com o auxílio da camada de inversão de controle.
+## Chronos.Crosscutting
+- Camada que realiza a distribuição de responsabilidades transversais (métodos comuns). Essa camada "cruza" toda a hierarquia de camadas, provendo a configuração dos serviços necessários para as classes funcionarem e estabelecendo o tempo de vida desses serviços.
+## Chronos.IoC
+- Camada que se comunica diretamente e somente com o CrossCutting, e é utilizada na camada de aplicação, que é responsável por injetar as classes que implementam as interfaces necessárias para o funcionamento da mesma.
+## Chronos.Data
+- Camada responsável por se comunicar diretamente com o banco de dados. Aqui são definidas as entidades da aplicação, que posteriormente irão ser persistidas no banco de dados. É realizado todo o "mapeamento" de configuração dessas entidades para estabelecimento correto de relacionamentos e outros constraints do SQL. Por meio do EF Core Code First, são feitas migrações para o banco de dados e a construção das Tables, com tudo previamente configurado.
+Também são construidas as classes que irão interagir com o banco de dados, na qual possuem métodos que realizam o CRUD necessário para a aplicação.
+## Chronos.Domain
+- Camada que delimita o "coração" do nosso negócio. Aqui, são construidos, com auxilio da linguagem ubíqua, contextos e modelagens realizados anteriormente, as interfaces, contratos de transferência de dados e entidades que serão utilizados em toda a aplicação. Além disso, classes auxiliares e utilitárias, excessões personalizadas e configurações são definidas nessa camada.
+## Chronos.Services
+- Camada que aplica as regras de negócio impostas pelo cliente e implementa a lógica dos serviços que a aplicação irá prover. Nela, são definidas validações para a transferência de dados dos contratos e permissões personalizadas que serão utilizadas pelos controllers.
+## Chronos.Testes
+- Camada que realiza testes de todos os componentes da aplicação.
 
 # Controllers
 
@@ -149,3 +154,28 @@ Algumas outras bibliotecas externas utilizadas ao longo do desenvolvimento:
 
 ## Toggl Controller  
 - [/toggl/relatorio-de-horas]() `GET` <sub>Endpoint de integração com o toggl.</sub>
+
+# Desafios e Proximos Passos
+
+# Requirements
+- [.NET Core 6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
+# Get Started
+
+```bash
+# Clone este repositório:
+git clone https://gitlab.com/gloinho/chronos.git
+```
+```bash 
+# Entre na pasta da camada de aplicação do projeto.
+cd Chronos.Api
+```  
+```bash
+# Rode a aplicação.
+dotnet run
+``` 
+# Agradecimentos
+# Desenvolvedores
+
+
+
+
