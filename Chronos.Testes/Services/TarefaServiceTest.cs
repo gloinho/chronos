@@ -17,6 +17,7 @@ namespace Chronos.Testes.Services
         private readonly Mock<ITarefaRepository> _mockTarefaRepository;
         private readonly Mock<IUsuario_ProjetoService> _mockUsuarioProjetoService;
         private readonly Mock<IHttpContextAccessor> _mockHttpContextAccessor;
+        private readonly Mock<ILogService> _mockLogService;
         private readonly IMapper _mapper;
         private readonly Fixture _fixture;
 
@@ -27,6 +28,7 @@ namespace Chronos.Testes.Services
             _mapper = MapperConfig.Get();
             _mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
             _fixture = FixtureConfig.Get();
+            _mockLogService = new Mock<ILogService>();
         }
 
         [TestMethod]
@@ -55,6 +57,7 @@ namespace Chronos.Testes.Services
                 _mockHttpContextAccessor.Object,
                 _mockUsuarioProjetoService.Object,
                 _mockTarefaRepository.Object,
+                _mockLogService.Object,
                 _mapper
             );
 
@@ -80,6 +83,7 @@ namespace Chronos.Testes.Services
                 _mockHttpContextAccessor.Object,
                 _mockUsuarioProjetoService.Object,
                 _mockTarefaRepository.Object,
+                _mockLogService.Object,
                 _mapper
             );
 
@@ -124,6 +128,7 @@ namespace Chronos.Testes.Services
                 _mockHttpContextAccessor.Object,
                 _mockUsuarioProjetoService.Object,
                 _mockTarefaRepository.Object,
+                _mockLogService.Object,
                 _mapper
             );
             var result = await service.AlterarAsync(tarefa.Id, request);
@@ -152,6 +157,7 @@ namespace Chronos.Testes.Services
                 _mockHttpContextAccessor.Object,
                 _mockUsuarioProjetoService.Object,
                 _mockTarefaRepository.Object,
+                _mockLogService.Object,
                 _mapper
             );
             var result = await service.CadastrarAsync(request);
@@ -179,6 +185,7 @@ namespace Chronos.Testes.Services
                 _mockHttpContextAccessor.Object,
                 _mockUsuarioProjetoService.Object,
                 _mockTarefaRepository.Object,
+                _mockLogService.Object,
                 _mapper
             );
 
@@ -202,6 +209,7 @@ namespace Chronos.Testes.Services
                 _mockHttpContextAccessor.Object,
                 _mockUsuarioProjetoService.Object,
                 _mockTarefaRepository.Object,
+                _mockLogService.Object,
                 _mapper
             );
 
@@ -228,6 +236,7 @@ namespace Chronos.Testes.Services
                 _mockHttpContextAccessor.Object,
                 _mockUsuarioProjetoService.Object,
                 _mockTarefaRepository.Object,
+                _mockLogService.Object,
                 _mapper
             );
 
@@ -244,6 +253,7 @@ namespace Chronos.Testes.Services
                 _mockHttpContextAccessor.Object,
                 _mockUsuarioProjetoService.Object,
                 _mockTarefaRepository.Object,
+                _mockLogService.Object,
                 _mapper
             );
 
@@ -263,6 +273,7 @@ namespace Chronos.Testes.Services
                 _mockHttpContextAccessor.Object,
                 _mockUsuarioProjetoService.Object,
                 _mockTarefaRepository.Object,
+                _mockLogService.Object,
                 _mapper
             );
 
@@ -282,6 +293,7 @@ namespace Chronos.Testes.Services
                 _mockHttpContextAccessor.Object,
                 _mockUsuarioProjetoService.Object,
                 _mockTarefaRepository.Object,
+                _mockLogService.Object,
                 _mapper
             );
 
@@ -301,6 +313,7 @@ namespace Chronos.Testes.Services
                 _mockHttpContextAccessor.Object,
                 _mockUsuarioProjetoService.Object,
                 _mockTarefaRepository.Object,
+                _mockLogService.Object,
                 _mapper
             );
 
@@ -326,6 +339,7 @@ namespace Chronos.Testes.Services
                 _mockHttpContextAccessor.Object,
                 _mockUsuarioProjetoService.Object,
                 _mockTarefaRepository.Object,
+                _mockLogService.Object,
                 _mapper
             );
 
@@ -351,6 +365,7 @@ namespace Chronos.Testes.Services
                 _mockHttpContextAccessor.Object,
                 _mockUsuarioProjetoService.Object,
                 _mockTarefaRepository.Object,
+                _mockLogService.Object,
                 _mapper
             );
 
@@ -375,6 +390,7 @@ namespace Chronos.Testes.Services
                 _mockHttpContextAccessor.Object,
                 _mockUsuarioProjetoService.Object,
                 _mockTarefaRepository.Object,
+                _mockLogService.Object,
                 _mapper
             );
             var result = await service.StartTarefa(tarefa.Id);
@@ -398,6 +414,7 @@ namespace Chronos.Testes.Services
                 _mockHttpContextAccessor.Object,
                 _mockUsuarioProjetoService.Object,
                 _mockTarefaRepository.Object,
+                _mockLogService.Object,
                 _mapper
             );
             var result = await Assert.ThrowsExceptionAsync<BaseException>(
@@ -425,6 +442,7 @@ namespace Chronos.Testes.Services
                 _mockHttpContextAccessor.Object,
                 _mockUsuarioProjetoService.Object,
                 _mockTarefaRepository.Object,
+                _mockLogService.Object,
                 _mapper
             );
             var result = await Assert.ThrowsExceptionAsync<BaseException>(
@@ -452,6 +470,7 @@ namespace Chronos.Testes.Services
                 _mockHttpContextAccessor.Object,
                 _mockUsuarioProjetoService.Object,
                 _mockTarefaRepository.Object,
+                _mockLogService.Object,
                 _mapper
             );
             var result = await service.StopTarefa(tarefa.Id);
@@ -476,6 +495,7 @@ namespace Chronos.Testes.Services
                 _mockHttpContextAccessor.Object,
                 _mockUsuarioProjetoService.Object,
                 _mockTarefaRepository.Object,
+                _mockLogService.Object,
                 _mapper
             );
             var result = await Assert.ThrowsExceptionAsync<BaseException>(
@@ -502,6 +522,7 @@ namespace Chronos.Testes.Services
                 _mockHttpContextAccessor.Object,
                 _mockUsuarioProjetoService.Object,
                 _mockTarefaRepository.Object,
+                _mockLogService.Object,
                 _mapper
             );
             var result = await Assert.ThrowsExceptionAsync<BaseException>(

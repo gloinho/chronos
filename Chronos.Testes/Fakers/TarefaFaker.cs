@@ -37,7 +37,6 @@
                 Descricao = faker.Random.String(),
                 DataInicial = DateTime.Today,
                 DataFinal = DateTime.Today.AddHours(1),
-                DataAlteracao = faker.Date.Past(),
                 DataInclusao = DateTime.Today,
             };
         }
@@ -51,7 +50,6 @@
                 Descricao = faker.Random.String(),
                 DataInicial = DateTime.Today,
                 DataFinal = DateTime.Today.AddHours(1),
-                DataAlteracao = faker.Date.Past(),
                 DataInclusao = faker.Date.Past(1),
             };
         }

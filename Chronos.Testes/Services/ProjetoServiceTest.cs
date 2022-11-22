@@ -15,6 +15,7 @@ namespace Chronos.Testes.Services
     {
         private readonly Mock<IProjetoRepository> _mockProjetoRepository;
         private readonly Mock<IUsuario_ProjetoService> _mockUsuarioProjetoService;
+        private readonly Mock<ILogService> _mockLogService;
         private readonly IMapper _mapper;
         private readonly Mock<IHttpContextAccessor> _mockHttpContextAccessor;
         private readonly Fixture _fixture;
@@ -26,6 +27,7 @@ namespace Chronos.Testes.Services
             _mockUsuarioProjetoService = new Mock<IUsuario_ProjetoService>();
             _mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
             _fixture = FixtureConfig.Get();
+            _mockLogService = new Mock<ILogService>();
         }
 
         [TestMethod]
@@ -38,6 +40,7 @@ namespace Chronos.Testes.Services
             var service = new ProjetoService(
                 _mockHttpContextAccessor.Object,
                 _mockProjetoRepository.Object,
+                _mockLogService.Object,
                 _mapper,
                 _mockUsuarioProjetoService.Object
             );
@@ -60,6 +63,7 @@ namespace Chronos.Testes.Services
             var service = new ProjetoService(
                 _mockHttpContextAccessor.Object,
                 _mockProjetoRepository.Object,
+                _mockLogService.Object,
                 _mapper,
                 _mockUsuarioProjetoService.Object
             );
@@ -79,6 +83,7 @@ namespace Chronos.Testes.Services
             var service = new ProjetoService(
                 _mockHttpContextAccessor.Object,
                 _mockProjetoRepository.Object,
+                _mockLogService.Object,
                 _mapper,
                 _mockUsuarioProjetoService.Object
             );
@@ -100,6 +105,7 @@ namespace Chronos.Testes.Services
             var service = new ProjetoService(
                 _mockHttpContextAccessor.Object,
                 _mockProjetoRepository.Object,
+                _mockLogService.Object,
                 _mapper,
                 _mockUsuarioProjetoService.Object
             );
@@ -120,6 +126,7 @@ namespace Chronos.Testes.Services
             var service = new ProjetoService(
                 _mockHttpContextAccessor.Object,
                 _mockProjetoRepository.Object,
+                _mockLogService.Object,
                 _mapper,
                 _mockUsuarioProjetoService.Object
             );
@@ -148,6 +155,7 @@ namespace Chronos.Testes.Services
             var service = new ProjetoService(
                 _mockHttpContextAccessor.Object,
                 _mockProjetoRepository.Object,
+                _mockLogService.Object,
                 _mapper,
                 _mockUsuarioProjetoService.Object
             );
@@ -176,6 +184,7 @@ namespace Chronos.Testes.Services
             var service = new ProjetoService(
                 _mockHttpContextAccessor.Object,
                 _mockProjetoRepository.Object,
+                _mockLogService.Object,
                 _mapper,
                 _mockUsuarioProjetoService.Object
             );
@@ -194,6 +203,7 @@ namespace Chronos.Testes.Services
             var service = new ProjetoService(
                 _mockHttpContextAccessor.Object,
                 _mockProjetoRepository.Object,
+                _mockLogService.Object,
                 _mapper,
                 _mockUsuarioProjetoService.Object
             );
@@ -216,6 +226,7 @@ namespace Chronos.Testes.Services
             var service = new ProjetoService(
                 _mockHttpContextAccessor.Object,
                 _mockProjetoRepository.Object,
+                _mockLogService.Object,
                 _mapper,
                 _mockUsuarioProjetoService.Object
             );
@@ -244,6 +255,7 @@ namespace Chronos.Testes.Services
             var service = new ProjetoService(
                 _mockHttpContextAccessor.Object,
                 _mockProjetoRepository.Object,
+                _mockLogService.Object,
                 _mapper,
                 _mockUsuarioProjetoService.Object
             );

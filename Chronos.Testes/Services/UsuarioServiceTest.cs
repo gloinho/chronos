@@ -18,6 +18,7 @@ namespace Chronos.Testes.Services
         private readonly Mock<IUsuarioRepository> _mockUsuarioRepository;
         private readonly Mock<IEmailService> _mockEmailService;
         private readonly Mock<IHttpContextAccessor> _mockHttpContextAccessor;
+        private readonly Mock<ILogService> _mockLogService;
         private readonly AppSettings _appSettings;
         private readonly IMapper _mapper;
 
@@ -26,6 +27,7 @@ namespace Chronos.Testes.Services
             _mockEmailService = new Mock<IEmailService>();
             _mockUsuarioRepository = new Mock<IUsuarioRepository>();
             _mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
+            _mockLogService = new Mock<ILogService>();
             _appSettings = new AppSettings()
             {
                 SecurityKey = "hWmZq4t6w9z$C&F)J@NcRfUjXn2r5u8x!A%D*G-KaPdSgVkYp3s6v9y$B?E(H+Mb"
@@ -49,6 +51,7 @@ namespace Chronos.Testes.Services
 
             var service = new UsuarioService(
                 _mockUsuarioRepository.Object,
+                _mockLogService.Object,
                 _mockEmailService.Object,
                 _appSettings,
                 _mapper,
@@ -80,6 +83,7 @@ namespace Chronos.Testes.Services
 
             var service = new UsuarioService(
                 _mockUsuarioRepository.Object,
+                _mockLogService.Object,
                 _mockEmailService.Object,
                 _appSettings,
                 _mapper,
@@ -107,6 +111,7 @@ namespace Chronos.Testes.Services
                 .ReturnsAsync(It.IsAny<Usuario>());
             var service = new UsuarioService(
                 _mockUsuarioRepository.Object,
+                _mockLogService.Object,
                 _mockEmailService.Object,
                 _appSettings,
                 _mapper,
@@ -131,6 +136,7 @@ namespace Chronos.Testes.Services
                 .ReturnsAsync(It.IsAny<Usuario>());
             var service = new UsuarioService(
                 _mockUsuarioRepository.Object,
+                _mockLogService.Object,
                 _mockEmailService.Object,
                 _appSettings,
                 _mapper,
@@ -158,6 +164,7 @@ namespace Chronos.Testes.Services
                 .ReturnsAsync(It.IsAny<Usuario>());
             var service = new UsuarioService(
                 _mockUsuarioRepository.Object,
+                _mockLogService.Object,
                 _mockEmailService.Object,
                 _appSettings,
                 _mapper,
@@ -181,6 +188,7 @@ namespace Chronos.Testes.Services
                 .ReturnsAsync(usuario);
             var service = new UsuarioService(
                 _mockUsuarioRepository.Object,
+                _mockLogService.Object,
                 _mockEmailService.Object,
                 _appSettings,
                 _mapper,
@@ -202,6 +210,7 @@ namespace Chronos.Testes.Services
                 .ReturnsAsync((Usuario)null);
             var service = new UsuarioService(
                 _mockUsuarioRepository.Object,
+                _mockLogService.Object,
                 _mockEmailService.Object,
                 _appSettings,
                 _mapper,
@@ -223,6 +232,7 @@ namespace Chronos.Testes.Services
                 .ReturnsAsync(usuario);
             var service = new UsuarioService(
                 _mockUsuarioRepository.Object,
+                _mockLogService.Object,
                 _mockEmailService.Object,
                 _appSettings,
                 _mapper,
@@ -242,6 +252,7 @@ namespace Chronos.Testes.Services
                 .ReturnsAsync((Usuario)null);
             var service = new UsuarioService(
                 _mockUsuarioRepository.Object,
+                _mockLogService.Object,
                 _mockEmailService.Object,
                 _appSettings,
                 _mapper,
@@ -264,6 +275,7 @@ namespace Chronos.Testes.Services
             _mockUsuarioRepository.Setup(mock => mock.ObterTodosAsync()).ReturnsAsync(usuarios);
             var service = new UsuarioService(
                 _mockUsuarioRepository.Object,
+                _mockLogService.Object,
                 _mockEmailService.Object,
                 _appSettings,
                 _mapper,
@@ -289,6 +301,7 @@ namespace Chronos.Testes.Services
 
             var service = new UsuarioService(
                 _mockUsuarioRepository.Object,
+                _mockLogService.Object,
                 _mockEmailService.Object,
                 _appSettings,
                 _mapper,
@@ -314,6 +327,7 @@ namespace Chronos.Testes.Services
 
             var service = new UsuarioService(
                 _mockUsuarioRepository.Object,
+                _mockLogService.Object,
                 _mockEmailService.Object,
                 _appSettings,
                 _mapper,
@@ -342,6 +356,7 @@ namespace Chronos.Testes.Services
 
             var service = new UsuarioService(
                 _mockUsuarioRepository.Object,
+                _mockLogService.Object,
                 _mockEmailService.Object,
                 _appSettings,
                 _mapper,
@@ -369,6 +384,7 @@ namespace Chronos.Testes.Services
 
             var service = new UsuarioService(
                 _mockUsuarioRepository.Object,
+                _mockLogService.Object,
                 _mockEmailService.Object,
                 _appSettings,
                 _mapper,
@@ -396,6 +412,7 @@ namespace Chronos.Testes.Services
                 .Returns(Task.CompletedTask);
             var service = new UsuarioService(
                 _mockUsuarioRepository.Object,
+                _mockLogService.Object,
                 _mockEmailService.Object,
                 _appSettings,
                 _mapper,
@@ -425,6 +442,7 @@ namespace Chronos.Testes.Services
                 .Returns(Task.CompletedTask);
             var service = new UsuarioService(
                 _mockUsuarioRepository.Object,
+                _mockLogService.Object,
                 _mockEmailService.Object,
                 _appSettings,
                 _mapper,
