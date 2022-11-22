@@ -112,40 +112,40 @@ Algumas outras bibliotecas externas utilizadas ao longo do desenvolvimento:
 # Controllers
 
 ## Autenticação Controller
-- [/api/autenticacao](./Endpoints.md#apiautenticacao-post) `POST` <sub>Ativa o e-mail do usuário.</sub>
-- [/api/autenticacao/login](./Endpoints.md#apiautenticacaologin-post) `POST` <sub>Realiza o login do usuário.</sub>
+- [/api/autenticacao](endpoints.md#apiautenticacao-post) `POST` <sub>Ativa o e-mail do usuário.</sub>
+- [/api/autenticacao/login](endpoints.md#apiautenticacaologin-post) `POST` <sub>Realiza o login do usuário.</sub>
 
 ## Projeto Controller
-- [/api/projeto](./Endpoints.md#apiprojeto-post) `POST`<sub>Cadastra um projeto.</sub>
-- [/api/projeto](./Endpoints.md#apiprojeto-get) `GET`<sub>Lista todos os projetos.</sub>
-- [/api/projeto/{id}/colaboradores](./Endpoints.md#apiprojetoidcolaboradores-post) `POST`<sub>Adiciona colaboradores em um projeto.</sub>
-- [/api/projeto/{id}](./Endpoints.md#apiprojetoid-get) `GET`<sub>Retorna um projeto pelo ID.</sub>
-- [/api/projeto/{id}](./Endpoints.md#apiprojetoid-put) `PUT` <sub>Edita um projeto</sub>
-- [/api/projeto/{id}](./Endpoints.md#apiprojetoid-delete) `DELETE` <sub>Remove um projeto.</sub>
-- [/api/projeto/usuario/{usuarioId}](./Endpoints.md#apiprojetousuariousuarioid-get) `GET` <sub>Lista todos os projetos que um usuário participa.</sub>
+- [/api/projeto](endpoints.md#apiprojeto-post) `POST`<sub>Cadastra um projeto.</sub>
+- [/api/projeto](endpoints.md#apiprojeto-get) `GET`<sub>Lista todos os projetos.</sub>
+- [/api/projeto/{id}/colaboradores](endpoints.md#apiprojetoidcolaboradores-post) `POST`<sub>Adiciona colaboradores em um projeto.</sub>
+- [/api/projeto/{id}](endpoints.md#apiprojetoid-get) `GET`<sub>Retorna um projeto pelo ID.</sub>
+- [/api/projeto/{id}](endpoints.md#apiprojetoid-put) `PUT` <sub>Edita um projeto</sub>
+- [/api/projeto/{id}](endpoints.md#apiprojetoid-delete) `DELETE` <sub>Remove um projeto.</sub>
+- [/api/projeto/usuario/{usuarioId}](endpoints.md#apiprojetousuariousuarioid-get) `GET` <sub>Lista todos os projetos que um usuário participa.</sub>
 
 ## Usuario Controller 
-- [/api/usuario](./Endpoints.md#apiusuario-post)  `POST` <sub>Cadastra um usuário.</sub>
-- [/api/usuario](./Endpoints.md#apiusuario-get) `GET` <sub>Lista todos os usuários.</sub>
-- [/api/usuario/{id}](./Endpoints.md#apiusuarioid-delete) `DELETE` <sub>Remove um usuário.</sub>
-- [/api/usuario/{id}](./Endpoints.md#apiusuarioid-get) `GET` <sub>Retorna um usuário pelo ID.</sub>
-- [/api/usuario/{id}](./Endpoints.md#apiusuarioid-put) `PUT` <sub>Edita as informações de um usuário.</sub>
-- [/api/usuario/senha](./Endpoints.md#apiusuariosenha-post) `POST` <sub>Envia o código para reset de senha para o e-mail.</sub>
-- [/api/usuario/senha](./Endpoints.md#apiusuariosenha-put) `PUT` <sub>Reseta a senha de um usuário.</sub>
+- [/api/usuario](endpoints.md#apiusuario-post)  `POST` <sub>Cadastra um usuário.</sub>
+- [/api/usuario](endpoints.md#apiusuario-get) `GET` <sub>Lista todos os usuários.</sub>
+- [/api/usuario/{id}](endpoints.md#apiusuarioid-delete) `DELETE` <sub>Remove um usuário.</sub>
+- [/api/usuario/{id}](endpoints.md#apiusuarioid-get) `GET` <sub>Retorna um usuário pelo ID.</sub>
+- [/api/usuario/{id}](endpoints.md#apiusuarioid-put) `PUT` <sub>Edita as informações de um usuário.</sub>
+- [/api/usuario/senha](endpoints.md#apiusuariosenha-post) `POST` <sub>Envia o código para reset de senha para o e-mail.</sub>
+- [/api/usuario/senha](endpoints.md#apiusuariosenha-put) `PUT` <sub>Reseta a senha de um usuário.</sub>
 
 ## Tarefa Controller
-- [/api/tarefa](./Endpoints.md#apitarefa-post) `POST` <sub>Cadastra uma tarefa.</sub>
-- [/api/tarefa](./Endpoints.md#apitarefa-get) `GET` <sub>Lista todas as tarefas.</sub>
-- [/api/tarefa/{id}/start](./Endpoints.md#apitarefaidstart-patch) `PATCH` <sub>Inicia uma tarefa.</sub>
-- [/api/tarefa/{id}/stop](./Endpoints.md#apitarefaidstop-patch) `PATCH` <sub>Para uma tarefa.</sub>
-- [/api/tarefa/{id}](./Endpoints.md#apitarefaid-delete) `DELETE` <sub>Remove uma tarefa.</sub>
-- [/api/tarefa/{id}](./Endpoints.md#apitarefaid-put) `PUT` <sub>Edita uma tarefa.</sub>
-- [/api/tarefa/{id}](./Endpoints.md#apitarefa-get) `GET` <sub>Retorna uma tarefa pelo ID.</sub>
-- [/api/tarefa/usuario/{usuarioId}](./Endpoints.md#apitarefausuariousuarioid-get) `GET` <sub>Retorna todas as tarefas de um usuário.</sub>
-- [/api/tarefa/{usuarioId}/dia](./Endpoints.md#apitarefausuarioiddia-get) `GET` <sub>Lista todas as tarefas que iniciaram e terminaram no dia.</sub>
-- [/api/tarefa/{usuarioId}/semana](./Endpoints.md#apitarefausuarioidsemana-get) `GET` <sub>Lista todas as tarefas que iniciaram e terminaram na semana.</sub>
-- [/api/tarefa/{usuarioId}/mes](./Endpoints.md#apitarefausuarioidmes-get) `GET` <sub>Lista todas as tarefas que iniciaram e terminaram no mês.</sub>
-- [/api/tarefa/projeto/{projetoId}](./Endpoints.md#apitarefaprojetoprojetoid-get) `GET` <sub>Lista todas as tarefas de um projeto.</sub>
+- [/api/tarefa](endpoints.md#apitarefa-post) `POST` <sub>Cadastra uma tarefa.</sub>
+- [/api/tarefa](endpoints.md#apitarefa-get) `GET` <sub>Lista todas as tarefas.</sub>
+- [/api/tarefa/{id}/start](endpoints.md#apitarefaidstart-patch) `PATCH` <sub>Inicia uma tarefa.</sub>
+- [/api/tarefa/{id}/stop](endpoints.md#apitarefaidstop-patch) `PATCH` <sub>Para uma tarefa.</sub>
+- [/api/tarefa/{id}](endpoints.md#apitarefaid-delete) `DELETE` <sub>Remove uma tarefa.</sub>
+- [/api/tarefa/{id}](endpoints.md#apitarefaid-put) `PUT` <sub>Edita uma tarefa.</sub>
+- [/api/tarefa/{id}](endpoints.md#apitarefa-get) `GET` <sub>Retorna uma tarefa pelo ID.</sub>
+- [/api/tarefa/usuario/{usuarioId}](endpoints.md#apitarefausuariousuarioid-get) `GET` <sub>Retorna todas as tarefas de um usuário.</sub>
+- [/api/tarefa/{usuarioId}/dia](endpoints.md#apitarefausuarioiddia-get) `GET` <sub>Lista todas as tarefas que iniciaram e terminaram no dia.</sub>
+- [/api/tarefa/{usuarioId}/semana](endpoints.md#apitarefausuarioidsemana-get) `GET` <sub>Lista todas as tarefas que iniciaram e terminaram na semana.</sub>
+- [/api/tarefa/{usuarioId}/mes](endpoints.md#apitarefausuarioidmes-get) `GET` <sub>Lista todas as tarefas que iniciaram e terminaram no mês.</sub>
+- [/api/tarefa/projeto/{projetoId}](endpoints.md#apitarefaprojetoprojetoid-get) `GET` <sub>Lista todas as tarefas de um projeto.</sub>
 
 ## Toggl Controller  
 - [/toggl/relatorio-de-horas]() `GET` <sub>Endpoint de integração com o toggl.</sub>
