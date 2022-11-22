@@ -10,7 +10,7 @@ namespace Chronos.Testes.Fakers
         {
             return new NovaSenhaRequest
             {
-                Codigo = fake.Random.String(6),
+                Codigo = fake.Random.Int(100000, 999999).ToString(),
                 Senha = fake.Internet.Password(
                     8,
                     true,
@@ -21,6 +21,16 @@ namespace Chronos.Testes.Fakers
                     true,
                     @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
                 ),
+            };
+        }
+
+        public static NovaSenhaRequest GetRequest(string senha)
+        {
+            return new NovaSenhaRequest
+            {
+                Codigo = fake.Random.Int(100000, 999999).ToString(),
+                Senha = senha,
+                ConfirmacaoSenha = senha
             };
         }
     }

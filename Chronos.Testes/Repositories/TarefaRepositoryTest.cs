@@ -8,21 +8,20 @@ namespace Chronos.Testes.Repositories
     public class TarefaRepositoryTest
     {
         private readonly ApplicationDbContext _context;
+        private readonly Usuario _usuario;
+        private readonly Projeto _projeto;
 
         public TarefaRepositoryTest()
         {
             _context = new InMemoryContext().GetContext();
 
             // Arrange -> Popular o banco de dados com uma entidade de cada tipo.
-            var usuario = UsuarioFaker.GetUsuario();
-            var projeto = ProjetoFaker.GetProjeto();
-            _context.Usuarios.Add(usuario);
-            _context.Projetos.Add(projeto);
+            _usuario = UsuarioFaker.GetUsuario();
+            _projeto = ProjetoFaker.GetProjeto();
+            _context.Usuarios.Add(_usuario);
+            _context.Projetos.Add(_projeto);
             _context.SaveChanges();
-            var usuario_projeto = Usuario_ProjetoFaker.GetRelacao(
-                _context.Projetos.First(),
-                _context.Usuarios.First()
-            );
+            var usuario_projeto = Usuario_ProjetoFaker.GetRelacao(_projeto, _usuario);
             _context.Usuarios_Projetos.Add(usuario_projeto);
             _context.SaveChanges();
             var tarefas = new List<Tarefa>()
@@ -58,7 +57,7 @@ namespace Chronos.Testes.Repositories
         public async Task TestObterPorUsuarioIdAsync()
         {
             var repository = new TarefaRepository(_context);
-            var result = await repository.ObterPorUsuarioIdAsync(1);
+            var result = await repository.ObterPorUsuarioIdAsync(_usuario.Id);
             Assert.IsNotNull(result);
             Assert.AreEqual(3, result.Count);
         }
@@ -67,7 +66,7 @@ namespace Chronos.Testes.Repositories
         public async Task TestGetTarefasDia()
         {
             var repository = new TarefaRepository(_context);
-            var result = await repository.GetTarefasDia(1);
+            var result = await repository.GetTarefasDia(_usuario.Id);
             Assert.AreEqual(2, result.Count);
         }
 

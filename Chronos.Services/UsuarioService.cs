@@ -123,7 +123,7 @@ namespace Chronos.Services
             {
                 throw new BaseException(
                     StatusException.FormatoIncorreto,
-                    $"Senhas digitadas as diferentes ."
+                    $"Senhas digitadas são diferentes."
                 );
             }
 
@@ -162,14 +162,18 @@ namespace Chronos.Services
 
             await _usuarioRepository.AlterarAsync(user);
 
-            await _emailService.Send(request.Email, $"Codigo:  {codigo}", $"Token: {token}");
+            await _emailService.Send(
+                request.Email,
+                "Recuperação de Senha Chronos",
+                $"Codigo: {codigo}, Token: {token}"
+            );
 
             return new MensagemResponse
             {
                 Codigo = StatusException.Nenhum,
                 Mensagens = new List<string>
                 {
-                    "Enviamos um token e Codigo para seu email. Por favor, faça a alteração."
+                    "Enviamos o código de alteração de senha para seu e-mail. Este código será válido por apenas 2 horas."
                 }
             };
         }
