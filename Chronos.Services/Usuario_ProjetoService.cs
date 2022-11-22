@@ -3,6 +3,7 @@ using Chronos.Domain.Entities;
 using Chronos.Domain.Exceptions;
 using Chronos.Domain.Interfaces.Repository;
 using Chronos.Domain.Interfaces.Services;
+using Chronos.Domain.Shared;
 using Chronos.Domain.Utils;
 using Microsoft.AspNetCore.Http;
 
@@ -117,7 +118,7 @@ namespace Chronos.Services
             {
                 throw new BaseException(
                     StatusException.NaoEncontrado,
-                    $"Projeto de id {projetoId} não foi encontrado."
+                    $"O projeto de ID {projetoId} não foi encontrado."
                 );
             }
         }
