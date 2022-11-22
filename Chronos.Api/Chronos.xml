@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Chronos.Api</name>
+    </assembly>
+    <members>
+        <member name="M:Chronos.Api.Controllers.BaseController`3.CadastrarAsync(`1)">
+            <summary>
+            Através dessa rota você será capaz de cadastrar um registro no banco
+            </summary>
+            <returns></returns>
+            <response code="201">Sucesso, </response>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Chronos.Api.Controllers.BaseController`3.AlterarAsync(System.Int32,`1)" -->
+        <!-- Badly formed XML comment ignored for member "M:Chronos.Api.Controllers.BaseController`3.DeleteAsync(System.Int32)" -->
+        <member name="M:Chronos.Api.Controllers.BaseController`3.ObterTodosAsync">
+            <summary>
+            Através dessa rota você será capaz de buscar uma listagem de registros
+            </summary>
+            <returns></returns>
+            <response code="200">Sucesso, e retorna uma lista de elementos</response>
+        </member>
+        <member name="M:Chronos.Api.Controllers.BaseController`3.ObterPorIdAsync(System.Int32)">
+            <summary>
+            Através dessa rota você será capaz de buscar um registro pelo Id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <response code="200">Sucesso, e retorna o elemento encontrado via ID</response>
+        </member>
+    </members>
+</doc>

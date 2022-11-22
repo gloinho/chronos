@@ -28,6 +28,11 @@ namespace Chronos.Api.Controllers
             _service = service;
         }
 
+        /// <summary>
+        /// Através dessa rota você será capaz de cadastrar um registro no banco
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="201">Sucesso, </response>
         [Authorize]
         [HttpPost]
         [ProducesResponseType(201)]
@@ -37,6 +42,11 @@ namespace Chronos.Api.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Através dessa rota você será capaz de alterar um registro do banco
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Mensagem - "alterado com sucesso".
         [Authorize]
         [HttpPut("{id}")]
         [ProducesResponseType(200)]
@@ -46,6 +56,11 @@ namespace Chronos.Api.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Através dessa rota você será capaz de deletar um registro do banco
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Mensagem - "deletado com sucesso".
         [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
         [HttpDelete("{id}")]
         [ProducesResponseType(200)]
@@ -55,6 +70,11 @@ namespace Chronos.Api.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Através dessa rota você será capaz de buscar uma listagem de registros
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Sucesso, e retorna uma lista de elementos</response>
         [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
         [HttpGet()]
         [ProducesResponseType(200)]
@@ -64,6 +84,12 @@ namespace Chronos.Api.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Através dessa rota você será capaz de buscar um registro pelo Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <response code="200">Sucesso, e retorna o elemento encontrado via ID</response>
         [Authorize]
         [HttpGet("{id}")]
         [ProducesResponseType(200)]

@@ -89,7 +89,7 @@ namespace Chronos.Services
             return new MensagemResponse()
             {
                 Codigo = StatusException.Nenhum,
-                Mensagens = new List<string>() { "Tarefa deletada com sucesso." }
+                Mensagens = new List<string>() { "Deletado com Sucesso" }
             };
         }
 

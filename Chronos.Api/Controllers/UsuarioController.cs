@@ -34,8 +34,6 @@ namespace Chronos.Api.Controllers
             return Created(nameof(CadastrarAsync), response);
         }
 
-
-        [Authorize]
         [HttpPut("senha")]
         public async Task<IActionResult> AlterarSenha([FromBody] NovaSenhaRequest request)
         {
