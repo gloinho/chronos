@@ -12,7 +12,6 @@
                 Descricao = faker.Random.String(),
                 DataInicial = DateTime.Today,
                 DataFinal = DateTime.Today,
-                DataAlteracao = faker.Date.Past(),
                 DataInclusao = DateTime.Today,
             };
         }
@@ -25,7 +24,6 @@
                 Descricao = faker.Random.String(),
                 DataInicial = DateTime.Today.AddDays(1),
                 DataFinal = DateTime.Today.AddDays(1),
-                DataAlteracao = faker.Date.Past(),
                 DataInclusao = DateTime.Today,
             };
         }

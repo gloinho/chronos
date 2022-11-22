@@ -4,6 +4,7 @@ using Chronos.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chronos.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221117193234_IncluindoEntidadeLog")]
+    partial class IncluindoEntidadeLog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,20 +32,16 @@ namespace Chronos.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Alteracao")
+                    b.Property<int>("AlteradorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Mensagem")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DataAlteracao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("ResponsavelId")
-                        .IsRequired()
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ResponsavelId");
+                    b.HasIndex("AlteradorId");
 
                     b.ToTable("Logs");
                 });
@@ -55,6 +53,9 @@ namespace Chronos.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime?>("DataAlteracao")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DataFim")
                         .HasColumnType("datetime2");
@@ -81,6 +82,9 @@ namespace Chronos.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime?>("DataAlteracao")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DataFinal")
                         .HasColumnType("datetime2");
@@ -118,6 +122,9 @@ namespace Chronos.Data.Migrations
 
                     b.Property<bool>("Confirmado")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime?>("DataAlteracao")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DataInclusao")
                         .HasColumnType("datetime2");
@@ -157,6 +164,9 @@ namespace Chronos.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<DateTime?>("DataAlteracao")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("DataInclusao")
                         .HasColumnType("datetime2");
 
@@ -177,13 +187,13 @@ namespace Chronos.Data.Migrations
 
             modelBuilder.Entity("Chronos.Domain.Entities.Log", b =>
                 {
-                    b.HasOne("Chronos.Domain.Entities.Usuario", "Responsavel")
+                    b.HasOne("Chronos.Domain.Entities.Usuario", "Alterador")
                         .WithMany("Logs")
-                        .HasForeignKey("ResponsavelId")
+                        .HasForeignKey("AlteradorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Responsavel");
+                    b.Navigation("Alterador");
                 });
 
             modelBuilder.Entity("Chronos.Domain.Entities.Tarefa", b =>

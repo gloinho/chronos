@@ -13,7 +13,6 @@ namespace Chronos.Testes.Fakers
             {
                 Id = fake.Random.Int(),
                 Nome = fake.Person.FullName,
-                DataAlteracao = fake.Date.Recent(),
                 DataInclusao = fake.Date.Recent(),
                 ConfirmacaoToken = fake.Random.String(),
                 Confirmado = fake.Random.Bool(),
