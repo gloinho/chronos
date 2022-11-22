@@ -1,5 +1,6 @@
 ﻿using Chronos.Domain.Contracts.Request;
 using Chronos.Domain.Contracts.Response;
+using Chronos.Domain.Entities;
 using Chronos.Domain.Interfaces.Services;
 using Chronos.Domain.Utils;
 using Microsoft.AspNetCore.Authorization;
@@ -7,30 +8,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Chronos.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [Authorize]
-    [ProducesResponseType(typeof(MensagemResponse), 200)]
-    [ProducesResponseType(typeof(MensagemResponse), 201)]
-    [ProducesResponseType(typeof(MensagemResponse), 400)]
-    [ProducesResponseType(typeof(MensagemResponse), 401)]
-    [ProducesResponseType(typeof(MensagemResponse), 403)]
-    [ProducesResponseType(typeof(MensagemResponse), 404)]
-    [ProducesResponseType(typeof(MensagemResponse), 500)]
-    [ApiController]
-    public class TarefaController : ControllerBase
+    public class TarefaController : BaseController<Tarefa, TarefaRequest, TarefaResponse>
     {
         private readonly ITarefaService _tarefaService;
 
-        public TarefaController(ITarefaService tarefaService)
+        public TarefaController(ITarefaService tarefaService) : base(tarefaService)
         {
             _tarefaService = tarefaService;
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CadastrarAsync([FromBody] TarefaRequest request)
-        {
-            var response = await _tarefaService.CadastrarAsync(request);
-            return Ok(response);
         }
 
         [HttpPatch("{id}/start")]
@@ -48,26 +32,10 @@ namespace Chronos.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletarAsync([FromRoute] int id)
+        [ProducesResponseType(200)]
+        public override async Task<IActionResult> DeleteAsync([FromRoute] int id)
         {
             var response = await _tarefaService.DeletarAsync(id);
-            return Ok(response);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> AlterarAsync(
-            [FromRoute] int id,
-            [FromBody] TarefaRequest request
-        )
-        {
-            var response = await _tarefaService.AlterarAsync(id, request);
-            return Ok(response);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> ObterPorIdAsync([FromRoute] int id)
-        {
-            var response = await _tarefaService.ObterPorIdAsync(id);
             return Ok(response);
         }
 
@@ -75,14 +43,6 @@ namespace Chronos.Api.Controllers
         public async Task<IActionResult> ObterPorUsuarioIdAsync([FromRoute] int usuarioId)
         {
             var response = await _tarefaService.ObterPorUsuarioId(usuarioId);
-            return Ok(response);
-        }
-
-        [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
-        [HttpGet]
-        public async Task<IActionResult> ObterTodosAsync()
-        {
-            var response = await _tarefaService.ObterTodosAsync();
             return Ok(response);
         }
 

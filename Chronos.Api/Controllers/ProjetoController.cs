@@ -1,5 +1,6 @@
 ﻿using Chronos.Domain.Contracts.Request;
 using Chronos.Domain.Contracts.Response;
+using Chronos.Domain.Entities;
 using Chronos.Domain.Interfaces.Services;
 using Chronos.Domain.Utils;
 using Microsoft.AspNetCore.Authorization;
@@ -7,20 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Chronos.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ProducesResponseType(typeof(MensagemResponse), 200)]
-    [ProducesResponseType(typeof(MensagemResponse), 201)]
-    [ProducesResponseType(typeof(MensagemResponse), 400)]
-    [ProducesResponseType(typeof(MensagemResponse), 401)]
-    [ProducesResponseType(typeof(MensagemResponse), 403)]
-    [ProducesResponseType(typeof(MensagemResponse), 404)]
-    [ProducesResponseType(typeof(MensagemResponse), 500)]
-    [ApiController]
-    public class ProjetoController : ControllerBase
+
+    public class ProjetoController : BaseController<Projeto, ProjetoRequest, ProjetoResponse>
     {
         private readonly IProjetoService _projetoService;
 
-        public ProjetoController(IProjetoService projetoService)
+        public ProjetoController(IProjetoService projetoService) : base(projetoService)
         {
             _projetoService = projetoService;
         }
@@ -28,7 +21,7 @@ namespace Chronos.Api.Controllers
         [HttpPost]
         [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
         [ProducesResponseType(201)]
-        public async Task<IActionResult> CadastrarAsync([FromBody] ProjetoRequest request)
+        public override async Task<IActionResult> CadastrarAsync([FromBody] ProjetoRequest request)
         {
             var response = await _projetoService.CadastrarAsync(request);
             return Created(nameof(CadastrarAsync), response);
@@ -46,19 +39,10 @@ namespace Chronos.Api.Controllers
             return Created(nameof(AdicionarColaboradoresAsync), response);
         }
 
-        [HttpGet]
-        [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
-        [ProducesResponseType(200)]
-        public async Task<IActionResult> ObterTodosAsync()
-        {
-            var response = await _projetoService.ObterTodosAsync();
-            return Ok(response);
-        }
-
         [HttpGet("{id}")]
         [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> ObterPorIdAsync([FromRoute] int id)
+        public override async Task<IActionResult> ObterPorIdAsync([FromRoute] int id)
         {
             var response = await _projetoService.ObterPorIdAsync(id);
             return Ok(response);
@@ -75,21 +59,12 @@ namespace Chronos.Api.Controllers
         [HttpPut("{id}")]
         [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> AlterarAsync(
+        public override async Task<IActionResult> AlterarAsync(
             [FromRoute] int id,
             [FromBody] ProjetoRequest request
         )
         {
             var response = await _projetoService.AlterarAsync(id, request);
-            return Ok(response);
-        }
-
-        [HttpDelete("{id}")]
-        [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
-        [ProducesResponseType(200)]
-        public async Task<IActionResult> DeletarAsync([FromRoute] int id)
-        {
-            var response = await _projetoService.DeletarAsync(id);
             return Ok(response);
         }
     }
