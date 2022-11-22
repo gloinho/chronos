@@ -4,6 +4,22 @@
         <name>Chronos.Api</name>
     </assembly>
     <members>
+        <member name="M:Chronos.Api.Controllers.AutenticacaoController.ConfirmarUsuario(System.String)">
+            <summary>
+            Através dessa rota você será capaz de confirmar usuario cadastrado, usando token.
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+            <response code="200">Sucesso, e retorna a mensagem "Usuário Confirmado com sucesso." </response>
+        </member>
+        <member name="M:Chronos.Api.Controllers.AutenticacaoController.Login(Chronos.Domain.Contracts.Request.LoginRequest)">
+            <summary>
+            Através dessa rota você será capaz de realizar o login, para ter acesso aos metodos da api.
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+            <response code="200">Sucesso, e retorna a mensagem "Token para autenticação na plataforma." </response>
+        </member>
         <member name="M:Chronos.Api.Controllers.BaseController`3.CadastrarAsync(`1)">
             <summary>
             Através dessa rota você será capaz de cadastrar um registro no banco
@@ -12,7 +28,14 @@
             <response code="201">Sucesso, </response>
         </member>
         <!-- Badly formed XML comment ignored for member "M:Chronos.Api.Controllers.BaseController`3.AlterarAsync(System.Int32,`1)" -->
-        <!-- Badly formed XML comment ignored for member "M:Chronos.Api.Controllers.BaseController`3.DeleteAsync(System.Int32)" -->
+        <member name="M:Chronos.Api.Controllers.BaseController`3.DeleteAsync(System.Int32)">
+            <summary>
+            Através dessa rota você será capaz de deletar um registro do banco de dados.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <response code="200">Sucesso, e retorna a mensagem  "Deletado com Sucesso"  </response>
+        </member>
         <member name="M:Chronos.Api.Controllers.BaseController`3.ObterTodosAsync">
             <summary>
             Através dessa rota você será capaz de buscar uma listagem de registros
@@ -27,6 +50,48 @@
             <param name="id"></param>
             <returns></returns>
             <response code="200">Sucesso, e retorna o elemento encontrado via ID</response>
+        </member>
+        <member name="M:Chronos.Api.Controllers.ProjetoController.CadastrarAsync(Chronos.Domain.Contracts.Request.ProjetoRequest)">
+            <summary>
+            Através dessa rota você será capaz de cadastrar um registro no banco
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+            <response code="201">Sucesso, e retorna a mensagem  "Cadastrado com Sucesso" </response>
+        </member>
+        <member name="M:Chronos.Api.Controllers.ProjetoController.AdicionarColaboradoresAsync(System.Int32,Chronos.Domain.Contracts.Request.AdicionarColaboradoresRequest)">
+            <summary>
+            Através dessa rota você será capaz de adicionar um colaborador há um projeto
+            </summary>
+            <param name="request"></param>
+            <param name="id"></param>
+            <returns></returns>
+            <response code="201">Sucesso, e retorna a mensagem  "Cadastrado com Sucesso" </response>
+        </member>
+        <member name="M:Chronos.Api.Controllers.ProjetoController.ObterPorIdAsync(System.Int32)">
+            <summary>
+            Através dessa rota você será capaz de buscar um projeto pelo Id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <response code="200">Sucesso, e retorna um projeto</response>
+        </member>
+        <member name="M:Chronos.Api.Controllers.ProjetoController.ObterPorUsuarioIdAsync(System.Int32)">
+            <summary>
+            Através dessa rota você será capaz de buscar um projeto pelo UsuarioId
+            </summary>
+            <param name="usuarioId"></param>
+            <returns></returns>
+            <response code="200">Sucesso, e retorna um projeto</response>
+        </member>
+        <member name="M:Chronos.Api.Controllers.ProjetoController.AlterarAsync(System.Int32,Chronos.Domain.Contracts.Request.ProjetoRequest)">
+            <summary>
+            Através dessa rota você será capaz de alterar um projeto do banco de dados.
+            </summary>
+            <param name="id"></param>
+            <param name="request"></param>
+            <returns></returns>
+            <response code="200">Sucesso, e retorna a mensagem "Alterado com Sucesso" </response>
         </member>
     </members>
 </doc>

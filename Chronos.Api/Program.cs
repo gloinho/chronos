@@ -59,6 +59,12 @@ builder.Services.AddSwaggerGen(c =>
             }
         }
     );
+
+    var xmlFile = "Chronos.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+    c.IncludeXmlComments(xmlPath);
+
 });
 
 #endregion

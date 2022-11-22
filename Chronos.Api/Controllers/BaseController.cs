@@ -57,10 +57,11 @@ namespace Chronos.Api.Controllers
         }
 
         /// <summary>
-        /// Através dessa rota você será capaz de deletar um registro do banco
+        /// Através dessa rota você será capaz de deletar um registro do banco de dados.
         /// </summary>
+        /// <param name="id"></param>
         /// <returns></returns>
-        /// <response code="200">Mensagem - "deletado com sucesso".
+        /// <response code="200">Sucesso, e retorna a mensagem  "Deletado com Sucesso"  </response>
         [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
         [HttpDelete("{id}")]
         [ProducesResponseType(200)]
