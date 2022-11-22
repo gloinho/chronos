@@ -46,7 +46,7 @@ namespace Chronos.Api.Controllers
         /// Através dessa rota você será capaz de alterar um registro do banco
         /// </summary>
         /// <returns></returns>
-        /// <response code="200">Mensagem - "alterado com sucesso".
+        /// <response code="200">Mensagem - "alterado com sucesso". </response>
         [Authorize]
         [HttpPut("{id}")]
         [ProducesResponseType(200)]

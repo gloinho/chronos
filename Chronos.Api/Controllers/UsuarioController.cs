@@ -17,6 +17,11 @@ namespace Chronos.Api.Controllers
             _usuarioService = usuarioService;
         }
 
+        /// <summary>
+        /// Através dessa rota você será capaz de cadastrar um Usuario no banco de dados
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="201">Conclua a configuração da sua nova Conta Chronos com o token: </response>
         [AllowAnonymous]
         [HttpPost]
         [ProducesResponseType(201)]
@@ -26,6 +31,12 @@ namespace Chronos.Api.Controllers
             return Created(nameof(CadastrarAsync), response);
         }
 
+        /// <summary>
+        /// Através dessa rota você enviará um codigo para seu email, para alterar senha.
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="201">Mensagem: "Enviamos o código de alteração de senha para seu e-mail. Este código 
+        /// será válido por apenas 2 horas." </response>
         [AllowAnonymous]
         [HttpPost("senha")]
         public async Task<IActionResult> EnviarCodigoResetSenha([FromBody] ResetSenhaRequest request)
@@ -34,6 +45,11 @@ namespace Chronos.Api.Controllers
             return Created(nameof(CadastrarAsync), response);
         }
 
+        /// <summary>
+        /// Através dessa rota você será capaz de alterar sua senha.
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="201">Mensagem: "Senha alterada com sucesso."  </response>
         [HttpPut("senha")]
         public async Task<IActionResult> AlterarSenha([FromBody] NovaSenhaRequest request)
         {

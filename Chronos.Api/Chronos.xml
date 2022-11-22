@@ -27,7 +27,13 @@
             <returns></returns>
             <response code="201">Sucesso, </response>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Chronos.Api.Controllers.BaseController`3.AlterarAsync(System.Int32,`1)" -->
+        <member name="M:Chronos.Api.Controllers.BaseController`3.AlterarAsync(System.Int32,`1)">
+            <summary>
+            Através dessa rota você será capaz de alterar um registro do banco
+            </summary>
+            <returns></returns>
+            <response code="200">Mensagem - "alterado com sucesso". </response>
+        </member>
         <member name="M:Chronos.Api.Controllers.BaseController`3.DeleteAsync(System.Int32)">
             <summary>
             Através dessa rota você será capaz de deletar um registro do banco de dados.
@@ -92,6 +98,28 @@
             <param name="request"></param>
             <returns></returns>
             <response code="200">Sucesso, e retorna a mensagem "Alterado com Sucesso" </response>
+        </member>
+        <member name="M:Chronos.Api.Controllers.UsuarioController.CadastrarAsync(Chronos.Domain.Contracts.Request.UsuarioRequest)">
+            <summary>
+            Através dessa rota você será capaz de cadastrar um Usuario no banco de dados
+            </summary>
+            <returns></returns>
+            <response code="201">Conclua a configuração da sua nova Conta Chronos com o token: </response>
+        </member>
+        <member name="M:Chronos.Api.Controllers.UsuarioController.EnviarCodigoResetSenha(Chronos.Domain.Contracts.Request.ResetSenhaRequest)">
+            <summary>
+            Através dessa rota você enviará um codigo para seu email, para alterar senha.
+            </summary>
+            <returns></returns>
+            <response code="201">Mensagem: "Enviamos o código de alteração de senha para seu e-mail. Este código 
+            será válido por apenas 2 horas." </response>
+        </member>
+        <member name="M:Chronos.Api.Controllers.UsuarioController.AlterarSenha(Chronos.Domain.Contracts.Request.NovaSenhaRequest)">
+            <summary>
+            Através dessa rota você será capaz de alterar sua senha.
+            </summary>
+            <returns></returns>
+            <response code="201">Mensagem: "Senha alterada com sucesso."  </response>
         </member>
     </members>
 </doc>
