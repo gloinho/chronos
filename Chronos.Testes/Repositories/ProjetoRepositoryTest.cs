@@ -111,10 +111,7 @@ namespace Chronos.Testes.Repositories
             context.Usuarios.Add(usuario);
             context.Projetos.Add(projeto);
             context.SaveChanges();
-            var usuario_projeto = Usuario_ProjetoFaker.GetRelacao(
-                context.Projetos.First(),
-                context.Usuarios.First()
-            );
+            var usuario_projeto = Usuario_ProjetoFaker.GetRelacao(projeto, usuario);
             context.Usuarios_Projetos.Add(usuario_projeto);
             context.SaveChanges();
             var tarefas = new List<Tarefa>() { TarefaFaker.GetTarefaDeHoje(usuario_projeto.Id), };
@@ -123,7 +120,7 @@ namespace Chronos.Testes.Repositories
 
             // Act
             var repository = new ProjetoRepository(context);
-            var result = await repository.ObterPorUsuarioIdAsync(1);
+            var result = await repository.ObterPorUsuarioIdAsync(usuario.Id);
 
             // Assert
             Assert.AreEqual(1, result.Count);

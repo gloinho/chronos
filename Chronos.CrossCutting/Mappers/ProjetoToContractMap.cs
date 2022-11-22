@@ -5,7 +5,7 @@ using Chronos.Domain.Entities;
 
 namespace Chronos.CrossCutting.Mappers
 {
-    internal class ProjetoToContractMap : Profile
+    public class ProjetoToContractMap : Profile
     {
         public ProjetoToContractMap()
         {

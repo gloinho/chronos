@@ -1,8 +1,7 @@
 ﻿using Chronos.Services.Validators;
 using Chronos.Testes.Fakers;
 using FluentValidation.TestHelper;
-using NSubstitute.Core;
-using NSubstitute.ReceivedExtensions;
+
 
 namespace Chronos.Testes.Validators
 {

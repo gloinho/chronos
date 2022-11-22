@@ -31,7 +31,7 @@ namespace Chronos.Services
             }
             if (!BCrypt.Net.BCrypt.Verify(request.Senha, usuario.Senha))
             {
-                throw new BaseException(StatusException.Erro, "Senha incorreta.");
+                throw new BaseException(StatusException.NaoProcessado, "Senha incorreta.");
             }
             ;
             if (!usuario.Confirmado)
@@ -52,7 +52,7 @@ namespace Chronos.Services
             var usuario = await _usuarioRepository.ObterAsync(u => u.ConfirmacaoToken == token);
             if (usuario == null)
             {
-                throw new BaseException(StatusException.NaoEncontrado, "Token inválido.");
+                throw new BaseException(StatusException.NaoProcessado, "Token inválido.");
             }
             await _usuarioRepository.Confirmar(usuario);
             return new MensagemResponse

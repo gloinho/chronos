@@ -1,5 +1,4 @@
-﻿
-using Chronos.Domain.Contracts.Request;
+﻿using Chronos.Domain.Contracts.Request;
 using FluentValidation;
 
 namespace Chronos.Services.Validators
@@ -12,7 +11,7 @@ namespace Chronos.Services.Validators
                 .NotEmpty()
                 .WithMessage("O campo 'Codigo' não pode ser vazio.")
                 .Length(6)
-                .WithMessage("O campo 'Codigo' precisa ter 6 números.");
+                .WithMessage("O campo 'Codigo' precisa ter 6 digitos.");
 
             RuleFor(p => p.Senha)
                 .NotEmpty()
