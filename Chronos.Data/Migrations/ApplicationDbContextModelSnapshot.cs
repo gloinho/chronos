@@ -22,29 +22,6 @@ namespace Chronos.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Chronos.Domain.Entities.Log", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Alteracao")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DataAlteracao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("Responsavel")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Logs");
-                });
-
             modelBuilder.Entity("Chronos.Domain.Entities.Projeto", b =>
                 {
                     b.Property<int>("Id")
@@ -52,6 +29,9 @@ namespace Chronos.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime?>("DataAlteracao")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DataFim")
                         .HasColumnType("datetime2");
@@ -79,18 +59,20 @@ namespace Chronos.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<DateTime?>("DataAlteracao")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("DataFinal")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DataInclusao")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DataInicial")
+                    b.Property<DateTime>("DataInicial")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<TimeSpan>("TotalHoras")
+                        .HasColumnType("time");
 
                     b.Property<int>("Usuario_ProjetoId")
                         .HasColumnType("int");
@@ -110,14 +92,14 @@ namespace Chronos.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("CodigoSenhaToken")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ConfirmacaoToken")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Confirmado")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime?>("DataAlteracao")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DataInclusao")
                         .HasColumnType("datetime2");
@@ -133,6 +115,12 @@ namespace Chronos.Data.Migrations
                     b.Property<string>("Permissao")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ResetSenhaToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ResetSenhaVencimento")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Senha")
                         .IsRequired()
@@ -154,8 +142,8 @@ namespace Chronos.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<bool>("Ativo")
-                        .HasColumnType("bit");
+                    b.Property<DateTime?>("DataAlteracao")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DataInclusao")
                         .HasColumnType("datetime2");

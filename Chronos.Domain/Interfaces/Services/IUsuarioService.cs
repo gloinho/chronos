@@ -6,7 +6,5 @@ namespace Chronos.Domain.Interfaces.Services
 {
     public interface IUsuarioService : IBaseService<UsuarioRequest, UsuarioResponse>
     {
-        Task<MensagemResponse> AlterarSenha(NovaSenhaRequest request);
-        Task<MensagemResponse> EnviarCodigoResetSenha(ResetSenhaRequest request);
     }
 }

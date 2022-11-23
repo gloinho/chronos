@@ -8,9 +8,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 var connectionString = builder.Configuration.GetConnectionString("ChronosDb");
 
@@ -24,7 +24,6 @@ builder.Services.AddControllers(options =>
 
 #region HttpContext
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddHttpClient();
 #endregion
 
 #region Swagger
@@ -59,12 +58,6 @@ builder.Services.AddSwaggerGen(c =>
             }
         }
     );
-
-    var xmlFile = "Chronos.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-
-    c.IncludeXmlComments(xmlPath);
-
 });
 
 #endregion
@@ -82,11 +75,6 @@ builder.Services.AddSingleton(appSetting);
 #region MailSettings
 var mailSetting = builder.Configuration.GetSection(nameof(EmailSettings)).Get<EmailSettings>();
 builder.Services.AddSingleton(mailSetting);
-#endregion
-
-#region TogglSettings
-var togglSetting = builder.Configuration.GetSection("Toggl").Get<TogglSettings>();
-builder.Services.AddSingleton(togglSetting);
 #endregion
 
 #region Jwt
@@ -108,12 +96,10 @@ builder.Services
 
 #region Authorization
 
-builder.Services
-    .AddAuthorization(options =>
-    {
-        options.InvokeHandlersAfterFailure = true;
-    })
-    .AddSingleton<IAuthorizationMiddlewareResultHandler, AuthorizationHandler>();
+builder.Services.AddAuthorization(options =>
+{
+    options.InvokeHandlersAfterFailure = true;
+}).AddSingleton<IAuthorizationMiddlewareResultHandler, AuthorizationHandler>();
 
 #endregion
 

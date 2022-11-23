@@ -1,7 +1,9 @@
 using Chronos.Domain.Interfaces.Services;
 using Chronos.Domain.Settings;
 using MailKit.Security;
+using Microsoft.Extensions.Options;
 using MimeKit;
+using MimeKit.Text;
 
 namespace Chronos.Services
 {

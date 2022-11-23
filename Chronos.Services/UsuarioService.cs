@@ -17,17 +17,13 @@ namespace Chronos.Services
     public class UsuarioService : BaseService, IUsuarioService
     {
         private readonly IUsuarioRepository _usuarioRepository;
-        private readonly ILogService _logService;
         private readonly IEmailService _emailService;
         private readonly UsuarioRequestValidator validator = new UsuarioRequestValidator();
-        private readonly NovaSenhaRequestValidator validatorNovaSenha =
-            new NovaSenhaRequestValidator();
         private readonly AppSettings _appSettings;
         private readonly IMapper _mapper;
 
         public UsuarioService(
             IUsuarioRepository usuarioRepository,
-            ILogService logService,
             IEmailService emailService,
             AppSettings appSettings,
             IMapper mapper,
@@ -35,7 +31,6 @@ namespace Chronos.Services
         ) : base(httpContextAccessor)
         {
             _usuarioRepository = usuarioRepository;
-            _logService = logService;
             _emailService = emailService;
             _appSettings = appSettings;
             _mapper = mapper;
@@ -61,10 +56,7 @@ namespace Chronos.Services
             return new MensagemResponse
             {
                 Codigo = StatusException.Nenhum,
-                Mensagens = new List<string>
-                {
-                    "Enviamos um token para seu email. Por favor, faça a confirmação."
-                }
+                Mensagens = new List<string> { "Enviamos um token para seu email. Por favor, faça a confirmação." }
             };
         }
 
@@ -73,13 +65,7 @@ namespace Chronos.Services
             CheckPermissao(id);
             var usuario = await CheckSeIdExiste(id);
             await validator.ValidateAndThrowAsync(request);
-
-            await _logService.LogAsync(nameof(UsuarioService), nameof(AlterarAsync), id);
-
-            request.Senha = BCrypt.Net.BCrypt.HashPassword(
-                request.Senha,
-                BCrypt.Net.BCrypt.GenerateSalt()
-            );
+            usuario.DataAlteracao = DateTime.Now;
             await _usuarioRepository.AlterarAsync(_mapper.Map(request, usuario));
             return new MensagemResponse
             {
@@ -91,9 +77,6 @@ namespace Chronos.Services
         public async Task<MensagemResponse> DeletarAsync(int id)
         {
             var usuario = await CheckSeIdExiste(id);
-
-            await _logService.LogAsync(nameof(UsuarioService), nameof(DeletarAsync), id);
-
             await _usuarioRepository.DeletarAsync(usuario);
             return new MensagemResponse
             {
@@ -113,86 +96,13 @@ namespace Chronos.Services
         public async Task<List<UsuarioResponse>> ObterTodosAsync()
         {
             var usuarios = await _usuarioRepository.ObterTodosAsync();
-            var usuariosOrdenados = _mapper
-                .Map<List<UsuarioResponse>>(usuarios)
-                .OrderBy(u => u.Nome)
-                .ToList();
+            var usuariosOrdenados = _mapper.Map<List<UsuarioResponse>>(usuarios).OrderBy(u => u.Nome).ToList();
             return usuariosOrdenados;
-        }
-
-        public async Task<MensagemResponse> AlterarSenha(NovaSenhaRequest request)
-        {
-            var user = await _usuarioRepository.ObterAsync(u => u.Email == UsuarioEmail);
-
-            await validatorNovaSenha.ValidateAndThrowAsync(request);
-
-            if (!BCrypt.Net.BCrypt.Verify(request.Codigo, user.CodigoSenhaToken))
-            {
-                throw new BaseException(StatusException.Erro, "Código incorreto.");
-            }
-
-            if (request.Senha != request.ConfirmacaoSenha)
-            {
-                throw new BaseException(
-                    StatusException.FormatoIncorreto,
-                    $"Senhas digitadas são diferentes."
-                );
-            }
-
-            if (BCrypt.Net.BCrypt.Verify(request.Senha, user.Senha))
-            {
-                throw new BaseException(
-                    StatusException.Erro,
-                    "Nova senha deve ser diferente da senha atual"
-                );
-            }
-
-            user.Senha = BCrypt.Net.BCrypt.HashPassword(
-                request.Senha,
-                BCrypt.Net.BCrypt.GenerateSalt()
-            );
-
-            await _usuarioRepository.AlterarAsync(user);
-
-            return new MensagemResponse
-            {
-                Codigo = StatusException.Nenhum,
-                Mensagens = new List<string> { "Senha alterada com sucesso." }
-            };
-        }
-
-        public async Task<MensagemResponse> EnviarCodigoResetSenha(ResetSenhaRequest request)
-        {
-            var user = await CheckSeEmailExiste(request.Email);
-            var codigo = Token.GenerateCodigo();
-            var token = Token.GenerateTokenRequest(user, _appSettings.SecurityKey, codigo);
-
-            user.CodigoSenhaToken = BCrypt.Net.BCrypt.HashPassword(
-                codigo,
-                BCrypt.Net.BCrypt.GenerateSalt()
-            );
-
-            await _usuarioRepository.AlterarAsync(user);
-
-            await _emailService.Send(
-                request.Email,
-                "Recuperação de Senha Chronos",
-                $"Codigo: {codigo}, Token: {token}"
-            );
-
-            return new MensagemResponse
-            {
-                Codigo = StatusException.Nenhum,
-                Mensagens = new List<string>
-                {
-                    "Enviamos o código de alteração de senha para seu e-mail. Este código será válido por apenas 2 horas."
-                }
-            };
         }
 
         private async Task CheckSeJaEstaCadastrado(string email)
         {
-            var user = await _usuarioRepository.ObterAsync(u => u.Email == email);
+            var user = await _usuarioRepository.GetPorEmail(email);
             if (user != null)
             {
                 throw new BaseException(StatusException.Erro, "E-mail já cadastrado");
@@ -204,10 +114,7 @@ namespace Chronos.Services
             var usuario = await _usuarioRepository.ObterPorIdAsync(id);
             if (usuario == null)
             {
-                throw new BaseException(
-                    StatusException.NaoEncontrado,
-                    $"Usuário com o id {id} não cadastrado."
-                );
+                throw new BaseException(StatusException.NaoEncontrado, $"Usuário com o id {id} não cadastrado.");
             }
             return usuario;
         }
@@ -216,24 +123,8 @@ namespace Chronos.Services
         {
             if (UsuarioPermissao == PermissaoUtil.PermissaoColaborador && id != UsuarioId)
             {
-                throw new BaseException(
-                    StatusException.NaoAutorizado,
-                    $"Colaborador não pode acessar."
-                );
+                throw new BaseException(StatusException.NaoAutorizado, $"Colaborador não pode acessar.");
             }
-        }
-
-        private async Task<Usuario> CheckSeEmailExiste(string email)
-        {
-            var usuario = await _usuarioRepository.ObterAsync(u => u.Email == email);
-            if (usuario == null)
-            {
-                throw new BaseException(
-                    StatusException.NaoEncontrado,
-                    $"Usuário com o email {email} não cadastrado."
-                );
-            }
-            return usuario;
         }
     }
 }
