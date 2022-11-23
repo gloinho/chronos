@@ -11,7 +11,7 @@
                 Usuario_ProjetoId = id,
                 Descricao = faker.Random.String(),
                 DataInicial = DateTime.Today,
-                DataFinal = DateTime.Today,
+                DataFinal = DateTime.Today.AddHours(3),
                 DataInclusao = DateTime.Today,
             };
         }
@@ -23,7 +23,7 @@
                 Usuario_ProjetoId = id,
                 Descricao = faker.Random.String(),
                 DataInicial = DateTime.Today.AddDays(1),
-                DataFinal = DateTime.Today.AddDays(1),
+                DataFinal = DateTime.Today.AddDays(1).AddHours(3),
                 DataInclusao = DateTime.Today,
             };
         }

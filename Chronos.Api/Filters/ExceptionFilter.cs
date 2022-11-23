@@ -18,13 +18,15 @@ namespace Chronos.Api.Filters
 
                 response.Codigo = informacaoException.Codigo;
                 response.Mensagens = informacaoException.Mensagens;
-                response.Detalhe = context.Exception?.InnerException?.Message;
+                response.Detalhe =
+                    $"{context.Exception.Message} | {context.Exception.InnerException?.Message}";
             }
             else
             {
                 response.Codigo = StatusException.Erro;
-                response.Mensagens = new List<string> { context.Exception.Message };
-                response.Detalhe = context.Exception?.InnerException?.Message;
+                response.Mensagens = new List<string> { "Erro inesperado" };
+                response.Detalhe =
+                    $"{context.Exception?.Message} | {context.Exception?.InnerException?.Message}";
             }
 
             if (context.Exception is FluentValidation.ValidationException)
@@ -32,7 +34,6 @@ namespace Chronos.Api.Filters
                 var infoex = (FluentValidation.ValidationException)context.Exception;
                 response.Codigo = StatusException.FormatoIncorreto;
                 response.Mensagens = infoex.Errors.Select(p => p.ErrorMessage).ToList();
-                response.Detalhe = infoex.InnerException?.Message;
             }
             context.Result = new ObjectResult(response)
             {
