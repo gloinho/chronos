@@ -25,11 +25,40 @@ namespace Chronos.Services
             _projetoRepository = projetoRepository;
         }
 
-        public async Task CadastrarAsync(Usuario_Projeto relacao)
+        public async Task CadastrarAsync(int usuarioId, int projetoId)
         {
-            await CheckSeUsuarioExiste(relacao.UsuarioId);
-            await CheckSeRelacaoJaExiste(relacao);
-            await _usuario_ProjetoRepository.CadastrarAsync(relacao);
+            await CheckSeUsuarioExiste(usuarioId);
+            var relacao = await _usuario_ProjetoRepository.ObterAsync(
+                p => p.ProjetoId == projetoId && p.UsuarioId == usuarioId
+            );
+            if (relacao == null)
+            {
+                var usuario_projeto = new Usuario_Projeto()
+                {
+                    UsuarioId = usuarioId,
+                    ProjetoId = projetoId
+                };
+                await _usuario_ProjetoRepository.CadastrarAsync(usuario_projeto);
+            }
+            else if (relacao.Ativo)
+            {
+                throw new BaseException(
+                    StatusException.Erro,
+                    $"O usuario de id {usuarioId} já faz parte do projeto {projetoId} e está ativo."
+                );
+            }
+            else
+            {
+                relacao.Ativo = true;
+                await _usuario_ProjetoRepository.AlterarAsync(relacao);
+            }
+        }
+
+        public async Task InativarColaborador(int projetoId, int usuarioId)
+        {
+            var relacao = await CheckSeUsuarioFazParteDoProjeto(projetoId, usuarioId);
+            relacao.Ativo = false;
+            await _usuario_ProjetoRepository.AlterarAsync(relacao);
         }
 
         public async Task<Usuario_Projeto> CheckSeUsuarioFazParteDoProjeto(
@@ -37,6 +66,7 @@ namespace Chronos.Services
             int? usuarioId
         )
         {
+            await CheckSeProjetoExiste(projetoId);
             var relacao = await _usuario_ProjetoRepository.ObterAsync(
                 p => p.ProjetoId == projetoId && p.UsuarioId == usuarioId
             );
@@ -47,6 +77,7 @@ namespace Chronos.Services
                     "Usuário não faz parte do projeto."
                 );
             }
+            CheckSeEstaAtivo(relacao);
             return relacao;
         }
 
@@ -63,6 +94,7 @@ namespace Chronos.Services
                     "Colaborador não pode interagir com tarefas de outros colaboradores."
                 );
             }
+            CheckSeEstaAtivo(relacao);
         }
 
         public async Task<Usuario_Projeto> CheckSePodeAlterarTarefa(int projetoId, Tarefa tarefa)
@@ -82,6 +114,7 @@ namespace Chronos.Services
                     projetoId,
                     usuario_projeto.UsuarioId
                 );
+                CheckSeEstaAtivo(relacao);
                 return relacao;
             }
             // Se o usuário logado for colaborador preciso checar SE o ID do usuário LOGADO é igual ao ID do usuário que existe no Usuario_Projeto da TAREFA.
@@ -93,6 +126,7 @@ namespace Chronos.Services
                     "Não é possivel alterar tarefas de outros usuários."
                 );
             }
+            CheckSeEstaAtivo(usuario_projeto);
             return usuario_projeto;
         }
 
@@ -121,16 +155,13 @@ namespace Chronos.Services
             }
         }
 
-        private async Task CheckSeRelacaoJaExiste(Usuario_Projeto relacao)
+        private void CheckSeEstaAtivo(Usuario_Projeto usuario_projeto)
         {
-            var find = await _usuario_ProjetoRepository.ObterAsync(
-                p => p.ProjetoId == relacao.ProjetoId && p.UsuarioId == relacao.UsuarioId
-            );
-            if (find != null)
+            if (!usuario_projeto.Ativo)
             {
                 throw new BaseException(
-                    StatusException.Erro,
-                    $"O usuario de id {relacao.UsuarioId} já faz parte do projeto {relacao.ProjetoId}"
+                    StatusException.NaoAutorizado,
+                    "Colaborador não está mais ativo no projeto. Falar com administrador do sistema."
                 );
             }
         }

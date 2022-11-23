@@ -2,7 +2,7 @@
 
 namespace Chronos.Domain.Contracts.Request
 {
-    public class AdicionarColaboradoresRequest
+    public class ColaboradoresRequest
     {
         [Required]
         public List<int> Usuarios { get; set; }

@@ -10,10 +10,8 @@ namespace Chronos.Domain.Interfaces.Services
 {
     public interface IProjetoService : IBaseService<ProjetoRequest, ProjetoResponse>
     {
-        Task<MensagemResponse> AdicionarColaboradores(
-            int projetoId,
-            AdicionarColaboradoresRequest request
-        );
+        Task<MensagemResponse> AdicionarColaboradores(int projetoId, ColaboradoresRequest request);
         Task<List<ProjetoResponse>> ObterPorUsuarioId(int usuarioId);
+        Task<MensagemResponse> InativarColaboradores(int projetoId, ColaboradoresRequest request);
     }
 }

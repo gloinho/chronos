@@ -65,7 +65,7 @@
             <returns></returns>
             <response code="201">Sucesso, e retorna a mensagem  "Cadastrado com Sucesso" </response>
         </member>
-        <member name="M:Chronos.Api.Controllers.ProjetoController.AdicionarColaboradoresAsync(System.Int32,Chronos.Domain.Contracts.Request.AdicionarColaboradoresRequest)">
+        <member name="M:Chronos.Api.Controllers.ProjetoController.AdicionarColaboradoresAsync(System.Int32,Chronos.Domain.Contracts.Request.ColaboradoresRequest)">
             <summary>
             Através dessa rota você será capaz de adicionar um colaborador há um projeto
             </summary>

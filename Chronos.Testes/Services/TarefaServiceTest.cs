@@ -1,13 +1,10 @@
 ﻿using AutoMapper;
-using Chronos.Domain.Contracts.Response;
-using Chronos.Domain.Entities;
 using Chronos.Domain.Exceptions;
 using Chronos.Domain.Interfaces.Services;
 using Chronos.Services;
 using Chronos.Testes.Fakers;
 using Chronos.Testes.Settings;
 using Microsoft.AspNetCore.Http;
-using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace Chronos.Testes.Services
 {
@@ -191,7 +188,7 @@ namespace Chronos.Testes.Services
 
             var result = await service.DeletarAsync(It.IsAny<int>());
 
-            Assert.AreEqual("Tarefa deletada com sucesso.", result.Mensagens[0]);
+            Assert.AreEqual("Deletado com Sucesso", result.Mensagens[0]);
         }
 
         [TestMethod]
@@ -222,6 +219,31 @@ namespace Chronos.Testes.Services
             tarefa.DataInicial = null;
             var result2 = await service.ObterPorIdAsync(tarefa.Id);
             Assert.AreEqual(TimeSpan.Zero, result2.TotalHoras);
+        }
+
+        [TestMethod]
+        public async Task TestObterPorIdDataFinalNulaEDataInicialNaoNula()
+        {
+            var tarefa = TarefaFaker.GetTarefa();
+            tarefa.DataFinal = null;
+            _mockTarefaRepository
+                .Setup(mock => mock.ObterPorIdAsync(It.IsAny<int>()))
+                .ReturnsAsync(tarefa);
+            _mockUsuarioProjetoService
+                .Setup(mock => mock.CheckPermissao(tarefa.Usuario_ProjetoId))
+                .Returns(Task.CompletedTask);
+
+            var service = new TarefaService(
+                _mockHttpContextAccessor.Object,
+                _mockUsuarioProjetoService.Object,
+                _mockTarefaRepository.Object,
+                _mockLogService.Object,
+                _mapper
+            );
+
+            var result = await service.ObterPorIdAsync(tarefa.Id);
+            Assert.AreEqual(tarefa.Id, result.Id);
+            Assert.AreNotEqual(TimeSpan.Zero, result.TotalHoras);
         }
 
         [TestMethod]

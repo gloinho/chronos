@@ -3,10 +3,9 @@ using FluentValidation;
 
 namespace Chronos.Services.Validators
 {
-    public class AdicionarColaboradoresRequestValidator
-        : AbstractValidator<AdicionarColaboradoresRequest>
+    public class ColaboradoresRequestValidator : AbstractValidator<ColaboradoresRequest>
     {
-        public AdicionarColaboradoresRequestValidator()
+        public ColaboradoresRequestValidator()
         {
             RuleFor(p => p.Usuarios)
                 .NotEmpty()

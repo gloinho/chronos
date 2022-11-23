@@ -214,13 +214,13 @@ namespace Chronos.Testes.Services
         [TestMethod]
         public async Task TestAdicionarColaboradores()
         {
-            var request = _fixture.Create<AdicionarColaboradoresRequest>();
+            var request = _fixture.Create<ColaboradoresRequest>();
             var projeto = _fixture.Create<Projeto>();
             _mockProjetoRepository
                 .Setup(mock => mock.ObterPorIdAsync(It.IsAny<int>()))
                 .ReturnsAsync(projeto);
             _mockUsuarioProjetoService
-                .Setup(mock => mock.CadastrarAsync(It.IsAny<Usuario_Projeto>()))
+                .Setup(mock => mock.CadastrarAsync(It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(Task.CompletedTask);
 
             var service = new ProjetoService(
@@ -233,7 +233,34 @@ namespace Chronos.Testes.Services
 
             var result = await service.AdicionarColaboradores(projeto.Id, request);
             Assert.AreEqual(
-                $"O(s) usuario(s) foram adicionados ao projeto de ID {projeto.Id} com sucesso",
+                $"O(s) usuario(s) foram adicionados/ativados no projeto de ID {projeto.Id} com sucesso",
+                result.Mensagens[0]
+            );
+        }
+
+        [TestMethod]
+        public async Task TestInativarColaboradores()
+        {
+            var projeto = _fixture.Create<Projeto>();
+            var request = _fixture.Create<ColaboradoresRequest>();
+            _mockProjetoRepository
+                .Setup(mock => mock.ObterPorIdAsync(It.IsAny<int>()))
+                .ReturnsAsync(projeto);
+            _mockUsuarioProjetoService
+                .Setup(mock => mock.InativarColaborador(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(Task.CompletedTask);
+
+            var service = new ProjetoService(
+                _mockHttpContextAccessor.Object,
+                _mockProjetoRepository.Object,
+                _mockLogService.Object,
+                _mapper,
+                _mockUsuarioProjetoService.Object
+            );
+
+            var result = await service.InativarColaboradores(projeto.Id, request);
+            Assert.AreEqual(
+                $"O(s) usuario(s) foram inativados no projeto de ID {projeto.Id} com sucesso",
                 result.Mensagens[0]
             );
         }
