@@ -121,7 +121,7 @@ namespace Chronos.Api.Controllers
         /// <param name="projetoId"></param>
         /// <returns></returns>
         /// <response code="200">retorna uma lista de tarefas"</response>
-        [HttpGet("{projetoId}/projeto")]
+        [HttpGet("projeto/{projetoId}")]
         public async Task<IActionResult> ObterTarefasDoProjeto(int projetoId)
         {
             var response = await _tarefaService.ObterTarefasDoProjeto(projetoId);
