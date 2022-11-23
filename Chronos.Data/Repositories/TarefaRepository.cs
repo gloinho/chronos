@@ -10,116 +10,41 @@ namespace Chronos.Data.Repositories
         public TarefaRepository(ApplicationDbContext manutencaoContext) : base(manutencaoContext)
         { }
 
-        public override async Task<Tarefa> ObterPorIdAsync(int id)
+        public async Task<List<Usuario_Projeto>> GetTarefasDia(int usuarioId)
         {
-            var tarefa = await _context.Tarefas
-                .Where(p => p.Id == id)
-                .Include(p => p.Usuario_Projeto)
-                .ThenInclude(u => u.Projeto)
-                .FirstOrDefaultAsync();
-            return tarefa;
-        }
-
-        public override async Task<ICollection<Tarefa>> ObterTodosAsync()
-        {
-            var tarefas = await _context.Tarefas
-                .Include(p => p.Usuario_Projeto)
-                .ThenInclude(u => u.Projeto)
-                .AsNoTracking()
-                .ToListAsync();
-            return tarefas;
-        }
-
-        public async Task<List<Tarefa>> ObterPorUsuarioIdAsync(int usuarioId)
-        {
-            var tarefas = await _context.Usuarios_Projetos
+            var tarefas = await base._context.Usuarios_Projetos
                 .Where(up => up.UsuarioId == usuarioId)
+                .Include(up => up.Projeto)
                 .Include(up => up.Tarefas)
-                .ThenInclude(t => t.Usuario_Projeto)
-                .ThenInclude(up => up.Projeto)
-                .SelectMany(t => t.Tarefas)
-                .AsNoTracking()
+                .Where(t => t.DataInclusao == DateTime.Today)
                 .ToListAsync();
             return tarefas;
         }
 
-        public async Task<List<Tarefa>> GetTarefasDia(int usuarioId)
+        public async Task<List<Usuario_Projeto>> GetTarefasMes(int usuarioId)
         {
-            var tarefas = await _context.Usuarios_Projetos
+            var tarefas = await base._context.Usuarios_Projetos
                 .Where(up => up.UsuarioId == usuarioId)
+                .Include(up => up.Projeto)
                 .Include(up => up.Tarefas)
-                .ThenInclude(t => t.Usuario_Projeto)
-                .ThenInclude(up => up.Projeto)
-                .SelectMany(
-                    t =>
-                        t.Tarefas.Where(
-                            t =>
-                                t.DataInicial.Value.Date == DateTime.Today
-                                && DateTime.Today == t.DataFinal.Value.Date
-                        )
-                )
-                .AsNoTracking()
+                .Where(t => t.DataInclusao.Month == DateTime.Today.Month)
                 .ToListAsync();
             return tarefas;
         }
 
-        public async Task<List<Tarefa>> GetTarefasSemana(int usuarioId)
+        public async Task<List<Usuario_Projeto>> GetTarefasProjeto(int projetoId)
         {
-            var tarefas = await _context.Usuarios_Projetos
-                .Where(up => up.UsuarioId == usuarioId)
+            var tarefas = await base._context.Usuarios_Projetos
+                .Where(up => up.ProjetoId == projetoId)
+                .Include(up => up.Projeto)
                 .Include(up => up.Tarefas)
-                .ThenInclude(t => t.Usuario_Projeto)
-                .ThenInclude(up => up.Projeto)
-                .SelectMany(
-                    t =>
-                        t.Tarefas.Where(
-                            t =>
-                                EF.Functions.DateDiffWeek(DateTime.Today, t.DataInicial.Value.Date)
-                                    == 0
-                                && EF.Functions.DateDiffWeek(DateTime.Today, t.DataFinal.Value.Date)
-                                    == 0
-                        )
-                )
-                .AsNoTracking()
-                .ToListAsync();
-
-            return tarefas;
-        }
-
-        public async Task<List<Tarefa>> GetTarefasMes(int usuarioId)
-        {
-            var tarefas = await _context.Usuarios_Projetos
-                .Where(up => up.UsuarioId == usuarioId)
-                .Include(up => up.Tarefas)
-                .ThenInclude(t => t.Usuario_Projeto)
-                .ThenInclude(up => up.Projeto)
-                .SelectMany(
-                    t =>
-                        t.Tarefas.Where(
-                            t =>
-                                EF.Functions.DateDiffMonth(DateTime.Today, t.DataInicial.Value.Date)
-                                    == 0
-                                && EF.Functions.DateDiffMonth(
-                                    DateTime.Today,
-                                    t.DataFinal.Value.Date
-                                ) == 0
-                        )
-                )
                 .ToListAsync();
             return tarefas;
         }
 
-        public async Task<List<Tarefa>> GetTarefasProjeto(int projetoId)
+        public Task<List<Usuario_Projeto>> GetTarefasSemana(int usuarioId)
         {
-            var tarefas = await _context.Usuarios_Projetos
-                .Where(u => u.ProjetoId == projetoId)
-                .Include(p => p.Tarefas)
-                .ThenInclude(t => t.Usuario_Projeto)
-                .ThenInclude(up => up.Projeto)
-                .SelectMany(t => t.Tarefas)
-                .AsNoTracking()
-                .ToListAsync();
-            return tarefas;
+            throw new NotImplementedException();
         }
     }
 }

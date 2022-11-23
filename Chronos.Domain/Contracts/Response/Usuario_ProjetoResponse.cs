@@ -2,6 +2,7 @@ namespace Chronos.Domain.Contracts.Response
 {
     public class Usuario_ProjetoResponse
     {
-        public ProjetoResponse Projeto { get; set; }
+        public string NomeDoProjeto { get; set; }
+        public ICollection<TarefaResponse> Tarefas { get; set; }
     }
 }
