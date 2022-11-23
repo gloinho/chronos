@@ -18,8 +18,8 @@ namespace Chronos.Services
         private readonly ILogService _logService;
         private readonly IUsuario_ProjetoService _usuario_projetoService;
         private readonly ProjetoRequestValidator _validator = new ProjetoRequestValidator();
-        private readonly AdicionarColaboradoresRequestValidator _validatorColab =
-            new AdicionarColaboradoresRequestValidator();
+        private readonly ColaboradoresRequestValidator _validatorColab =
+            new ColaboradoresRequestValidator();
         private readonly IMapper _mapper;
         private readonly Verificador<Projeto> _verificador;
 
@@ -45,16 +45,14 @@ namespace Chronos.Services
 
         public async Task<MensagemResponse> AdicionarColaboradores(
             int projetoId,
-            AdicionarColaboradoresRequest request
+            ColaboradoresRequest request
         )
         {
             await _verificador.Id(projetoId);
             await _validatorColab.ValidateAndThrowAsync(request);
             foreach (int usuarioId in request.Usuarios)
             {
-                await _usuario_projetoService.CadastrarAsync(
-                    new Usuario_Projeto { ProjetoId = projetoId, UsuarioId = usuarioId }
-                );
+                await _usuario_projetoService.CadastrarAsync(projetoId, usuarioId);
             }
             ;
             return new MensagemResponse
@@ -62,7 +60,28 @@ namespace Chronos.Services
                 Codigo = StatusException.Nenhum,
                 Mensagens = new List<string>
                 {
-                    $"O(s) usuario(s) foram adicionados ao projeto de ID {projetoId} com sucesso"
+                    $"O(s) usuario(s) foram adicionados/ativados no projeto de ID {projetoId} com sucesso"
+                }
+            };
+        }
+
+        public async Task<MensagemResponse> InativarColaboradores(
+            int projetoId,
+            ColaboradoresRequest request
+        )
+        {
+            await _verificador.Id(projetoId);
+            await _validatorColab.ValidateAndThrowAsync(request);
+            foreach (int usuarioId in request.Usuarios)
+            {
+                await _usuario_projetoService.InativarColaborador(projetoId, usuarioId);
+            }
+            return new MensagemResponse()
+            {
+                Codigo = StatusException.Nenhum,
+                Mensagens = new List<string>
+                {
+                    $"O(s) usuario(s) foram inativados no projeto de ID {projetoId} com sucesso"
                 }
             };
         }

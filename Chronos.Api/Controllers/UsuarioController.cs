@@ -18,10 +18,10 @@ namespace Chronos.Api.Controllers
         }
 
         /// <summary>
-        /// Através dessa rota você será capaz de cadastrar um Usuario no banco de dados
+        /// Através dessa rota você será capaz de cadastrar um usuário.
         /// </summary>
         /// <returns></returns>
-        /// <response code="201">Conclua a configuração da sua nova Conta Chronos com o token: </response>
+        /// <response code="201">Sucesso, e retorna mensagem de sucesso com instruções para utilização da aplicação.</response>
         [AllowAnonymous]
         [HttpPost]
         [ProducesResponseType(201)]
@@ -35,26 +35,27 @@ namespace Chronos.Api.Controllers
         /// Atráves dessa rota será enviado um código para resetar sua senha.
         /// </summary>
         /// <returns></returns>
-        /// <response code="201">Mensagem: "Enviamos o código de alteração de senha para seu e-mail. Este código 
-        /// será válido por apenas 2 horas." </response>
+        /// <response code="200">Sucesso, e retorna mensagem de sucesso com instruções para reset de senha. </response>
         [AllowAnonymous]
         [HttpPost("senha")]
-        public async Task<IActionResult> EnviarCodigoResetSenha([FromBody] ResetSenhaRequest request)
+        public async Task<IActionResult> EnviarCodigoResetSenha(
+            [FromBody] ResetSenhaRequest request
+        )
         {
             var response = await _usuarioService.EnviarCodigoResetSenha(request);
-            return Created(nameof(CadastrarAsync), response);
+            return Ok(response);
         }
 
         /// <summary>
         /// Através dessa rota você será capaz de alterar sua senha.
         /// </summary>
         /// <returns></returns>
-        /// <response code="201">Mensagem: "Senha alterada com sucesso."  </response>
+        /// <response code="200">Sucesso, e retorna mensagem de sucesso. </response>
         [HttpPut("senha")]
         public async Task<IActionResult> AlterarSenha([FromBody] NovaSenhaRequest request)
         {
             var response = await _usuarioService.AlterarSenha(request);
-            return Created(nameof(CadastrarAsync), response);
+            return Ok(response);
         }
     }
 }

@@ -117,6 +117,7 @@ namespace Chronos.Testes.Services
         public async Task TestCheckPermissaoColaboradorComPermissao()
         {
             var usuario_projeto = _fixture.Create<Usuario_Projeto>();
+            usuario_projeto.Ativo = true;
             var usuario = _fixture.Create<Usuario>();
             var claims = ClaimConfig.Get(
                 usuario_projeto.UsuarioId,
@@ -170,6 +171,7 @@ namespace Chronos.Testes.Services
         public async Task TestCheckPermissaoAdministradorSuasTarefas()
         {
             var usuario_projeto = _fixture.Create<Usuario_Projeto>();
+            usuario_projeto.Ativo = true;
             var usuario = _fixture.Create<Usuario>();
             var claims = ClaimConfig.Get(
                 usuario_projeto.UsuarioId,
@@ -201,6 +203,9 @@ namespace Chronos.Testes.Services
             _mockUsuarioProjetoRepository
                 .Setup(mock => mock.ObterAsync(It.IsAny<Expression<Func<Usuario_Projeto, bool>>>()))
                 .ReturnsAsync(usuario_projeto);
+            _mockProjetoRepository
+                .Setup(mock => mock.ObterPorIdAsync(projeto.Id))
+                .ReturnsAsync(projeto);
             var service = new Usuario_ProjetoService(
                 _mockUsuarioProjetoRepository.Object,
                 _mockUsuarioRepository.Object,
@@ -218,6 +223,10 @@ namespace Chronos.Testes.Services
             var projeto = _fixture.Create<Projeto>();
             var usuario = _fixture.Create<Usuario>();
             var usuario_projeto = Usuario_ProjetoFaker.GetRelacao(projeto, usuario);
+            usuario_projeto.Ativo = true;
+            _mockProjetoRepository
+                .Setup(mock => mock.ObterPorIdAsync(projeto.Id))
+                .ReturnsAsync(projeto);
             _mockUsuarioProjetoRepository
                 .Setup(mock => mock.ObterAsync(It.IsAny<Expression<Func<Usuario_Projeto, bool>>>()))
                 .ReturnsAsync((Usuario_Projeto)null);
@@ -240,6 +249,7 @@ namespace Chronos.Testes.Services
             var projetoTarget = _fixture.Create<Projeto>();
             var usuario = _fixture.Create<Usuario>();
             var usuario_projeto = _fixture.Create<Usuario_Projeto>();
+            usuario_projeto.Ativo = true;
             var tarefa = _fixture.Create<Tarefa>();
             var claims = ClaimConfig.Get(
                 usuario_projeto.UsuarioId,
@@ -272,6 +282,7 @@ namespace Chronos.Testes.Services
             var projetoTarget = _fixture.Create<Projeto>();
             var usuario = _fixture.Create<Usuario>();
             var usuario_projeto = _fixture.Create<Usuario_Projeto>();
+            usuario_projeto.Ativo = true;
             var tarefa = _fixture.Create<Tarefa>();
             var claims = ClaimConfig.Get(
                 usuario_projeto.UsuarioId,
@@ -335,7 +346,7 @@ namespace Chronos.Testes.Services
         public async Task TestCadastrarAsync()
         {
             var usuario = _fixture.Create<Usuario>();
-            var usuario_projeto = _fixture.Create<Usuario_Projeto>();
+            var projeto = _fixture.Create<Projeto>();
             _mockUsuarioRepository
                 .Setup(mock => mock.ObterPorIdAsync(It.IsAny<int>()))
                 .ReturnsAsync(usuario);
@@ -348,15 +359,16 @@ namespace Chronos.Testes.Services
                 _mockProjetoRepository.Object,
                 _mockHttpContextAccessor.Object
             );
-            var result = service.CadastrarAsync(usuario_projeto);
+            var result = service.CadastrarAsync(usuario.Id, projeto.Id);
             Assert.AreEqual(Task.CompletedTask, result);
         }
 
         [TestMethod]
-        public async Task TestCadastrarAsyncRelacaoQueJaExiste()
+        public async Task TestCadastrarAsyncRelacaoQueJaExisteEJaEstaAtiva()
         {
             var usuario = _fixture.Create<Usuario>();
             var usuario_projeto = _fixture.Create<Usuario_Projeto>();
+            usuario_projeto.Ativo = true;
             _mockUsuarioRepository
                 .Setup(mock => mock.ObterPorIdAsync(It.IsAny<int>()))
                 .ReturnsAsync(usuario);
@@ -370,10 +382,86 @@ namespace Chronos.Testes.Services
                 _mockHttpContextAccessor.Object
             );
             var result = await Assert.ThrowsExceptionAsync<BaseException>(
-                () => service.CadastrarAsync(usuario_projeto)
+                () => service.CadastrarAsync(usuario_projeto.UsuarioId, usuario_projeto.ProjetoId)
             );
             Assert.AreEqual(
-                $"O usuario de id {usuario_projeto.UsuarioId} já faz parte do projeto {usuario_projeto.ProjetoId}",
+                $"O usuario de id {usuario_projeto.UsuarioId} já faz parte do projeto {usuario_projeto.ProjetoId} e está ativo.",
+                result.Mensagens[0]
+            );
+        }
+
+        [TestMethod]
+        public async Task TestCadastrarASyncRelacaoQueJaExisteENaoEstaAtiva()
+        {
+            var usuario = _fixture.Create<Usuario>();
+            var usuario_projeto = _fixture.Create<Usuario_Projeto>();
+            usuario_projeto.Ativo = false;
+            _mockUsuarioRepository
+                .Setup(mock => mock.ObterPorIdAsync(It.IsAny<int>()))
+                .ReturnsAsync(usuario);
+            _mockUsuarioProjetoRepository
+                .Setup(mock => mock.ObterAsync(It.IsAny<Expression<Func<Usuario_Projeto, bool>>>()))
+                .ReturnsAsync(usuario_projeto);
+            var service = new Usuario_ProjetoService(
+                _mockUsuarioProjetoRepository.Object,
+                _mockUsuarioRepository.Object,
+                _mockProjetoRepository.Object,
+                _mockHttpContextAccessor.Object
+            );
+            var result = service.CadastrarAsync(
+                usuario_projeto.UsuarioId,
+                usuario_projeto.ProjetoId
+            );
+            Assert.AreEqual(Task.CompletedTask, result);
+            Assert.AreEqual(true, usuario_projeto.Ativo);
+        }
+
+        [TestMethod]
+        public async Task TestInativarColaborador()
+        {
+            var relacao = _fixture.Create<Usuario_Projeto>();
+            var projeto = _fixture.Create<Projeto>();
+            _mockProjetoRepository
+                .Setup(mock => mock.ObterPorIdAsync(relacao.ProjetoId))
+                .ReturnsAsync(projeto);
+            relacao.Ativo = true;
+            _mockUsuarioProjetoRepository
+                .Setup(mock => mock.ObterAsync(It.IsAny<Expression<Func<Usuario_Projeto, bool>>>()))
+                .ReturnsAsync(relacao);
+            var service = new Usuario_ProjetoService(
+                _mockUsuarioProjetoRepository.Object,
+                _mockUsuarioRepository.Object,
+                _mockProjetoRepository.Object,
+                _mockHttpContextAccessor.Object
+            );
+            var result = service.InativarColaborador(relacao.ProjetoId, relacao.UsuarioId);
+            Assert.AreEqual(Task.CompletedTask, result);
+            Assert.AreEqual(false, relacao.Ativo);
+        }
+
+        [TestMethod]
+        public async Task TestInativarColaboradorQueJaEstaInativo()
+        {
+            var relacao = _fixture.Create<Usuario_Projeto>();
+            var projeto = _fixture.Create<Projeto>();
+            _mockProjetoRepository
+                .Setup(mock => mock.ObterPorIdAsync(relacao.ProjetoId))
+                .ReturnsAsync(projeto);
+            relacao.Ativo = false;
+            _mockUsuarioProjetoRepository
+                .Setup(mock => mock.ObterAsync(It.IsAny<Expression<Func<Usuario_Projeto, bool>>>()))
+                .ReturnsAsync(relacao);
+            var service = new Usuario_ProjetoService(
+                _mockUsuarioProjetoRepository.Object,
+                _mockUsuarioRepository.Object,
+                _mockProjetoRepository.Object,
+                _mockHttpContextAccessor.Object
+            );
+            var result = await Assert.ThrowsExceptionAsync<BaseException>(
+                () => service.InativarColaborador(relacao.ProjetoId, relacao.UsuarioId)
+            );
+            Assert.AreEqual(
+                "Colaborador não está mais ativo no projeto. Falar com administrador do sistema.",
                 result.Mensagens[0]
             );
         }

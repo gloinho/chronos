@@ -7,13 +7,13 @@ namespace Chronos.Testes.Validators
     [TestClass]
     public class AdicionarColaboradoresRequestValidatorTest
     {
-        private readonly AdicionarColaboradoresRequestValidator _validator =
-            new AdicionarColaboradoresRequestValidator();
+        private readonly ColaboradoresRequestValidator _validator =
+            new ColaboradoresRequestValidator();
 
         [TestMethod]
         public async Task TestAdicionarColaboradores()
         {
-            var colaboradores = new AdicionarColaboradoresRequest()
+            var colaboradores = new ColaboradoresRequest()
             {
                 Usuarios = new List<int> { 1, 2 },
             };
@@ -25,7 +25,7 @@ namespace Chronos.Testes.Validators
         [TestMethod]
         public async Task TestAdicionarNenhumColaborador()
         {
-            var colaboradores = new AdicionarColaboradoresRequest() { Usuarios = new List<int>() };
+            var colaboradores = new ColaboradoresRequest() { Usuarios = new List<int>() };
             var result = _validator.TestValidate(colaboradores);
             result.ShouldHaveValidationErrorFor(p => p.Usuarios);
         }
@@ -33,10 +33,7 @@ namespace Chronos.Testes.Validators
         [TestMethod]
         public async Task TestAdicionarColaboradorComIdZero()
         {
-            var colaboradores = new AdicionarColaboradoresRequest()
-            {
-                Usuarios = new List<int>() { 0 }
-            };
+            var colaboradores = new ColaboradoresRequest() { Usuarios = new List<int>() { 0 } };
             var result = _validator.TestValidate(colaboradores);
             result.ShouldHaveValidationErrorFor(p => p.Usuarios);
         }
