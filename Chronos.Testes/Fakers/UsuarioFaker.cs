@@ -23,7 +23,7 @@ namespace Chronos.Testes.Fakers
                     true,
                     @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
                 ),
-                ResetSenhaToken = fake.Random.Int(100000, 999999).ToString(),
+                CodigoSenhaToken = fake.Random.Int(100000, 999999).ToString(),
             };
         }
 
@@ -39,7 +39,7 @@ namespace Chronos.Testes.Fakers
                 Email = fake.Person.Email,
                 Permissao = fake.PickRandom<Permissao>(),
                 Senha = BCrypt.Net.BCrypt.HashPassword(senha, BCrypt.Net.BCrypt.GenerateSalt()),
-                ResetSenhaToken = fake.Random.Int(100000, 999999).ToString(),
+                CodigoSenhaToken = fake.Random.Int(100000, 999999).ToString(),
             };
         }
 
@@ -59,7 +59,7 @@ namespace Chronos.Testes.Fakers
                     true,
                     @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
                 ),
-                ResetSenhaToken = fake.Random.Int(100000, 999999).ToString(),
+                CodigoSenhaToken = fake.Random.Int(100000, 999999).ToString(),
             };
         }
 
@@ -79,7 +79,7 @@ namespace Chronos.Testes.Fakers
                     true,
                     @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
                 ),
-                ResetSenhaToken = BCrypt.Net.BCrypt.HashPassword(
+                CodigoSenhaToken = BCrypt.Net.BCrypt.HashPassword(
                     codigo,
                     BCrypt.Net.BCrypt.GenerateSalt()
                 ),

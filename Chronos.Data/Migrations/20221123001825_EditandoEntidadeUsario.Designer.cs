@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chronos.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221121224324_removedataalteracao")]
-    partial class removedataalteracao
+    [Migration("20221123001825_EditandoEntidadeUsario")]
+    partial class EditandoEntidadeUsario
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -39,13 +39,10 @@ namespace Chronos.Data.Migrations
                     b.Property<DateTime>("DataAlteracao")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ResponsavelId")
-                        .IsRequired()
+                    b.Property<int?>("Responsavel")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ResponsavelId");
 
                     b.ToTable("Logs");
                 });
@@ -115,6 +112,9 @@ namespace Chronos.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("CodigoSenhaToken")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConfirmacaoToken")
                         .HasColumnType("nvarchar(max)");
 
@@ -134,9 +134,6 @@ namespace Chronos.Data.Migrations
 
                     b.Property<string>("Permissao")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ResetSenhaToken")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Senha")
@@ -177,17 +174,6 @@ namespace Chronos.Data.Migrations
                     b.ToTable("Usuarios_Projetos");
                 });
 
-            modelBuilder.Entity("Chronos.Domain.Entities.Log", b =>
-                {
-                    b.HasOne("Chronos.Domain.Entities.Usuario", "Responsavel")
-                        .WithMany("Logs")
-                        .HasForeignKey("ResponsavelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Responsavel");
-                });
-
             modelBuilder.Entity("Chronos.Domain.Entities.Tarefa", b =>
                 {
                     b.HasOne("Chronos.Domain.Entities.Usuario_Projeto", "Usuario_Projeto")
@@ -225,8 +211,6 @@ namespace Chronos.Data.Migrations
 
             modelBuilder.Entity("Chronos.Domain.Entities.Usuario", b =>
                 {
-                    b.Navigation("Logs");
-
                     b.Navigation("Projetos");
                 });
 

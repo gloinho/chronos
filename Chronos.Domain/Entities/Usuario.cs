@@ -10,7 +10,6 @@ public class Usuario : BaseEntity
     public Permissao Permissao { get; set; }
     public bool Confirmado { get; set; }
     public string? ConfirmacaoToken { get; set; } = null;
-    public string? ResetSenhaToken { get; set; } = null;
+    public string? CodigoSenhaToken { get; set; } = null;
     public virtual ICollection<Usuario_Projeto> Projetos { get; set; }
-    public virtual ICollection<Log> Logs { get; set; }
 }

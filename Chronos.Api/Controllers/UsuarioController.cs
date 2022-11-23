@@ -1,5 +1,6 @@
 using Chronos.Domain.Contracts.Request;
 using Chronos.Domain.Contracts.Response;
+using Chronos.Domain.Entities;
 using Chronos.Domain.Interfaces.Services;
 using Chronos.Domain.Utils;
 using Microsoft.AspNetCore.Authorization;
@@ -7,66 +8,35 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Chronos.Api.Controllers
 {
-    [Authorize]
-    [ApiController]
-    [ProducesResponseType(typeof(MensagemResponse), 200)]
-    [ProducesResponseType(typeof(MensagemResponse), 201)]
-    [ProducesResponseType(typeof(MensagemResponse), 400)]
-    [ProducesResponseType(typeof(MensagemResponse), 401)]
-    [ProducesResponseType(typeof(MensagemResponse), 403)]
-    [ProducesResponseType(typeof(MensagemResponse), 404)]
-    [ProducesResponseType(typeof(MensagemResponse), 500)]
-    [Route("api/[controller]")]
-    public class UsuarioController : ControllerBase
+    public class UsuarioController : BaseController<Usuario, UsuarioRequest, UsuarioResponse>
     {
         private readonly IUsuarioService _usuarioService;
 
-        public UsuarioController(IUsuarioService usuarioService)
+        public UsuarioController(IUsuarioService usuarioService) : base(usuarioService)
         {
             _usuarioService = usuarioService;
         }
 
+        /// <summary>
+        /// Através dessa rota você será capaz de cadastrar um Usuario no banco de dados
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="201">Conclua a configuração da sua nova Conta Chronos com o token: </response>
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> CadastrarAsync(UsuarioRequest request)
+        [ProducesResponseType(201)]
+        public override async Task<IActionResult> CadastrarAsync(UsuarioRequest request)
         {
             var response = await _usuarioService.CadastrarAsync(request);
             return Created(nameof(CadastrarAsync), response);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> ObterPorIdAsync([FromRoute] int id)
-        {
-            var usuario = await _usuarioService.ObterPorIdAsync(id);
-            return Ok(usuario);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> AlterarAsync(
-            [FromRoute] int id,
-            [FromBody] UsuarioRequest request
-        )
-        {
-            var response = await _usuarioService.AlterarAsync(id, request);
-            return Ok(response);
-        }
-
-        [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
-        [HttpGet]
-        public async Task<IActionResult> ObterTodosAsync()
-        {
-            var response = await _usuarioService.ObterTodosAsync();
-            return Ok(response);
-        }
-
-        [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
-        [HttpDelete]
-        public async Task<IActionResult> DeletarAsync(int id)
-        {
-            var response = await _usuarioService.DeletarAsync(id);
-            return Ok(response);
-        }
-
+        /// <summary>
+        /// Atráves dessa rota será enviado um código para resetar sua senha.
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="201">Mensagem: "Enviamos o código de alteração de senha para seu e-mail. Este código 
+        /// será válido por apenas 2 horas." </response>
         [AllowAnonymous]
         [HttpPost("senha")]
         public async Task<IActionResult> EnviarCodigoResetSenha([FromBody] ResetSenhaRequest request)
@@ -75,8 +45,11 @@ namespace Chronos.Api.Controllers
             return Created(nameof(CadastrarAsync), response);
         }
 
-        
-        [Authorize]
+        /// <summary>
+        /// Através dessa rota você será capaz de alterar sua senha.
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="201">Mensagem: "Senha alterada com sucesso."  </response>
         [HttpPut("senha")]
         public async Task<IActionResult> AlterarSenha([FromBody] NovaSenhaRequest request)
         {

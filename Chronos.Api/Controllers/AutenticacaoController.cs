@@ -23,6 +23,13 @@ namespace Chronos.Api.Controllers
             _autenticacaoService = autenticacaoService;
         }
 
+
+        /// <summary>
+        /// Através dessa rota você será capaz de confirmar usuario cadastrado, usando token.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        /// <response code="200">Sucesso, e retorna a mensagem "Usuário Confirmado com sucesso." </response>
         [HttpPost]
         public async Task<IActionResult> ConfirmarUsuario([FromQuery] string token)
         {
@@ -30,6 +37,12 @@ namespace Chronos.Api.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Através dessa rota você será capaz de realizar o login, para ter acesso aos metodos da api.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <response code="200">Sucesso, e retorna a mensagem "Token para autenticação na plataforma." </response>
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)

@@ -26,7 +26,5 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Projeto>(new ProjetoMap().Configure);
         modelBuilder.Entity<Tarefa>(new TarefaMap().Configure);
         modelBuilder.Entity<Usuario_Projeto>(new Usuario_ProjetoMap().Configure);
-
-        modelBuilder.Entity<Log>(new LogMap().Configure);
     }
 }
