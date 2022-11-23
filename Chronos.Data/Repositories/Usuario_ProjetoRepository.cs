@@ -1,7 +1,7 @@
 ﻿using Chronos.Data.Context;
-using Chronos.Data.Repositories;
 using Chronos.Domain.Entities;
 using Chronos.Domain.Interfaces.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace Chronos.Data.Repositories
 {

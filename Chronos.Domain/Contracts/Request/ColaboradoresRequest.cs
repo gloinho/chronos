@@ -2,9 +2,9 @@
 
 namespace Chronos.Domain.Contracts.Request
 {
-    public class CodigoRecuperarSenhaRequest
+    public class ColaboradoresRequest
     {
         [Required]
-        public string Email { get; set; }
+        public List<int> Usuarios { get; set; }
     }
 }

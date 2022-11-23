@@ -13,10 +13,16 @@ namespace Chronos.CrossCutting.DependencyInjection
             string connectionString
         )
         {
-            serviceCollection.AddDbContext<ApplicationDbContext>(
-                options => options.UseSqlServer(connectionString)
-            );
+            serviceCollection.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseSqlServer(connectionString);
+                //options.UseLazyLoadingProxies();
+            });
             serviceCollection.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            serviceCollection.AddScoped<IProjetoRepository, ProjetoRepository>();
+            serviceCollection.AddScoped<IUsuario_ProjetoRepository, Usuario_ProjetoRepository>();
+            serviceCollection.AddScoped<ITarefaRepository, TarefaRepository>();
+            serviceCollection.AddScoped<ILogRepository, LogRepository>();
         }
     }
 }
