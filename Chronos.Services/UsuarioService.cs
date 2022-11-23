@@ -126,7 +126,7 @@ namespace Chronos.Services
 
             await validatorNovaSenha.ValidateAndThrowAsync(request);
 
-            if (!BCrypt.Net.BCrypt.Verify(request.Codigo, user.ResetSenhaToken))
+            if (!BCrypt.Net.BCrypt.Verify(request.Codigo, user.CodigoSenhaToken))
             {
                 throw new BaseException(StatusException.Erro, "Código incorreto.");
             }
@@ -167,7 +167,7 @@ namespace Chronos.Services
             var codigo = Token.GenerateCodigo();
             var token = Token.GenerateTokenRequest(user, _appSettings.SecurityKey, codigo);
 
-            user.ResetSenhaToken = BCrypt.Net.BCrypt.HashPassword(
+            user.CodigoSenhaToken = BCrypt.Net.BCrypt.HashPassword(
                 codigo,
                 BCrypt.Net.BCrypt.GenerateSalt()
             );
