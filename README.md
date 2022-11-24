@@ -99,18 +99,115 @@ Algumas outras bibliotecas externas utilizadas ao longo do desenvolvimento:
 ## Diagrama de Classes
 # Camadas da Aplicação
 ## Chronos.Api
-- Camada responsável por fazer a aplicação se comunicar diretamente com o domínio. Nela, são construídas as classes que serão necessárias para a aplicação. A construção dessas classes, feitas por meio de injeção de dependencias com o intuito de reduzir o acomplamento da aplicação, é realizado com o auxílio da camada de inversão de controle.
+- Camada responsável por fazer a aplicação se comunicar diretamente com o domínio. Nela, são construídas as classes que serão necessárias para a aplicação. A construção dessas classes, feitas por meio de injeção de dependencias com o intuito de reduzir o acomplamento da aplicação, é realizado com o auxílio da camada de inversão de controle.  
+
+**Handlers**
+- AuthorizationHandler.cs &rarr; classe de middleware, responsável por intervir durante o acesso a aplicação e retornar uma excessão personalizada no caso de acesso não permitido. 
+
+**Filters**
+- ExceptionFilter.cs &rarr; classe de filtro de excessão personalizada.  
+
+**Controllers**
+- BaseController.cs &rarr; classe de base em que outros controllers se especificam.
+- [AutenticacaoController.cs](#autenticação-controller) &rarr; definição dos endpoints de autenticação de um usuário.
+- [TarefaController.cs](#tarefa-controller) &rarr; definição dos endpoints para interação com as tarefas de um usuário.
+- [TogglController.cs](#toggl-controller) &rarr; definição dos endpoints para integração com a API do Toggl.
+- [UsuarioController.cs](#usuario-controller)&rarr; definição dos endpoints para interação com o contexto de usuário.
+
 ## Chronos.Crosscutting
 - Camada que realiza a distribuição de responsabilidades transversais (métodos comuns). Essa camada "cruza" toda a hierarquia de camadas, provendo a configuração dos serviços necessários para as classes funcionarem e estabelecendo o tempo de vida desses serviços.
+
+**DependencyInjection**
+- ConfigureMappers.cs &rarr; configuração da injeção de dependência dos serviços de mapeamentos de Entidade para Contracts (entity &harr; request/response)
+- ConfigureRepository.cs &rarr; configuração da injeção de dependência do contexto de banco de dados e repositórios.
+- ConfigureServices.cs &rarr; configuração da injeção de dependência das classes de services da aplicação.
 ## Chronos.IoC
-- Camada que se comunica diretamente e somente com o CrossCutting, e é utilizada na camada de aplicação, que é responsável por injetar as classes que implementam as interfaces necessárias para o funcionamento da mesma.
+- Camada que se comunica diretamente e somente com o CrossCutting, e é utilizada na camada de aplicação, que é responsável por registrar as dependencias necessárias para o funcionamento dos serviços do aplicativo.
+- NativeInjectorBootstraper.cs &rarr; classe responsável por registrar as dependencias do aplicativo (mappers, services e repositories).
 ## Chronos.Data
 - Camada responsável por se comunicar diretamente com o banco de dados. Aqui são definidas as entidades da aplicação, que posteriormente irão ser persistidas no banco de dados. É realizado todo o "mapeamento" de configuração dessas entidades para estabelecimento correto de relacionamentos e outros constraints do SQL. Por meio do EF Core Code First, são feitas migrações para o banco de dados e a construção das Tables, com tudo previamente configurado.
 Também são construidas as classes que irão interagir com o banco de dados, na qual possuem métodos que realizam o CRUD necessário para a aplicação.
+
+**Context**
+- ApplicationDbContext.cs &rarr; classe que define o contexto a ser utilizado para comunicação e transações com o banco de dados.  
+
+**Mappings**
+- ProjetoMap.cs &rarr; classe de configuração da entidade Projeto, definindo suas constraints e relacionamentos.
+- TarefaMap.cs &rarr; classe de configuração da entidade Tarefa definindo suas constraints e relacionamentos.
+- Usuario_ProjetoMap.cs &rarr; classe de configuração da entidade Usuario_Projeto definindo suas constraints e relacionamentos.
+- UsuarioMap.cs &rarr; classe de configuração da entidade Usuario definindo suas constraints e relacionamentos.  
+
+**Repositories**
+- BaseRepository.cs &rarr; classe que define os métodos base para comunicação com o banco de dados.
+- LogRepository.cs &rarr; classe que herda de base repository e interage com a tabela de Log.
+- ProjetoRepository.cs &rarr; classe que herda de base repository e interage com a tabela de Projeto.
+- TarefaRepository.cs &rarr; classe que herda de base repository e interage com a tabela de Tarefa.
+- Usuario_ProjetoRepository.cs &rarr; classe que herda de base repository e interage com a tabela de Usuario_Projeto.
+- UsuarioRepository.cs &rarr; classe que herda de base repository e interage com a tabela de Usuario.
 ## Chronos.Domain
 - Camada que delimita o "coração" do nosso negócio. Aqui, são construidos, com auxilio da linguagem ubíqua, contextos e modelagens realizados anteriormente, as interfaces, contratos de transferência de dados e entidades que serão utilizados em toda a aplicação. Além disso, classes auxiliares e utilitárias, excessões personalizadas e configurações são definidas nessa camada.
+
+**Contracts**
+- ColaboradoresRequest.cs &rarr; define as informações a serem requisitadas no ProjetoController.cs para adicionar ou remover colaboradores de um projeto.
+- LoginRequest.cs &rarr; define as informações a serem requisitadas no AutenticacaoController.cs para realizar o login de um usuário.
+- NovaSenhaRequest.cs &rarr; define as informações a serem requisitadas no UsuarioController.cs para realizar o processo de reset de senha de um usuário.
+- ProjetoRequest.cs &rarr; define as informações a serem requisitadas no ProjetoController.cs para realizar a interação(criação, alteração) para com a entidade de Projeto.
+- ResetSenhaRequest.cs &rarr; define as informações a serem requisitadas no UsuarioController.cs para mudar a senha de um usuário. 
+- TarefaRequest.cs &rarr; define as informações a serem requisitadas no TarefaController.cs para realizar a interação(criação, alteração) para com a entidade de Tarefa.
+- TarefaStartRequest.cs &rarr; define as informações a serem requisitadas no TarefaController.cs para realizar o inicio de uma tarefa.
+- TarefaStopRequest.cs &rarr; define as informações a serem requisitadas no TarefaController.cs para realizar a finalização de uma tarefa.
+- TogglDetailedRequest.cs  &rarr; define as informações a serem requisitadas no TogglController.cs para realizar a integração com a API do Toggl e recuperar as informações de projetos e tarefas dos usuários cadastrados na plataforma Toggl.
+- UsuarioRequest.cs &rarr; define as informações a serem requisitadas no UsuarioController.cs para realizar a interação(criação, alteração) para com a entidade de Usuario.
+- MessageResponse.cs &rarr; classe que define o padrão de mensagem que será entregue quando uma solicitação for feita, com código de status, descrição da mensagem, várias mensagens e detalhes da requisição.
+- ProjetoResponse.cs &rarr; define as informações que serão entregues como resposta a uma solicitação que se relacione com a entidade Projeto.
+- TarefaResponse.cs &rarr; define as informações que serão entregues como resposta a uma solicitação que se relacione com a entidade Tarefa.
+- TogglDetailedResponse.cs &rarr; define as informações que serão entregues como resposta a uma solicitação a API do Toggl.
+- Usuario_ProjetoResponse.cs &rarr; define as informações que serão entregues como resposta a uma solicitação que se relacione com a entidade de Tarefa, visto que um usuario_projeto possui diversas tarefas.
+- UsuarioResponse.cs &rarr; define as informações que serão entregues como resposta a uma solicitação que se relacione com a entidade Usuario.
+
+**Entities**  
+- BaseEntity.cs &rarr; classe base que define as propriedades(colunas) que serão persistidas no banco de dados.
+- Log.cs &rarr; classe que define a tabela Log e suas propriedades que serão persistidas no banco de dados. Não herda de BaseEntity.
+- Projeto.cs &rarr; classe que define a tabela Projeto e suas propriedades que serão persistidas no banco de dados e suas propriedades de referência.
+- Tarefa.cs &rarr; classe que define a tabela Tarefa e suas propriedades que serão persistidas no banco de dados e suas propriedades de referência.
+- Usuario.cs &rarr; classe que define a tabela Usuario e suas propriedades que serão persistidas no banco de dados e suas propriedades de referência.
+- Usuario_Projeto.cs &rarr; classe que define a tabela Usuario_Projeto e suas propriedades que serão persistidas no banco de dados e suas propriedades de referência.
+
+**Exceptions**
+- BaseException.cs &rarr; classe que define a excessão personalizada ao ser utilizada pelo filtro de excessão quando uma requisição não atender os requisitos necessários para ser processada, ou outros erros ocorrerem.
+- StatusException.cs &rarr; enum que define o tipo de status a ser entregue por uma MessageResponse.
+
+**Interfaces** 
+- Repository &rarr; definem os métodos a serem implementados pelas classes de repository.
+- Sevices &rarr; definem os métodos a serem implementados pelas classes de services.  
+<sub>para mais informações: [Diagrama De Classes](#diagrama-de-classes)</sub>
+
+**Settings**
+- AppSettings.cs &rarr; classe que resgata a securityKey da aplicação para ser utilizada em métodos de services.
+- EmailSettings.cs &rarr; classe que resgata informações para serem utilizadas pelo serviço de email na comunicação com o servidor de email externo.
+- TogglSettings.cs &rarr; classe que resgata informações sobre a conta toggl para serem utilizadas pelo serviço de integração com a API do toggl.
+
+**Shared**
+- Token.cs &rarr; classe que gera JsonWebToken, este que é utilizado nas requisições como bearer para a autenticação na plataforma.
+- Verificador.cs &rarr; classe helper para auxiliar em métodos que são repetidos ao longo de certos serviços, como verificar se um registro existe e checar a permissão de acesso a certa request.
 ## Chronos.Services
 - Camada que aplica as regras de negócio impostas pelo cliente e implementa a lógica dos serviços que a aplicação irá prover. Nela, são definidas validações para a transferência de dados dos contratos e permissões personalizadas que serão utilizadas pelos controllers.
+
+**Validators**
+- ColaboradoresRequestValidator.cs &rarr; define regras de validação para as informações a serem recebidas no contract ColaboradoresRequest.
+- NovaSenhaRequestValidator.cs &rarr; define regras de validação para as informações a serem recebidas no contract NovaSenhaRequest.
+- ProjetoRequestValidator.cs &rarr; define regras de validação para as informações a serem recebidas no contract ProjetoRequest.
+- TarefaRequestValidator.cs &rarr; define regras de validação para as informações a serem recebidas no contract TarefaRequest.
+- UsuarioRequestValidator.cs &rarr; define regras de validação para as informações a serem recebidas no contract UsuarioRequest.
+**Services**
+- BaseService.cs &rarr; classe base utilizada apenas para compartilhar, no mesmo contexto HTTP, as claims de uma requisição e de um usuário.
+- EmailService.cs &rarr; classe responsável por implementar os métodos contendo a lógica necessária para o funcionamento do serviço de comunicação com o servidor de email.
+- LogService.cs &rarr; classe responsável por implementar o método de logar toda ação feita dentro da aplicação e salvar no banco de dados.
+- ProjetoService &rarr; classe responsável por implementar todos os métodos e lógica de negócio no que concerne aos Projetos.
+- TarefaService &rarr; classe responsável por implementar todos os métodos e lógica de negócio no que concerne as Tarefas.
+- TogglService &rarr; classe responsável por implementar o método necessário para a integração com a API externa do Toggl.
+- Usuario_ProjetoService.cs &rarr; classe que realiza a conexão entre um usuário e seus projetos e implementa métodos verificadores que auxiliam na lógica do TarefaService e ProjetoService, 
+- UsuarioService.cs &rarr; classe que implementa os métodos a serem utilizados no contexto de um Usuario.
 ## Chronos.Testes
 - Camada que realiza testes de todos os componentes da aplicação.
 
