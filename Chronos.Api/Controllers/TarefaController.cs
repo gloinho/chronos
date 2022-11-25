@@ -2,8 +2,6 @@
 using Chronos.Domain.Contracts.Response;
 using Chronos.Domain.Entities;
 using Chronos.Domain.Interfaces.Services;
-using Chronos.Domain.Utils;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chronos.Api.Controllers
@@ -51,7 +49,7 @@ namespace Chronos.Api.Controllers
         /// <response code="200">Sucesso, e retorna mensagem de sucesso.  </response>
         [HttpDelete("{id}")]
         [ProducesResponseType(200)]
-        public override async Task<IActionResult> DeleteAsync([FromRoute] int id)
+        public override async Task<IActionResult> DeletarAsync([FromRoute] int id)
         {
             var response = await _tarefaService.DeletarAsync(id);
             return Ok(response);
@@ -59,6 +57,7 @@ namespace Chronos.Api.Controllers
 
         /// <summary>
         /// Através dessa rota você será capaz de listar as tarefas de um usuário.
+        /// </summary>
         /// <param name="usuarioId"></param>
         /// <returns></returns>
         /// <response code="200">Sucesso, e retorna uma lista de tarefas."  </response>
