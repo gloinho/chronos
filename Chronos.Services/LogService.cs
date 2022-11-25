@@ -29,5 +29,19 @@ namespace Chronos.Services
                 Mensagens = new List<string> {"Sucesso"}
             };
         }
+
+        public async Task<MensagemResponse> LogAlterarSenha(string localAcao, string acao, int alterado, int responsavel)
+        {
+            var alteracao = $"{acao} em {localAcao}. Referencia: Id {alterado}";
+
+            var log = new Log { Responsavel = $"UsuarioId: {responsavel}", Alteracao = alteracao };
+
+            await _logRepository.CadastrarAsync(log);
+
+            return new MensagemResponse
+            {
+                Mensagens = new List<string> { "Sucesso" }
+            };
+        }
     }
 }
