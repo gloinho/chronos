@@ -7,6 +7,6 @@ namespace Chronos.Domain.Interfaces.Services
     public interface ILogService
     {
         Task<MensagemResponse> LogAsync(string localAcao, string acao, int alterado);
-
+        Task<MensagemResponse> LogAsync(string localAcao, string acao, int alterado, int responsavel);
     }
 }

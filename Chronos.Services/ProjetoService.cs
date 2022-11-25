@@ -52,6 +52,7 @@ namespace Chronos.Services
             await _validatorColab.ValidateAndThrowAsync(request);
             foreach (int usuarioId in request.Usuarios)
             {
+                await _logService.LogAsync(nameof(ProjetoService), nameof(AdicionarColaboradores) + $" Id: {usuarioId}", projetoId);
                 await _usuario_projetoService.CadastrarAsync(projetoId, usuarioId);
             }
             ;
@@ -74,6 +75,7 @@ namespace Chronos.Services
             await _validatorColab.ValidateAndThrowAsync(request);
             foreach (int usuarioId in request.Usuarios)
             {
+                await _logService.LogAsync(nameof(ProjetoService), nameof(InativarColaboradores), projetoId);
                 await _usuario_projetoService.InativarColaborador(projetoId, usuarioId);
             }
             return new MensagemResponse()
@@ -105,6 +107,9 @@ namespace Chronos.Services
         {
             await _validator.ValidateAndThrowAsync(request);
             var projeto = _mapper.Map<Projeto>(request);
+
+            await _logService.LogAsync(nameof(ProjetoService), nameof(CadastrarAsync), projeto.Id);
+
             await _projetoRepository.CadastrarAsync(projeto);
             return new MensagemResponse
             {
