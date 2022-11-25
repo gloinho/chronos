@@ -34,7 +34,7 @@
             <returns></returns>
             <response code="200">Mensagem - "alterado com sucesso". </response>
         </member>
-        <member name="M:Chronos.Api.Controllers.BaseController`3.DeletarAsync(System.Int32)">
+        <member name="M:Chronos.Api.Controllers.BaseController`3.DeleteAsync(System.Int32)">
             <summary>
             Através dessa rota você será capaz de deletar um registro do banco de dados.
             </summary>
@@ -124,7 +124,7 @@
             <returns></returns>
             <response code="200">Retorna a tarefa que foi finalizada.</response>
         </member>
-        <member name="M:Chronos.Api.Controllers.TarefaController.DeletarAsync(System.Int32)">
+        <member name="M:Chronos.Api.Controllers.TarefaController.DeleteAsync(System.Int32)">
             <summary>
             Através dessa rota você será capaz de deletar uma tarefa.
             </summary>
@@ -132,14 +132,7 @@
             <returns></returns>
             <response code="200">Sucesso, e retorna mensagem de sucesso.  </response>
         </member>
-        <member name="M:Chronos.Api.Controllers.TarefaController.ObterPorUsuarioIdAsync(System.Int32)">
-            <summary>
-            Através dessa rota você será capaz de listar as tarefas de um usuário.
-            </summary>
-            <param name="usuarioId"></param>
-            <returns></returns>
-            <response code="200">Sucesso, e retorna uma lista de tarefas."  </response>
-        </member>
+        <!-- Badly formed XML comment ignored for member "M:Chronos.Api.Controllers.TarefaController.ObterPorUsuarioIdAsync(System.Int32)" -->
         <member name="M:Chronos.Api.Controllers.TarefaController.ObterTarefasDoDia(System.Int32)">
             <summary>
             Através dessa rota você será capaz de listar as tarefas de um usuário que foram finalizadas no dia.
