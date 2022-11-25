@@ -217,3 +217,7 @@
 
 - Response:  
 `List<TarefaResponse>`
+
+# /toggl/relatorio-de-horas <span style="color:cyan">GET</span>
+>
+>

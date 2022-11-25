@@ -10,14 +10,14 @@
 
 
 # :hourglass: Índice
-- [Apresentação do Projeto](#:hourglass:-apresentação-do-projeto)
-- [Design da Aplicação, Tecnologias e Abordagens utilizadas](#:hourglass:-design-da-aplicação-tecnologias-e-abordagens-utilizadas)
-- [Glossário](#:hourglass:-glossário)
+- [Apresentação do Projeto](#hourglass-apresentação-do-projeto)
+- [Design da Aplicação, Tecnologias e Abordagens utilizadas](#hourglass-design-da-aplicação-tecnologias-e-abordagens-utilizadas)
+- [Glossário](#hourglass-glossário)
 - [Contextos Delimitados](#hourglass-contextos-delimitados)
-- [Modelagens](#:hourglass:-modelagens)
+- [Modelagens](#hourglass-modelagens)
     - [Diagrama Entidade-Relacionamento](#diagrama-entidade-relacionamento)
     - [Diagrama de Classes](#diagrama-de-classes)
-- [Camadas da Aplicação](#:hourglass:-camadas-da-aplicação)
+- [Camadas da Aplicação](#hourglass-camadas-da-aplicação)
     - [Chronos.Api](#chronosapi)
     - [Chronos.Crosscutting](#chronoscrosscutting)
     - [Chronos.Data](#chronosdata)
@@ -25,13 +25,13 @@
     - [Chronos.IoC](#chronosioc)
     - [Chronos.Services](#chronosservices)
     - [Chronos.Testes](#chronostestes)
-- [Controllers](#:hourglass:-controllers)
-- [Features](#:hourglass:-features)
-- [Desafios e Proximos Passos](#:hourglass:-desafios-e-proximos-passos)
-- [Requirements](#:hourglass:-requirements)
-- [Get Started](#:hourglass:-get-started)
-- [Agradecimentos](#:hourglass:-agradecimentos)
-- [Desenvolvedores](#:hourglass:-desenvolvedores)
+- [Controllers](#hourglass-controllers)
+- [Features](#hourglass-features)
+- [Desafios e Proximos Passos](#hourglass-desafios-e-proximos-passos)
+- [Requirements](#hourglass-requirements)
+- [Get Started](#hourglass-get-started)
+- [Agradecimentos](#hourglass-agradecimentos)
+- [Desenvolvedores](#hourglass-desenvolvedores)
 
 # :hourglass: Apresentação do Projeto
 O objetivo do presente projeto é atender os critérios do desafio final da turma de .NET da Raro Academy, sintetizando todo o conteúdo visto nas ultimas 10 semanas por meio de aulas síncronas na plataforma Zoom e monitorias diárias.  
@@ -262,7 +262,7 @@ Também são construidas as classes que irão interagir com o banco de dados, na
 - [/api/tarefa/projeto/{projetoId}](./ReadMeAssets/endpoints.md#apitarefaprojetoprojetoid-get) `GET` <sub>Lista todas as tarefas de um projeto.</sub>
 
 ## Toggl Controller  
-- [/toggl/relatorio-de-horas]() `GET` <sub>Endpoint de integração com o toggl.</sub>
+- [/toggl/relatorio-de-horas](./ReadMeAssets/endpoints.md#togglrelatorio-de-horas-get) `GET` <sub>Endpoint de integração com o toggl.</sub>
 
 # :hourglass: Features
 - [x] Cadastro do usuário
