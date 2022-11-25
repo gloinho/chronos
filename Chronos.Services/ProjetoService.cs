@@ -75,6 +75,7 @@ namespace Chronos.Services
             await _validatorColab.ValidateAndThrowAsync(request);
             foreach (int usuarioId in request.Usuarios)
             {
+                await _logService.LogAsync(nameof(ProjetoService), nameof(InativarColaboradores), projetoId);
                 await _usuario_projetoService.InativarColaborador(projetoId, usuarioId);
             }
             return new MensagemResponse()
