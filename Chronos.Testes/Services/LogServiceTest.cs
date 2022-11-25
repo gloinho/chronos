@@ -1,13 +1,6 @@
-﻿using AutoMapper;
-using Chronos.Domain.Contracts.Request;
-using Chronos.Domain.Contracts.Response;
-using Chronos.Domain.Entities;
-using Chronos.Domain.Exceptions;
-using Chronos.Domain.Interfaces.Services;
+﻿using Chronos.Domain.Contracts.Response;
 using Chronos.Services;
-using Chronos.Testes.Fakers;
 using Chronos.Testes.Settings;
-using IdentityModel;
 using Microsoft.AspNetCore.Http;
 
 namespace Chronos.Testes.Services
@@ -29,17 +22,17 @@ namespace Chronos.Testes.Services
         [TestMethod]
         public async Task LogAsync()
         {
-            _mockLogRepository.Setup(mock => mock.CadastrarAsync(It.IsAny<Log>())).Returns(Task.CompletedTask);
+            _mockLogRepository
+                .Setup(mock => mock.CadastrarAsync(It.IsAny<Log>()))
+                .Returns(Task.CompletedTask);
 
             var tarefa = _fixture.Create<TarefaResponse>();
 
-            var service = new LogService(_mockLogRepository.Object, _mockHttpContextAccessor.Object);      
-            
-            var result =  await service.LogAsync("TarefaService", "DeletarAsync", tarefa.Id);
+            var service = new LogService(_mockLogRepository.Object);
+
+            var result = await service.LogAsync("TarefaService", "DeletarAsync", tarefa.Id, null);
 
             Assert.AreEqual("Sucesso", result.Mensagens[0]);
-
         }
-
     }
 }

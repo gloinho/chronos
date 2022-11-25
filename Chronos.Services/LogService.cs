@@ -23,7 +23,7 @@ namespace Chronos.Services
         {
             var alteracao = $"{acao} em {localAcao}. Referencia: Id {alterado}";
 
-            var log = new Log { Responsavel = usuarioId, Alteracao = alteracao };
+            var log = new Log { Responsavel = $"UsuarioId: {usuarioId}", Alteracao = alteracao };
 
             await _logRepository.CadastrarAsync(log);
 
