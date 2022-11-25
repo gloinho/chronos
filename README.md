@@ -1,17 +1,19 @@
 <div align="center">
-<h1>Chronos</h1>
+<h1>:hourglass:Chronos:hourglass:</h1>
 </div>
 <p align="center"><i>“Tudo o que temos de decidir é o que fazer com o tempo que nos é dado"</i></p>
 
-# Índice
-- [Apresentação do Projeto](#apresentação-do-projeto)
-- [Design da Aplicação, Tecnologias e Abordagens utilizadas](#design-da-aplicação-tecnologias-e-abordagens-utilizadas)
-- [Glossário](#glossário)
-- [Contextos Delimitados]()
-- [Modelagens](#modelagens)
+
+
+# :hourglass: Índice
+- [Apresentação do Projeto](#:hourglass:-apresentação-do-projeto)
+- [Design da Aplicação, Tecnologias e Abordagens utilizadas](#:hourglass:-design-da-aplicação-tecnologias-e-abordagens-utilizadas)
+- [Glossário](#:hourglass:-glossário)
+- [Contextos Delimitados](#hourglass-contextos-delimitados)
+- [Modelagens](#:hourglass:-modelagens)
     - [Diagrama Entidade-Relacionamento](#diagrama-entidade-relacionamento)
     - [Diagrama de Classes](#diagrama-de-classes)
-- [Camadas da Aplicação](#camadas-da-aplicação)
+- [Camadas da Aplicação](#:hourglass:-camadas-da-aplicação)
     - [Chronos.Api](#chronosapi)
     - [Chronos.Crosscutting](#chronoscrosscutting)
     - [Chronos.Data](#chronosdata)
@@ -19,14 +21,15 @@
     - [Chronos.IoC](#chronosioc)
     - [Chronos.Services](#chronosservices)
     - [Chronos.Testes](#chronostestes)
-- [Controllers](#controllers)
-- [Desafios e Proximos Passos](#desafios-e-proximos-passos)
-- [Requirements](#requirements)
-- [Get Started](#get-started)
-- [Agradecimentos](#agradecimentos)
-- [Desenvolvedores](#desenvolvedores)
+- [Controllers](#:hourglass:-controllers)
+- [Features](#:hourglass:-features)
+- [Desafios e Proximos Passos](#:hourglass:-desafios-e-proximos-passos)
+- [Requirements](#:hourglass:-requirements)
+- [Get Started](#:hourglass:-get-started)
+- [Agradecimentos](#:hourglass:-agradecimentos)
+- [Desenvolvedores](#:hourglass:-desenvolvedores)
 
-# Apresentação do Projeto
+# :hourglass: Apresentação do Projeto
 O objetivo do presente projeto é atender os critérios do desafio final da turma de .NET da Raro Academy, sintetizando todo o conteúdo visto nas ultimas 10 semanas por meio de aulas síncronas na plataforma Zoom e monitorias diárias.  
 
 Como motivação, nos foi apresentado a proposta de projeto pelo cliente Raro Labs, que pretende gradualmente parar de usar software de terceiros para realizar a gestão de horas que são destinadas a projetos pelos seus colaboradores.  
@@ -34,7 +37,7 @@ Como motivação, nos foi apresentado a proposta de projeto pelo cliente Raro La
 Para isso, se viu necessário a criação de uma solução que atendesse as expectativas do cliente.   
 Essa solução se chama **Chronos** <sub>v1.0</sub>
 
-# Design da Aplicação, Tecnologias e Abordagens utilizadas
+# :hourglass: Design da Aplicação, Tecnologias e Abordagens utilizadas
 O design escolhido para a arquitetura do software foi o Domain-Driven-Design (DDD). Essa modelagem consiste (de uma maneira bem abstrata) em camadas de design de dados, design estratégico e design tático, este ultimo somente funcionando se o design estratégico funcionar de maneira excepcional.  
 
 Desse modo, o primeiro passo da modelagem do nosso sistema foi realizar a montagem do [Glossário](#glossário) a ser utilizado ao longo da aplicação para estabelecer uma linguagem ubíqua(universal) que facilitasse a comunicação entre os desenvolvedores e os stakeholders.
@@ -45,7 +48,7 @@ Para facilitar a construção da aplicação, realizamos inicialmente o [Diagram
 
 Feito isso, o próximo passo foi começar a pensar nas classes, interfaces, e contratos que provavelmente utilizariamos ao desenvolver o software. Nessa etapa, diversas mudanças foram feitas ao adentrar mais e mais no problema e entender o que realmente precisariamos realizar para alcançar o que nos era solicitado. Para isso, realizamos o [Diagrama de Classes](#diagrama-de-classes) para auxiliar nesse processo.  
 
-O próximo processo foi realmente colocar "as mãos no código". Seguindo a arquitetura do DDD, as [Camadas da Aplicação](#camadas-da-aplicação) foram executadas, testadas e documentadas.  
+O próximo processo foi realmente colocar "as mãos no código". Seguindo a arquitetura do DDD, as [Camadas da Aplicação](#camadas-da-aplicação) foram executadas, testadas e documentadas, sempre seguindo também as boas práticas S.O.L.I.D para manter o código limpo, legível e escalável.
 
 O projeto foi realizado utilizando a plataforma de desenvolvimento open source [.NET Core 6](https://learn.microsoft.com/pt-br/dotnet/fundamentals/).
 
@@ -66,16 +69,17 @@ Algumas outras bibliotecas externas utilizadas ao longo do desenvolvimento:
 - Moq.EntityFrameworkCore v6.0.1.4
 - NetCORE.MailKit v2.1.0
 
-# Glossário
+# :hourglass: Glossário
 - Usuário: qualquer pessoa cadastrada na solução Chronos. Um usuário pode ser Colaborador e Administrador.
 - Projeto: Representação do projeto na solução. Um Usuário participar de nenhum ou vários projetos. Um projeto pode ter nenhum ou vários usuários inseridos.
 - Usuario_Projeto: Representação da relação entre projeto e usuário. Obrigatoriamente precisa ter um projeto e um usuário. Uma relação Usuario_Projeto pode ter zero ou várias tarefas.
 - Tarefa: Representação das tarefas realizadas pelos usuários cadastrados na solução. Uma tarefa obrigatoriamente precisa ser vinculada a um e somente um Usuario_Projeto.
 - ConfirmacaoToken: Token criado para a confirmação do e-mail do usuário.
-- ResetSenhaToken: Token criado para o reset da senha de um usuário.
+- CodigoResetSenha: Código criado para o reset da senha de um usuário.
 - Relatório de Horas: Representação de uma lista de tarefas, contendo total de horas, descrição, data inicial, data final da tarefa e nome do projeto.
+- Integração com Toggl: comunicação com o serviço externo Toggl, que era responsável pelo registro total das horas trabalhadas dos colaboradores Raro.
 
-# Contextos Delimitados
+# :hourglass: Contextos Delimitados
 - Usuario
     - Todo usuário deverá ser cadastrado e para acessar a solução, precisa autenticar seu e-mail.
     - Um usuário pode ser administrador ou colaborador, mas mantem outras caracteristicas iguais.
@@ -93,11 +97,13 @@ Algumas outras bibliotecas externas utilizadas ao longo do desenvolvimento:
     - Um usuário administrador pode ver todos os relatório de horas, editar, ver, iniciar, parar e excluir as tarefas de todos os usuários.
     - Uma tarefa só pode ser iniciada se não tiver sido iniciada ou finalizada.
     - Uma tarefa só pode ser finalizada se não tiver sido finalizada e já tiver sido iniciada.
+- Toggl
+    - Um usuário administrador pode solicitar a visualização e importação dos dados da plataforma de terceiros Toggl. Para realizar a importação para o banco de dados, o usuário responsável pela tarefa precisa já estar cadastrado no Chronos. Apenas administradores podem solicitar a importação dos dados para banco de dados.
 
-# Modelagens
+# :hourglass: Modelagens
 ## Diagrama Entidade-Relacionamento
 ## Diagrama de Classes
-# Camadas da Aplicação
+# :hourglass: Camadas da Aplicação
 ## Chronos.Api
 - Camada responsável por fazer a aplicação se comunicar diretamente com o domínio. Nela, são construídas as classes que serão necessárias para a aplicação. A construção dessas classes, feitas por meio de injeção de dependencias com o intuito de reduzir o acomplamento da aplicação, é realizado com o auxílio da camada de inversão de controle.  
 
@@ -211,7 +217,7 @@ Também são construidas as classes que irão interagir com o banco de dados, na
 ## Chronos.Testes
 - Camada que realiza testes de todos os componentes da aplicação.
 
-# Controllers
+# :hourglass: Controllers
 
 ## Autenticação Controller
 - [/api/autenticacao](endpoints.md#apiautenticacao-post) `POST` <sub>Ativa o e-mail do usuário.</sub>
@@ -252,11 +258,24 @@ Também são construidas as classes que irão interagir com o banco de dados, na
 ## Toggl Controller  
 - [/toggl/relatorio-de-horas]() `GET` <sub>Endpoint de integração com o toggl.</sub>
 
-# Desafios e Proximos Passos
+# :hourglass: Features
+- [x] Cadastro do usuário
+- [x] Autenticação do e-mail de um usuário
+- [x] Login de um usuário cadastrado
+- [x] Resetar a senha de um usuário
+- [x] Criar projetos
+- [x] Adicionar e remover colaboradores de um projeto
+- [x] Editar e remover projetos
+- [x] Criar tarefas e associa-las a projetos
+- [x] Iniciar e parar tarefas
+- [x] Editar e excluir tarefas
 
-# Requirements
+# :hourglass: Desafios e Proximos Passos
+- [ ] Possibilitar a total integração da gestão de horas da raro, não dependendo do Toggl.
+- [ ] Separação dos Projetos por Clientes
+# :hourglass: Requirements
 - [.NET Core 6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
-# Get Started
+# :hourglass: Get Started
 
 ```bash
 # Clone este repositório:
@@ -270,9 +289,11 @@ cd Chronos.Api
 # Rode a aplicação.
 dotnet run
 ``` 
-# Agradecimentos
-# Desenvolvedores
+# :hourglass: Agradecimentos
+- Gostariamos de agradecer a todo suporte dado pela Raro Academy, aos instrutores que nos aguentaram e auxiliaram e aos monitores que estavam disponíveis para tirar nossas dúvidas.
 
+# :hourglass: Desenvolvedores
+![avatar](https://images.weserv.nl/?url=https://avatars.githubusercontent.com/u/99846614?v=4&h=150&w=150&fit=cover&mask=circle&maxage=7d)
 
 
 
