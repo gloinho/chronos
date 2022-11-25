@@ -65,8 +65,13 @@ namespace Chronos.Services
             );
             var tarefa = _mapper.Map<Tarefa>(request);
             tarefa.Usuario_ProjetoId = usuario_projeto.Id;
-            await _logService.LogAsync(nameof(TarefaService), nameof(CadastrarAsync), 0, UsuarioId);
             await _tarefaRepository.CadastrarAsync(tarefa);
+            await _logService.LogAsync(
+                nameof(TarefaService),
+                nameof(CadastrarAsync),
+                tarefa.Id,
+                UsuarioId
+            );
             return new MensagemResponse()
             {
                 Codigo = StatusException.Nenhum,

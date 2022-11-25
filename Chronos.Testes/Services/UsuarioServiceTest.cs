@@ -18,6 +18,7 @@ namespace Chronos.Testes.Services
         private readonly Mock<IUsuarioRepository> _mockUsuarioRepository;
         private readonly Mock<IEmailService> _mockEmailService;
         private readonly Mock<IHttpContextAccessor> _mockHttpContextAccessor;
+        private readonly Mock<IUsuario_ProjetoService> _mockUsuario_ProjetoService;
         private readonly Mock<ILogService> _mockLogService;
         private readonly AppSettings _appSettings;
         private readonly IMapper _mapper;
@@ -27,6 +28,7 @@ namespace Chronos.Testes.Services
             _mockEmailService = new Mock<IEmailService>();
             _mockUsuarioRepository = new Mock<IUsuarioRepository>();
             _mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
+            _mockUsuario_ProjetoService = new Mock<IUsuario_ProjetoService>();
             _mockLogService = new Mock<ILogService>();
             _appSettings = new AppSettings()
             {
@@ -50,6 +52,7 @@ namespace Chronos.Testes.Services
             );
 
             var service = new UsuarioService(
+                _mockUsuario_ProjetoService.Object,
                 _mockUsuarioRepository.Object,
                 _mockLogService.Object,
                 _mockEmailService.Object,
@@ -82,6 +85,7 @@ namespace Chronos.Testes.Services
             );
 
             var service = new UsuarioService(
+                _mockUsuario_ProjetoService.Object,
                 _mockUsuarioRepository.Object,
                 _mockLogService.Object,
                 _mockEmailService.Object,
@@ -110,6 +114,7 @@ namespace Chronos.Testes.Services
                 .Setup(mock => mock.AlterarAsync(usuario))
                 .ReturnsAsync(It.IsAny<Usuario>());
             var service = new UsuarioService(
+                _mockUsuario_ProjetoService.Object,
                 _mockUsuarioRepository.Object,
                 _mockLogService.Object,
                 _mockEmailService.Object,
@@ -135,6 +140,7 @@ namespace Chronos.Testes.Services
                 .Setup(mock => mock.AlterarAsync(usuario))
                 .ReturnsAsync(It.IsAny<Usuario>());
             var service = new UsuarioService(
+                _mockUsuario_ProjetoService.Object,
                 _mockUsuarioRepository.Object,
                 _mockLogService.Object,
                 _mockEmailService.Object,
@@ -145,35 +151,7 @@ namespace Chronos.Testes.Services
             var result = await Assert.ThrowsExceptionAsync<BaseException>(
                 () => service.AlterarAsync(usuario.Id, request)
             );
-            Assert.AreEqual($"Usuário com o id {usuario.Id} não cadastrado.", result.Mensagens[0]);
-        }
-
-        [TestMethod]
-        public async Task TestAlterarAsyncColaboradorSemPermissao()
-        {
-            var usuario = UsuarioFaker.GetUsuario();
-            var outroUsuario = UsuarioFaker.GetUsuario();
-            var request = UsuarioToContractFaker.GetRequest();
-            var claims = ClaimConfig.Get(usuario.Id, usuario.Email, Permissao.Colaborador);
-            _mockHttpContextAccessor.Setup(mock => mock.HttpContext.User.Claims).Returns(claims);
-            _mockUsuarioRepository
-                .Setup(mock => mock.ObterPorIdAsync(usuario.Id))
-                .ReturnsAsync(outroUsuario);
-            _mockUsuarioRepository
-                .Setup(mock => mock.AlterarAsync(usuario))
-                .ReturnsAsync(It.IsAny<Usuario>());
-            var service = new UsuarioService(
-                _mockUsuarioRepository.Object,
-                _mockLogService.Object,
-                _mockEmailService.Object,
-                _appSettings,
-                _mapper,
-                _mockHttpContextAccessor.Object
-            );
-            var result = await Assert.ThrowsExceptionAsync<BaseException>(
-                () => service.AlterarAsync(outroUsuario.Id, request)
-            );
-            Assert.AreEqual($"Colaborador não pode acessar.", result.Mensagens[0]);
+            Assert.AreEqual($"Id {usuario.Id} não cadastrado.", result.Mensagens[0]);
         }
 
         [TestMethod]
@@ -187,6 +165,7 @@ namespace Chronos.Testes.Services
                 .Setup(mock => mock.ObterPorIdAsync(usuario.Id))
                 .ReturnsAsync(usuario);
             var service = new UsuarioService(
+                _mockUsuario_ProjetoService.Object,
                 _mockUsuarioRepository.Object,
                 _mockLogService.Object,
                 _mockEmailService.Object,
@@ -209,6 +188,7 @@ namespace Chronos.Testes.Services
                 .Setup(mock => mock.ObterPorIdAsync(usuario.Id))
                 .ReturnsAsync((Usuario)null);
             var service = new UsuarioService(
+                _mockUsuario_ProjetoService.Object,
                 _mockUsuarioRepository.Object,
                 _mockLogService.Object,
                 _mockEmailService.Object,
@@ -219,7 +199,7 @@ namespace Chronos.Testes.Services
             var result = await Assert.ThrowsExceptionAsync<BaseException>(
                 () => service.DeletarAsync(usuario.Id)
             );
-            Assert.AreEqual($"Usuário com o id {usuario.Id} não cadastrado.", result.Mensagens[0]);
+            Assert.AreEqual($"Id {usuario.Id} não cadastrado.", result.Mensagens[0]);
         }
 
         [TestMethod]
@@ -231,6 +211,7 @@ namespace Chronos.Testes.Services
                 .Setup(mock => mock.ObterPorIdAsync(usuario.Id))
                 .ReturnsAsync(usuario);
             var service = new UsuarioService(
+                _mockUsuario_ProjetoService.Object,
                 _mockUsuarioRepository.Object,
                 _mockLogService.Object,
                 _mockEmailService.Object,
@@ -251,6 +232,7 @@ namespace Chronos.Testes.Services
                 .Setup(mock => mock.ObterPorIdAsync(usuario.Id))
                 .ReturnsAsync((Usuario)null);
             var service = new UsuarioService(
+                _mockUsuario_ProjetoService.Object,
                 _mockUsuarioRepository.Object,
                 _mockLogService.Object,
                 _mockEmailService.Object,
@@ -261,7 +243,7 @@ namespace Chronos.Testes.Services
             var result = await Assert.ThrowsExceptionAsync<BaseException>(
                 () => service.ObterPorIdAsync(usuario.Id)
             );
-            Assert.AreEqual($"Usuário com o id {usuario.Id} não cadastrado.", result.Mensagens[0]);
+            Assert.AreEqual($"Id {usuario.Id} não cadastrado.", result.Mensagens[0]);
         }
 
         [TestMethod]
@@ -274,6 +256,7 @@ namespace Chronos.Testes.Services
                 .ToList();
             _mockUsuarioRepository.Setup(mock => mock.ObterTodosAsync()).ReturnsAsync(usuarios);
             var service = new UsuarioService(
+                _mockUsuario_ProjetoService.Object,
                 _mockUsuarioRepository.Object,
                 _mockLogService.Object,
                 _mockEmailService.Object,
@@ -300,6 +283,7 @@ namespace Chronos.Testes.Services
             _mockUsuarioRepository.Setup(mock => mock.AlterarAsync(usuario)).ReturnsAsync(usuario);
 
             var service = new UsuarioService(
+                _mockUsuario_ProjetoService.Object,
                 _mockUsuarioRepository.Object,
                 _mockLogService.Object,
                 _mockEmailService.Object,
@@ -326,6 +310,7 @@ namespace Chronos.Testes.Services
             _mockUsuarioRepository.Setup(mock => mock.AlterarAsync(usuario)).ReturnsAsync(usuario);
 
             var service = new UsuarioService(
+                _mockUsuario_ProjetoService.Object,
                 _mockUsuarioRepository.Object,
                 _mockLogService.Object,
                 _mockEmailService.Object,
@@ -355,6 +340,7 @@ namespace Chronos.Testes.Services
             _mockUsuarioRepository.Setup(mock => mock.AlterarAsync(usuario)).ReturnsAsync(usuario);
 
             var service = new UsuarioService(
+                _mockUsuario_ProjetoService.Object,
                 _mockUsuarioRepository.Object,
                 _mockLogService.Object,
                 _mockEmailService.Object,
@@ -383,6 +369,7 @@ namespace Chronos.Testes.Services
             _mockUsuarioRepository.Setup(mock => mock.AlterarAsync(usuario)).ReturnsAsync(usuario);
 
             var service = new UsuarioService(
+                _mockUsuario_ProjetoService.Object,
                 _mockUsuarioRepository.Object,
                 _mockLogService.Object,
                 _mockEmailService.Object,
@@ -411,6 +398,7 @@ namespace Chronos.Testes.Services
                 .Setup(mock => mock.Send(request.Email, It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(Task.CompletedTask);
             var service = new UsuarioService(
+                _mockUsuario_ProjetoService.Object,
                 _mockUsuarioRepository.Object,
                 _mockLogService.Object,
                 _mockEmailService.Object,
@@ -441,6 +429,7 @@ namespace Chronos.Testes.Services
                 .Setup(mock => mock.Send(request.Email, It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(Task.CompletedTask);
             var service = new UsuarioService(
+                _mockUsuario_ProjetoService.Object,
                 _mockUsuarioRepository.Object,
                 _mockLogService.Object,
                 _mockEmailService.Object,

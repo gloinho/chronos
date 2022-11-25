@@ -337,7 +337,7 @@ namespace Chronos.Testes.Services
                 () => service.CheckSePodeAlterarTarefa(projetoTarget.Id, tarefa)
             );
             Assert.AreEqual(
-                "Não é possivel alterar tarefas de outros usuários.",
+                "Colaborador não pode interagir com tarefas de outros colaboradores.",
                 result.Mensagens[0]
             );
         }
@@ -464,6 +464,54 @@ namespace Chronos.Testes.Services
                 "Colaborador não está mais ativo no projeto. Falar com administrador do sistema.",
                 result.Mensagens[0]
             );
+        }
+
+        [TestMethod]
+        public async Task TestCheckPermissaoColaboradorException()
+        {
+            var usuario = _fixture.Create<Usuario>();
+            var outroUsuario = _fixture.Create<Usuario>();
+            var claims = ClaimConfig.Get(usuario.Id, usuario.Email, Permissao.Colaborador);
+
+            _mockUsuarioRepository
+                .Setup(mock => mock.ObterPorIdAsync(It.IsAny<int>()))
+                .ReturnsAsync(outroUsuario);
+            _mockHttpContextAccessor.Setup(mock => mock.HttpContext.User.Claims).Returns(claims);
+            var service = new Usuario_ProjetoService(
+                _mockUsuarioProjetoRepository.Object,
+                _mockUsuarioRepository.Object,
+                _mockProjetoRepository.Object,
+                _mockHttpContextAccessor.Object
+            );
+
+            var result = await Assert.ThrowsExceptionAsync<BaseException>(
+                () => service.CheckPermissao(outroUsuario.Id)
+            );
+
+            Assert.AreEqual("Acesso não permitido.", result.Mensagens[0]);
+        }
+
+        [TestMethod]
+        public async Task TestCheckPermissaoAdmin()
+        {
+            var usuario = _fixture.Create<Usuario>();
+            var outroUsuario = _fixture.Create<Usuario>();
+            var claims = ClaimConfig.Get(usuario.Id, usuario.Email, Permissao.Administrador);
+
+            _mockUsuarioRepository
+                .Setup(mock => mock.ObterPorIdAsync(It.IsAny<int>()))
+                .ReturnsAsync(outroUsuario);
+            _mockHttpContextAccessor.Setup(mock => mock.HttpContext.User.Claims).Returns(claims);
+            var service = new Usuario_ProjetoService(
+                _mockUsuarioProjetoRepository.Object,
+                _mockUsuarioRepository.Object,
+                _mockProjetoRepository.Object,
+                _mockHttpContextAccessor.Object
+            );
+
+            var result = service.CheckPermissao(outroUsuario.Id);
+
+            Assert.AreEqual(Task.CompletedTask, result);
         }
     }
 }

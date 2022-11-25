@@ -19,7 +19,7 @@ namespace Chronos.Api.Filters
                 response.Codigo = informacaoException.Codigo;
                 response.Mensagens = informacaoException.Mensagens;
                 response.Detalhe =
-                    $"{context.Exception.Message} | {context.Exception.InnerException?.Message}";
+                    $"{context.Exception?.Message} | {context.Exception?.InnerException?.Message}";
             }
             else
             {

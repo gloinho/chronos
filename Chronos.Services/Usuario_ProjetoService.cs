@@ -1,4 +1,5 @@
-﻿using Chronos.Domain.Entities;
+﻿using Chronos.Domain.Contracts.Request;
+using Chronos.Domain.Entities;
 using Chronos.Domain.Exceptions;
 using Chronos.Domain.Interfaces.Repository;
 using Chronos.Domain.Interfaces.Services;
@@ -108,35 +109,32 @@ namespace Chronos.Services
 
         public async Task<Usuario_Projeto> CheckSePodeAlterarTarefa(int projetoId, Tarefa tarefa)
         {
-            // Primeiro checar se o projeto existe:
-            await CheckSeProjetoExiste(projetoId);
-
-            // Depois obter a relação pela tarefa:
             var usuario_projeto = await _usuario_ProjetoRepository.ObterPorIdAsync(
                 tarefa.Usuario_ProjetoId
             );
-
-            // Se o usuário logado for admin, precisa checar se o dono da tarefa em que ele quer mudar faz parte do projeto em que ele quer colocar a tarefa
-            if (UsuarioPermissao == PermissaoUtil.PermissaoAdministrador)
-            {
-                var relacao = await CheckSeUsuarioFazParteDoProjeto(
-                    projetoId,
-                    usuario_projeto.UsuarioId
-                );
-                CheckSeEstaAtivo(relacao);
-                return relacao;
-            }
-            // Se o usuário logado for colaborador preciso checar SE o ID do usuário LOGADO é igual ao ID do usuário que existe no Usuario_Projeto da TAREFA.
-
-            if (UsuarioId != usuario_projeto.UsuarioId)
+            if (
+                UsuarioPermissao == PermissaoUtil.PermissaoColaborador
+                && usuario_projeto.UsuarioId != UsuarioId
+            )
             {
                 throw new BaseException(
                     StatusException.NaoAutorizado,
-                    "Não é possivel alterar tarefas de outros usuários."
+                    "Colaborador não pode interagir com tarefas de outros colaboradores."
                 );
             }
-            CheckSeEstaAtivo(usuario_projeto);
-            return usuario_projeto;
+            else if (
+                UsuarioPermissao == PermissaoUtil.PermissaoAdministrador
+                && usuario_projeto.UsuarioId != UsuarioId
+            )
+            {
+                var resultadoAdmin = await CheckSeUsuarioFazParteDoProjeto(
+                    projetoId,
+                    usuario_projeto.UsuarioId
+                );
+                return resultadoAdmin;
+            }
+            var resultado = await CheckSeUsuarioFazParteDoProjeto(projetoId, UsuarioId);
+            return resultado;
         }
 
         public async Task CheckSeUsuarioExiste(int usuarioId)

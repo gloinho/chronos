@@ -25,6 +25,8 @@ namespace Chronos.Data.Repositories
             var tarefas = await _context.Tarefas
                 .Include(p => p.Usuario_Projeto)
                 .ThenInclude(u => u.Projeto)
+                .Include(p => p.Usuario_Projeto)
+                .ThenInclude(u => u.Usuario)
                 .AsNoTracking()
                 .ToListAsync();
             return tarefas;
