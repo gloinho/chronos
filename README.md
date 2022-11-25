@@ -1,7 +1,11 @@
 <div align="center">
-<h1>:hourglass:Chronos:hourglass:</h1>
+<h1>Chronos</h1>
 </div>
-<p align="center"><i>“Tudo o que temos de decidir é o que fazer com o tempo que nos é dado"</i></p>
+
+<div align="center">
+<p><i>“Tudo o que temos de decidir é o que fazer com o tempo que nos é dado"</i></p>
+</div>
+
 
 
 
