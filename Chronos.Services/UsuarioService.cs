@@ -154,6 +154,12 @@ namespace Chronos.Services
             );
 
             await _usuarioRepository.AlterarAsync(user);
+            await _logService.LogAsync(
+                nameof(UsuarioService),
+                nameof(AlterarSenha),
+                user.Id,
+                user.Id
+            );
 
             return new MensagemResponse
             {

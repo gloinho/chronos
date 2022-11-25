@@ -1,10 +1,10 @@
 ﻿using Chronos.Domain.Contracts.Request;
 using Chronos.Domain.Exceptions;
+using Chronos.Domain.Interfaces.Services;
 using Chronos.Domain.Settings;
 using Chronos.Services;
 using Chronos.Testes.Fakers;
 using Chronos.Testes.Settings;
-using Org.BouncyCastle.Asn1.Ocsp;
 using System.Linq.Expressions;
 
 namespace Chronos.Testes.Services
@@ -13,6 +13,7 @@ namespace Chronos.Testes.Services
     public class AutenticacaoServiceTest
     {
         private readonly Mock<IUsuarioRepository> _repository;
+        private readonly Mock<ILogService> _mockLogService;
         private readonly Fixture _fixture;
         private readonly AppSettings _appSettings;
 
@@ -24,6 +25,7 @@ namespace Chronos.Testes.Services
             {
                 SecurityKey = "hWmZq4t6w9z$C&F)J@NcRfUjXn2r5u8x!A%D*G-KaPdSgVkYp3s6v9y$B?E(H+Mb"
             };
+            _mockLogService = new Mock<ILogService>();
         }
 
         [TestMethod]
@@ -37,7 +39,11 @@ namespace Chronos.Testes.Services
                 .Setup(mock => mock.ObterAsync(It.IsAny<Expression<Func<Usuario, bool>>>()))
                 .ReturnsAsync(usuario);
 
-            var service = new AutenticacaoService(_repository.Object, _appSettings);
+            var service = new AutenticacaoService(
+                _repository.Object,
+                _appSettings,
+                _mockLogService.Object
+            );
             var result = await service.Login(request);
             Assert.AreEqual("Token para autenticação na plataforma.", result.Detalhe);
         }
@@ -52,7 +58,11 @@ namespace Chronos.Testes.Services
                 .Setup(mock => mock.ObterAsync(It.IsAny<Expression<Func<Usuario, bool>>>()))
                 .ReturnsAsync((Usuario)null);
 
-            var service = new AutenticacaoService(_repository.Object, _appSettings);
+            var service = new AutenticacaoService(
+                _repository.Object,
+                _appSettings,
+                _mockLogService.Object
+            );
             var result = await Assert.ThrowsExceptionAsync<BaseException>(
                 () => service.Login(request)
             );
@@ -69,7 +79,11 @@ namespace Chronos.Testes.Services
                 .Setup(mock => mock.ObterAsync(It.IsAny<Expression<Func<Usuario, bool>>>()))
                 .ReturnsAsync(usuario);
 
-            var service = new AutenticacaoService(_repository.Object, _appSettings);
+            var service = new AutenticacaoService(
+                _repository.Object,
+                _appSettings,
+                _mockLogService.Object
+            );
             var result = await Assert.ThrowsExceptionAsync<BaseException>(
                 () => service.Login(request)
             );
@@ -85,7 +99,11 @@ namespace Chronos.Testes.Services
             _repository
                 .Setup(mock => mock.ObterAsync(It.IsAny<Expression<Func<Usuario, bool>>>()))
                 .ReturnsAsync(usuario);
-            var service = new AutenticacaoService(_repository.Object, _appSettings);
+            var service = new AutenticacaoService(
+                _repository.Object,
+                _appSettings,
+                _mockLogService.Object
+            );
             var result = await Assert.ThrowsExceptionAsync<BaseException>(
                 () => service.Login(request)
             );
@@ -100,7 +118,11 @@ namespace Chronos.Testes.Services
             _repository
                 .Setup(mock => mock.ObterAsync(It.IsAny<Expression<Func<Usuario, bool>>>()))
                 .ReturnsAsync(usuario);
-            var service = new AutenticacaoService(_repository.Object, _appSettings);
+            var service = new AutenticacaoService(
+                _repository.Object,
+                _appSettings,
+                _mockLogService.Object
+            );
             var result = await service.Confirmar(usuario.ConfirmacaoToken);
             Assert.AreEqual("Usuário Confirmado com sucesso.", result.Mensagens[0]);
         }
@@ -113,7 +135,11 @@ namespace Chronos.Testes.Services
             _repository
                 .Setup(mock => mock.ObterAsync(It.IsAny<Expression<Func<Usuario, bool>>>()))
                 .ReturnsAsync((Usuario)null);
-            var service = new AutenticacaoService(_repository.Object, _appSettings);
+            var service = new AutenticacaoService(
+                _repository.Object,
+                _appSettings,
+                _mockLogService.Object
+            );
             var result = await Assert.ThrowsExceptionAsync<BaseException>(
                 () => service.Confirmar(usuario.ConfirmacaoToken)
             );
