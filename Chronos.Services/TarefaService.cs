@@ -13,14 +13,13 @@ using Microsoft.AspNetCore.Http;
 
 namespace Chronos.Services
 {
-    public class TarefaService : BaseService, ITarefaService
+    public class TarefaService : BaseService<Tarefa>, ITarefaService
     {
         private readonly ITarefaRepository _tarefaRepository;
         private readonly ILogService _logService;
         private readonly IUsuario_ProjetoService _usuario_ProjetoService;
         private readonly IMapper _mapper;
-        private readonly TarefaRequestValidator _validator = new TarefaRequestValidator();
-        private readonly Verificador<Tarefa> _verificador;
+        private readonly TarefaRequestValidator _validator = new();
 
         public TarefaService(
             IHttpContextAccessor httpContextAccessor,
@@ -28,23 +27,17 @@ namespace Chronos.Services
             ITarefaRepository tarefaRepository,
             ILogService logService,
             IMapper mapper
-        ) : base(httpContextAccessor)
+        ) : base(httpContextAccessor, tarefaRepository)
         {
             _tarefaRepository = tarefaRepository;
             _mapper = mapper;
             _usuario_ProjetoService = usuario_ProjetoService;
             _logService = logService;
-            _verificador = new Verificador<Tarefa>(
-                _tarefaRepository,
-                _usuario_ProjetoService,
-                UsuarioPermissao,
-                UsuarioId
-            );
         }
 
         public async Task<MensagemResponse> AlterarAsync(int id, TarefaRequest request)
         {
-            var tarefa = await _verificador.Id(id);
+            var tarefa = await CheckSeIdExiste(id);
             CheckDataDeInclusao(tarefa);
             var usuario_projeto = await _usuario_ProjetoService.CheckSePodeAlterarTarefa(
                 request.ProjetoId,
@@ -53,7 +46,7 @@ namespace Chronos.Services
             var editada = _mapper.Map(request, tarefa);
             editada.Usuario_ProjetoId = usuario_projeto.Id;
 
-            await _logService.LogAsync(nameof(TarefaService), nameof(AlterarAsync), id);
+            await _logService.LogAsync(nameof(TarefaService), nameof(AlterarAsync), id, UsuarioId);
 
             await _tarefaRepository.AlterarAsync(editada);
             return new MensagemResponse
@@ -82,9 +75,9 @@ namespace Chronos.Services
 
         public async Task<MensagemResponse> DeletarAsync(int id)
         {
-            var tarefa = await _verificador.Id(id);
-            await _usuario_ProjetoService.CheckPermissao(tarefa.Usuario_ProjetoId);
-            await _logService.LogAsync(nameof(TarefaService), nameof(DeletarAsync), id);
+            var tarefa = await CheckSeIdExiste(id);
+            await _usuario_ProjetoService.CheckPermissaoRelacao(tarefa.Usuario_ProjetoId);
+            await _logService.LogAsync(nameof(TarefaService), nameof(DeletarAsync), id, UsuarioId);
             await _tarefaRepository.DeletarAsync(tarefa);
             return new MensagemResponse()
             {
@@ -95,15 +88,15 @@ namespace Chronos.Services
 
         public async Task<TarefaResponse> ObterPorIdAsync(int id)
         {
-            var tarefa = await _verificador.Id(id);
-            await _usuario_ProjetoService.CheckPermissao(tarefa.Usuario_ProjetoId);
+            var tarefa = await CheckSeIdExiste(id);
+            await _usuario_ProjetoService.CheckPermissaoRelacao(tarefa.Usuario_ProjetoId);
             var response = ObterHorasTotais(tarefa);
             return response;
         }
 
         public async Task<List<TarefaResponse>> ObterPorUsuarioId(int usuarioId)
         {
-            await _verificador.Permissao(usuarioId);
+            await _usuario_ProjetoService.CheckPermissao(usuarioId);
             var tarefas = await _tarefaRepository.ObterPorUsuarioIdAsync(usuarioId);
             var response = ObterHorasTotais(tarefas);
             return response;
@@ -118,7 +111,7 @@ namespace Chronos.Services
 
         public async Task<List<TarefaResponse>> ObterTarefasDoDia(int usuarioId)
         {
-            await _verificador.Permissao(usuarioId);
+            await _usuario_ProjetoService.CheckPermissao(usuarioId);
             var tarefas = await _tarefaRepository.GetTarefasDia(usuarioId);
             var response = ObterHorasTotais(tarefas);
             return response;
@@ -126,7 +119,7 @@ namespace Chronos.Services
 
         public async Task<List<TarefaResponse>> ObterTarefasDoMes(int usuarioId)
         {
-            await _verificador.Permissao(usuarioId);
+            await _usuario_ProjetoService.CheckPermissao(usuarioId);
             var tarefas = await _tarefaRepository.GetTarefasMes(usuarioId);
             var response = ObterHorasTotais(tarefas);
             return response;
@@ -134,7 +127,7 @@ namespace Chronos.Services
 
         public async Task<List<TarefaResponse>> ObterTarefasDaSemana(int usuarioId)
         {
-            await _verificador.Permissao(usuarioId);
+            await _usuario_ProjetoService.CheckPermissao(usuarioId);
             var tarefas = await _tarefaRepository.GetTarefasSemana(usuarioId);
             var response = ObterHorasTotais(tarefas);
             return response;
@@ -154,8 +147,8 @@ namespace Chronos.Services
 
         public async Task<TarefaResponse> StartTarefa(int id)
         {
-            var tarefa = await _verificador.Id(id);
-            await _usuario_ProjetoService.CheckPermissao(tarefa.Usuario_ProjetoId);
+            var tarefa = await CheckSeIdExiste(id);
+            await _usuario_ProjetoService.CheckPermissaoRelacao(tarefa.Usuario_ProjetoId);
             if (tarefa.DataFinal != null || tarefa.DataInicial != null)
             {
                 throw new BaseException(
@@ -171,8 +164,8 @@ namespace Chronos.Services
 
         public async Task<TarefaResponse> StopTarefa(int id)
         {
-            var tarefa = await _verificador.Id(id);
-            await _usuario_ProjetoService.CheckPermissao(tarefa.Usuario_ProjetoId);
+            var tarefa = await CheckSeIdExiste(id);
+            await _usuario_ProjetoService.CheckPermissaoRelacao(tarefa.Usuario_ProjetoId);
 
             if (tarefa.DataInicial == null)
             {

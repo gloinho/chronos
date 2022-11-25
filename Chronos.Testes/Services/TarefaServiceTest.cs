@@ -175,7 +175,7 @@ namespace Chronos.Testes.Services
                 .Setup(mock => mock.DeletarAsync(tarefa))
                 .Returns(Task.CompletedTask);
             _mockUsuarioProjetoService
-                .Setup(mock => mock.CheckPermissao(tarefa.Usuario_ProjetoId))
+                .Setup(mock => mock.CheckPermissaoRelacao(tarefa.Usuario_ProjetoId))
                 .Returns(Task.CompletedTask);
 
             var service = new TarefaService(
@@ -199,7 +199,7 @@ namespace Chronos.Testes.Services
                 .Setup(mock => mock.ObterPorIdAsync(It.IsAny<int>()))
                 .ReturnsAsync(tarefa);
             _mockUsuarioProjetoService
-                .Setup(mock => mock.CheckPermissao(tarefa.Usuario_ProjetoId))
+                .Setup(mock => mock.CheckPermissaoRelacao(tarefa.Usuario_ProjetoId))
                 .Returns(Task.CompletedTask);
 
             var service = new TarefaService(
@@ -230,7 +230,7 @@ namespace Chronos.Testes.Services
                 .Setup(mock => mock.ObterPorIdAsync(It.IsAny<int>()))
                 .ReturnsAsync(tarefa);
             _mockUsuarioProjetoService
-                .Setup(mock => mock.CheckPermissao(tarefa.Usuario_ProjetoId))
+                .Setup(mock => mock.CheckPermissaoRelacao(tarefa.Usuario_ProjetoId))
                 .Returns(Task.CompletedTask);
 
             var service = new TarefaService(
@@ -405,7 +405,7 @@ namespace Chronos.Testes.Services
                 .Setup(mock => mock.ObterPorIdAsync(tarefa.Id))
                 .ReturnsAsync(tarefa);
             _mockUsuarioProjetoService
-                .Setup(mock => mock.CheckPermissao(tarefa.Usuario_ProjetoId))
+                .Setup(mock => mock.CheckPermissaoRelacao(tarefa.Usuario_ProjetoId))
                 .Returns(Task.CompletedTask);
             _mockTarefaRepository.Setup(mock => mock.AlterarAsync(tarefa)).ReturnsAsync(tarefa);
             var service = new TarefaService(
@@ -429,7 +429,7 @@ namespace Chronos.Testes.Services
                 .Setup(mock => mock.ObterPorIdAsync(tarefa.Id))
                 .ReturnsAsync(tarefa);
             _mockUsuarioProjetoService
-                .Setup(mock => mock.CheckPermissao(tarefa.Usuario_ProjetoId))
+                .Setup(mock => mock.CheckPermissaoRelacao(tarefa.Usuario_ProjetoId))
                 .Returns(Task.CompletedTask);
             _mockTarefaRepository.Setup(mock => mock.AlterarAsync(tarefa)).ReturnsAsync(tarefa);
             var service = new TarefaService(
@@ -457,7 +457,7 @@ namespace Chronos.Testes.Services
                 .Setup(mock => mock.ObterPorIdAsync(tarefa.Id))
                 .ReturnsAsync(tarefa);
             _mockUsuarioProjetoService
-                .Setup(mock => mock.CheckPermissao(tarefa.Usuario_ProjetoId))
+                .Setup(mock => mock.CheckPermissaoRelacao(tarefa.Usuario_ProjetoId))
                 .Returns(Task.CompletedTask);
             _mockTarefaRepository.Setup(mock => mock.AlterarAsync(tarefa)).ReturnsAsync(tarefa);
             var service = new TarefaService(
@@ -485,7 +485,7 @@ namespace Chronos.Testes.Services
                 .Setup(mock => mock.ObterPorIdAsync(tarefa.Id))
                 .ReturnsAsync(tarefa);
             _mockUsuarioProjetoService
-                .Setup(mock => mock.CheckPermissao(tarefa.Usuario_ProjetoId))
+                .Setup(mock => mock.CheckPermissaoRelacao(tarefa.Usuario_ProjetoId))
                 .Returns(Task.CompletedTask);
             _mockTarefaRepository.Setup(mock => mock.AlterarAsync(tarefa)).ReturnsAsync(tarefa);
             var service = new TarefaService(
@@ -510,7 +510,7 @@ namespace Chronos.Testes.Services
                 .Setup(mock => mock.ObterPorIdAsync(tarefa.Id))
                 .ReturnsAsync(tarefa);
             _mockUsuarioProjetoService
-                .Setup(mock => mock.CheckPermissao(tarefa.Usuario_ProjetoId))
+                .Setup(mock => mock.CheckPermissaoRelacao(tarefa.Usuario_ProjetoId))
                 .Returns(Task.CompletedTask);
             _mockTarefaRepository.Setup(mock => mock.AlterarAsync(tarefa)).ReturnsAsync(tarefa);
             var service = new TarefaService(
@@ -537,7 +537,7 @@ namespace Chronos.Testes.Services
                 .Setup(mock => mock.ObterPorIdAsync(tarefa.Id))
                 .ReturnsAsync(tarefa);
             _mockUsuarioProjetoService
-                .Setup(mock => mock.CheckPermissao(tarefa.Usuario_ProjetoId))
+                .Setup(mock => mock.CheckPermissaoRelacao(tarefa.Usuario_ProjetoId))
                 .Returns(Task.CompletedTask);
             _mockTarefaRepository.Setup(mock => mock.AlterarAsync(tarefa)).ReturnsAsync(tarefa);
             var service = new TarefaService(

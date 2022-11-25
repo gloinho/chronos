@@ -136,7 +136,7 @@ namespace Chronos.Testes.Services
                 _mockHttpContextAccessor.Object
             );
 
-            var result = service.CheckPermissao(usuario_projeto.Id);
+            var result = service.CheckPermissaoRelacao(usuario_projeto.Id);
             Assert.AreEqual(Task.CompletedTask, result);
         }
 
@@ -159,7 +159,7 @@ namespace Chronos.Testes.Services
             );
 
             var result = await Assert.ThrowsExceptionAsync<BaseException>(
-                () => service.CheckPermissao(usuario_projeto.Id)
+                () => service.CheckPermissaoRelacao(usuario_projeto.Id)
             );
             Assert.AreEqual(
                 "Colaborador não pode interagir com tarefas de outros colaboradores.",
@@ -190,7 +190,7 @@ namespace Chronos.Testes.Services
                 _mockHttpContextAccessor.Object
             );
 
-            var result = service.CheckPermissao(usuario_projeto.Id);
+            var result = service.CheckPermissaoRelacao(usuario_projeto.Id);
             Assert.AreEqual(Task.CompletedTask, result);
         }
 

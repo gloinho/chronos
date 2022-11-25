@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Chronos.Services
 {
-    public class Usuario_ProjetoService : BaseService, IUsuario_ProjetoService
+    public class Usuario_ProjetoService : BaseService<Usuario_Projeto>, IUsuario_ProjetoService
     {
         private readonly IUsuario_ProjetoRepository _usuario_ProjetoRepository;
         private readonly IUsuarioRepository _usuarioRepository;
@@ -18,7 +18,7 @@ namespace Chronos.Services
             IUsuarioRepository usuarioRepository,
             IProjetoRepository projetoRepository,
             IHttpContextAccessor httpContextAccessor
-        ) : base(httpContextAccessor)
+        ) : base(httpContextAccessor, usuario_ProjetoRepository)
         {
             _usuario_ProjetoRepository = usuario_ProjetoRepository;
             _usuarioRepository = usuarioRepository;
@@ -81,7 +81,7 @@ namespace Chronos.Services
             return relacao;
         }
 
-        public async Task CheckPermissao(int usuario_projetoId)
+        public async Task CheckPermissaoRelacao(int usuario_projetoId)
         {
             var relacao = await _usuario_ProjetoRepository.ObterPorIdAsync(usuario_projetoId);
             if (
@@ -95,6 +95,15 @@ namespace Chronos.Services
                 );
             }
             CheckSeEstaAtivo(relacao);
+        }
+
+        public async Task CheckPermissao(int usuarioId)
+        {
+            await CheckSeUsuarioExiste(usuarioId);
+            if (UsuarioPermissao == PermissaoUtil.PermissaoColaborador && UsuarioId != usuarioId)
+            {
+                throw new BaseException(StatusException.NaoAutorizado, "Acesso não permitido.");
+            }
         }
 
         public async Task<Usuario_Projeto> CheckSePodeAlterarTarefa(int projetoId, Tarefa tarefa)
@@ -155,7 +164,7 @@ namespace Chronos.Services
             }
         }
 
-        private void CheckSeEstaAtivo(Usuario_Projeto usuario_projeto)
+        private static void CheckSeEstaAtivo(Usuario_Projeto usuario_projeto)
         {
             if (!usuario_projeto.Ativo)
             {
