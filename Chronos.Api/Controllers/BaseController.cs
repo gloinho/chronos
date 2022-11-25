@@ -1,5 +1,3 @@
-using AutoMapper;
-using Chronos.Domain.Contracts.Request;
 using Chronos.Domain.Contracts.Response;
 using Chronos.Domain.Entities;
 using Chronos.Domain.Interfaces.Services;
@@ -19,7 +17,8 @@ namespace Chronos.Api.Controllers
     [ProducesResponseType(typeof(MensagemResponse), 404)]
     [ProducesResponseType(typeof(MensagemResponse), 500)]
     [ApiController]
-    public class BaseController<TEntity, KRequest, YResponse> : ControllerBase where TEntity : BaseEntity
+    public class BaseController<TEntity, KRequest, YResponse> : ControllerBase
+        where TEntity : BaseEntity
     {
         private readonly IBaseService<KRequest, YResponse> _service;
 
@@ -39,7 +38,7 @@ namespace Chronos.Api.Controllers
         public virtual async Task<IActionResult> CadastrarAsync([FromBody] KRequest request)
         {
             var response = await _service.CadastrarAsync(request);
-            return Ok(response);
+            return Created(nameof(CadastrarAsync), response);
         }
 
         /// <summary>
@@ -50,7 +49,10 @@ namespace Chronos.Api.Controllers
         [Authorize]
         [HttpPut("{id}")]
         [ProducesResponseType(200)]
-        public virtual async Task<IActionResult> AlterarAsync([FromRoute] int id, [FromBody] KRequest request)
+        public virtual async Task<IActionResult> AlterarAsync(
+            [FromRoute] int id,
+            [FromBody] KRequest request
+        )
         {
             var response = await _service.AlterarAsync(id, request);
             return Ok(response);
@@ -65,7 +67,7 @@ namespace Chronos.Api.Controllers
         [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
         [HttpDelete("{id}")]
         [ProducesResponseType(200)]
-        public virtual async Task<IActionResult> DeleteAsync([FromRoute] int id)
+        public virtual async Task<IActionResult> DeletarAsync([FromRoute] int id)
         {
             var response = await _service.DeletarAsync(id);
             return Ok(response);

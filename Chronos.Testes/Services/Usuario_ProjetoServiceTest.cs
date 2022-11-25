@@ -382,7 +382,7 @@ namespace Chronos.Testes.Services
                 _mockHttpContextAccessor.Object
             );
             var result = await Assert.ThrowsExceptionAsync<BaseException>(
-                () => service.CadastrarAsync(usuario_projeto.UsuarioId, usuario_projeto.ProjetoId)
+                () => service.CadastrarAsync(usuario_projeto.ProjetoId, usuario_projeto.UsuarioId)
             );
             Assert.AreEqual(
                 $"O usuario de id {usuario_projeto.UsuarioId} já faz parte do projeto {usuario_projeto.ProjetoId} e está ativo.",
