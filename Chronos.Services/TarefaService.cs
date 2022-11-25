@@ -65,6 +65,7 @@ namespace Chronos.Services
             );
             var tarefa = _mapper.Map<Tarefa>(request);
             tarefa.Usuario_ProjetoId = usuario_projeto.Id;
+            await _logService.LogAsync(nameof(TarefaService), nameof(CadastrarAsync), 0);
             await _tarefaRepository.CadastrarAsync(tarefa);
             return new MensagemResponse()
             {
@@ -158,6 +159,7 @@ namespace Chronos.Services
             }
             tarefa.DataInicial = DateTime.Now;
 
+            await _logService.LogAsync(nameof(TarefaService), nameof(StartTarefa), id);
             await _tarefaRepository.AlterarAsync(tarefa);
             return _mapper.Map<TarefaResponse>(tarefa);
         }
@@ -183,6 +185,7 @@ namespace Chronos.Services
             }
             tarefa.DataFinal = DateTime.Now;
 
+            await _logService.LogAsync(nameof(TarefaService), nameof(StopTarefa), id);
             await _tarefaRepository.AlterarAsync(tarefa);
             var response = ObterHorasTotais(tarefa);
             return response;

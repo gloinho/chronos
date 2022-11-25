@@ -11,7 +11,7 @@ namespace Chronos.Domain.Entities
         
         public int Id { get; set; }
         public DateTime DataAlteracao { get; set; }
-        public int? Responsavel { get; set; }
+        public string? Responsavel { get; set; }
         public string Alteracao { get; set; }
     }
 }
