@@ -152,8 +152,9 @@ namespace Chronos.Services
                 BCrypt.Net.BCrypt.GenerateSalt()
             );
 
-            await _logService.LogAlterarSenha(nameof(UsuarioService), nameof(AlterarSenha), user.Id, user.Id);
+            
             await _usuarioRepository.AlterarAsync(user);
+            await _logService.LogAsync(nameof(UsuarioService), nameof(AlterarSenha), user.Id, user.Id);
 
             return new MensagemResponse
             {

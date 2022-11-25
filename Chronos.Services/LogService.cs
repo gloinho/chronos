@@ -30,7 +30,7 @@ namespace Chronos.Services
             };
         }
 
-        public async Task<MensagemResponse> LogAlterarSenha(string localAcao, string acao, int alterado, int responsavel)
+        public async Task<MensagemResponse> LogAsync(string localAcao, string acao, int alterado, int responsavel)
         {
             var alteracao = $"{acao} em {localAcao}. Referencia: Id {alterado}";
 
