@@ -140,6 +140,7 @@
             <returns></returns>
             <response code="200">Sucesso, e retorna uma lista de tarefas."  </response>
         </member>
+        <!-- Badly formed XML comment ignored for member "M:Chronos.Api.Controllers.TarefaController.ObterPorUsuarioIdAsync(System.Int32)" -->
         <member name="M:Chronos.Api.Controllers.TarefaController.ObterTarefasDoDia(System.Int32)">
             <summary>
             Através dessa rota você será capaz de listar as tarefas de um usuário que foram finalizadas no dia.
