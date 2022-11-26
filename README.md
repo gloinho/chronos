@@ -44,15 +44,15 @@ Essa solução se chama **Chronos** <sub>v1.0</sub>
 # :hourglass: Design da Aplicação, Tecnologias e Abordagens utilizadas
 O design escolhido para a arquitetura do software foi o Domain-Driven-Design (DDD). Essa modelagem consiste (de uma maneira bem abstrata) em camadas de design de dados, design estratégico e design tático, este ultimo somente funcionando se o design estratégico funcionar de maneira excepcional.  
 
-Desse modo, o primeiro passo da modelagem do nosso sistema foi realizar a montagem do [Glossário](#glossário) a ser utilizado ao longo da aplicação para estabelecer uma linguagem ubíqua(universal) que facilitasse a comunicação entre os desenvolvedores e os stakeholders.
+Desse modo, o primeiro passo da modelagem do nosso sistema foi realizar a montagem do [Glossário](#hourglass-glossário) a ser utilizado ao longo da aplicação para estabelecer uma linguagem ubíqua(universal) que facilitasse a comunicação entre os desenvolvedores e os stakeholders.
 
-Com o glossário em mãos, o próximo passo a ser realizado, ainda no design estratégico, foi traçar os [Contextos Delimitados](#contextos-delimitados) da aplicação (Bounded Contexts) para após isso, engatinhar para a a modelagem.  
+Com o glossário em mãos, o próximo passo a ser realizado, ainda no design estratégico, foi traçar os [Contextos Delimitados](#hourglass-contextos-delimitados) da aplicação (Bounded Contexts) para após isso, engatinhar para a a modelagem.  
 
 Para facilitar a construção da aplicação, realizamos inicialmente o [Diagrama de Entidade-Relacionamento](#diagrama-entidade-relacionamento) para começarmos a ter uma idéia do que precisariamos persistir no banco de dados.  
 
 Feito isso, o próximo passo foi começar a pensar nas classes, interfaces, e contratos que provavelmente utilizariamos ao desenvolver o software. Nessa etapa, diversas mudanças foram feitas ao adentrar mais e mais no problema e entender o que realmente precisariamos realizar para alcançar o que nos era solicitado. Para isso, realizamos o [Diagrama de Classes](#diagrama-de-classes) para auxiliar nesse processo.  
 
-O próximo processo foi realmente colocar "as mãos no código". Seguindo a arquitetura do DDD, as [Camadas da Aplicação](#camadas-da-aplicação) foram executadas, testadas e documentadas, sempre seguindo também as boas práticas S.O.L.I.D para manter o código limpo, legível e escalável.
+O próximo processo foi realmente colocar "as mãos no código". Seguindo a arquitetura do DDD, as [Camadas da Aplicação](#hourglass-camadas-da-aplicação) foram executadas, testadas e documentadas, sempre seguindo também as boas práticas S.O.L.I.D para manter o código limpo, legível e escalável.
 
 O projeto foi realizado utilizando a plataforma de desenvolvimento open source [.NET Core 6](https://learn.microsoft.com/pt-br/dotnet/fundamentals/).
 
@@ -105,7 +105,7 @@ Algumas outras bibliotecas externas utilizadas ao longo do desenvolvimento:
     - Uma tarefa só pode ser finalizada se não tiver sido finalizada e já tiver sido iniciada.
 - Toggl
     - Um usuário administrador pode solicitar a visualização e importação dos dados da plataforma de terceiros Toggl. Para realizar a importação para o banco de dados, o usuário responsável pela tarefa precisa já estar cadastrado no Chronos. Apenas administradores podem solicitar a importação dos dados para banco de dados.
-
+- Foi realizado uma [Modelagem](https://miro.com/app/board/uXjVP_4nbFs=/) no Miro, para melhor visualização dos contextos e suas interações com outros contextos.
 # :hourglass: Modelagens
 ## Diagrama Entidade-Relacionamento
 ![DER](/ReadMeAssets/chronos_der.drawio.png)
