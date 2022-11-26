@@ -72,6 +72,8 @@ Algumas outras bibliotecas externas utilizadas ao longo do desenvolvimento:
 - Moq v4.18.2
 - Moq.EntityFrameworkCore v6.0.1.4
 - NetCORE.MailKit v2.1.0
+- Miro
+- Draw.io
 
 # :hourglass: Glossário
 - Usuário: qualquer pessoa cadastrada na solução Chronos. Um usuário pode ser Colaborador e Administrador.
@@ -239,6 +241,7 @@ Também são construidas as classes que irão interagir com o banco de dados, na
 - [/api/projeto](./ReadMeAssets/endpoints.md#apiprojeto-post) `POST`<sub>Cadastra um projeto.</sub>
 - [/api/projeto](./ReadMeAssets/endpoints.md#apiprojeto-get) `GET`<sub>Lista todos os projetos.</sub>
 - [/api/projeto/{id}/colaboradores](./ReadMeAssets/endpoints.md#apiprojetoidcolaboradores-post) `POST`<sub>Adiciona colaboradores em um projeto.</sub>
+- [/api/projeto/{id}/colaboradores](./ReadMeAssets/endpoints.md#apiprojetoidcolaboradores-delete) `POST`<sub>Remove colaboradores de um projeto.</sub>
 - [/api/projeto/{id}](./ReadMeAssets/endpoints.md#apiprojetoid-get) `GET`<sub>Retorna um projeto pelo ID.</sub>
 - [/api/projeto/{id}](./ReadMeAssets/endpoints.md#apiprojetoid-put) `PUT` <sub>Edita um projeto</sub>
 - [/api/projeto/{id}](./ReadMeAssets/endpoints.md#apiprojetoid-delete) `DELETE` <sub>Remove um projeto.</sub>

@@ -34,6 +34,12 @@
 - Response:
 `MensagemResponse`.
 
+# /api/projeto/{id}/colaboradores <span style="color:red">DELETE</span>
+> Inativa colaboradores em um projeto.
+> Permissões: Administradores.
+
+- Response:
+`MensagemResponse`.
 # /api/projeto/{id} <span style="color:cyan">GET</span>
 > Retorna um projeto pelo ID.
 > Permissões: Administradores e Colaboradores**
