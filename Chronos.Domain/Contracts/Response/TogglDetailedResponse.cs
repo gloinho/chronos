@@ -2,19 +2,21 @@
 {
     public class TogglDetailedResponse
     {
-        public ulong total_grand { get; set; }
-        public ulong total_billable { get; set; }
-        public ulong total_count { get; set; }
-        public ulong per_page { get; set; }
-        public Total_Currencies[] total_currencies { get; set; }
+        //public ulong total_grand { get; set; }
+        //public ulong total_billable { get; set; }
+        //public ulong total_count { get; set; }
+        //public ulong per_page { get; set; }
+        //public Total_Currencies[] total_currencies { get; set; }
+
+        public List<string> Mensagens { get; set; }
         public Data[] data { get; set; }
     }
 
-    public class Total_Currencies
-    {
-        public string currency { get; set; }
-        public float amount { get; set; }
-    }
+    //public class Total_Currencies
+    //{
+    //    public string currency { get; set; }
+    //    public float amount { get; set; }
+    //}
 
     public class Data
     {

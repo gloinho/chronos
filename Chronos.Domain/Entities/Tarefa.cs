@@ -6,5 +6,6 @@ public class Tarefa : BaseEntity
     public string Descricao { get; set; }
     public DateTime? DataInicial { get; set; }
     public DateTime? DataFinal { get; set; } = null;
+    public string? TogglId { get; set; }
     public virtual Usuario_Projeto Usuario_Projeto { get; set; }
 }
