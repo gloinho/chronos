@@ -277,6 +277,36 @@ namespace Chronos.Testes.Services
         }
 
         [TestMethod]
+        public async Task TestCheckSePodeAlterarTarefaDeOutroColaboradorSendoAdmin()
+        {
+            var projeto = _fixture.Create<Projeto>();
+            var outroUsuario = _fixture.Create<Usuario>();
+            var usuario_projeto = Usuario_ProjetoFaker.GetRelacao(projeto, outroUsuario);
+            usuario_projeto.Ativo = true;
+            var usuario = _fixture.Create<Usuario>();
+            var claims = ClaimConfig.Get(usuario.Id, usuario.Email, Permissao.Administrador);
+            var tarefa = _fixture.Create<Tarefa>();
+            _mockHttpContextAccessor.Setup(mock => mock.HttpContext.User.Claims).Returns(claims);
+            _mockProjetoRepository
+                .Setup(mock => mock.ObterPorIdAsync(It.IsAny<int>()))
+                .ReturnsAsync(projeto);
+            _mockUsuarioProjetoRepository
+                .Setup(mock => mock.ObterAsync(It.IsAny<Expression<Func<Usuario_Projeto, bool>>>()))
+                .ReturnsAsync(usuario_projeto);
+            _mockUsuarioProjetoRepository
+                .Setup(mock => mock.ObterPorIdAsync(tarefa.Usuario_ProjetoId))
+                .ReturnsAsync(usuario_projeto);
+            var service = new Usuario_ProjetoService(
+                _mockUsuarioProjetoRepository.Object,
+                _mockUsuarioRepository.Object,
+                _mockProjetoRepository.Object,
+                _mockHttpContextAccessor.Object
+            );
+            var result = await service.CheckSePodeAlterarTarefa(projeto.Id, tarefa);
+            Assert.AreEqual(usuario_projeto, result);
+        }
+
+        [TestMethod]
         public async Task TestCheckSePodeAlterarTarefaColaborador()
         {
             var projetoTarget = _fixture.Create<Projeto>();

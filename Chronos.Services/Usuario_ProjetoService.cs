@@ -1,5 +1,4 @@
-﻿using Chronos.Domain.Contracts.Request;
-using Chronos.Domain.Entities;
+﻿using Chronos.Domain.Entities;
 using Chronos.Domain.Exceptions;
 using Chronos.Domain.Interfaces.Repository;
 using Chronos.Domain.Interfaces.Services;
