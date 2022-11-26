@@ -166,36 +166,6 @@ namespace Chronos.Testes.Services
         }
 
         [TestMethod]
-        public async Task TestObterPorUsuarioIdSendoColaborador()
-        {
-            var usuario = UsuarioFaker.GetUsuario(Permissao.Colaborador); // só pode resgatar seus projetos.
-            var outroUsuario = _fixture.Create<Usuario>();
-            var claims = ClaimConfig.Get(usuario.Id, usuario.Email, usuario.Permissao);
-
-            var projetos = ProjetoFaker.GetProjetos();
-            _mockUsuarioProjetoService
-                .Setup(mock => mock.CheckSeUsuarioExiste(It.IsAny<int>()))
-                .Returns(Task.CompletedTask);
-            _mockHttpContextAccessor.Setup(mock => mock.HttpContext.User.Claims).Returns(claims);
-            _mockProjetoRepository
-                .Setup(mock => mock.ObterPorUsuarioIdAsync(usuario.Id))
-                .ReturnsAsync(projetos);
-
-            var service = new ProjetoService(
-                _mockHttpContextAccessor.Object,
-                _mockProjetoRepository.Object,
-                _mockLogService.Object,
-                _mapper,
-                _mockUsuarioProjetoService.Object
-            );
-
-            var result = await Assert.ThrowsExceptionAsync<BaseException>(
-                () => service.ObterPorUsuarioId(outroUsuario.Id)
-            );
-            Assert.AreEqual("Acesso não permitido.", result.Mensagens[0]);
-        }
-
-        [TestMethod]
         public async Task TestObterTodosAsync()
         {
             var projetos = ProjetoFaker.GetProjetos();

@@ -7,7 +7,8 @@ namespace Chronos.Domain.Interfaces.Services
     {
         Task CadastrarAsync(int projetoId, int usuarioId);
         Task<Usuario_Projeto> CheckSeUsuarioFazParteDoProjeto(int projetoId, int? usuarioId);
-        Task CheckPermissao(int usuario_projetoId);
+        Task CheckPermissaoRelacao(int usuario_projetoId);
+        Task CheckPermissao(int usuarioId);
         Task<Usuario_Projeto> CheckSePodeAlterarTarefa(int projetoId, Tarefa tarefa);
         Task CheckSeProjetoExiste(int id);
         Task CheckSeUsuarioExiste(int usuarioId);

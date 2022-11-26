@@ -5,23 +5,20 @@ using Chronos.Domain.Entities;
 using Chronos.Domain.Exceptions;
 using Chronos.Domain.Interfaces.Repository;
 using Chronos.Domain.Interfaces.Services;
-using Chronos.Domain.Shared;
 using Chronos.Services.Validators;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 
 namespace Chronos.Services
 {
-    public class ProjetoService : BaseService, IProjetoService
+    public class ProjetoService : BaseService<Projeto>, IProjetoService
     {
         private readonly IProjetoRepository _projetoRepository;
         private readonly ILogService _logService;
         private readonly IUsuario_ProjetoService _usuario_projetoService;
-        private readonly ProjetoRequestValidator _validator = new ProjetoRequestValidator();
-        private readonly ColaboradoresRequestValidator _validatorColab =
-            new ColaboradoresRequestValidator();
+        private readonly ProjetoRequestValidator _validator = new();
+        private readonly ColaboradoresRequestValidator _validatorColab = new();
         private readonly IMapper _mapper;
-        private readonly Verificador<Projeto> _verificador;
 
         public ProjetoService(
             IHttpContextAccessor httpContextAccessor,
@@ -29,18 +26,12 @@ namespace Chronos.Services
             ILogService logService,
             IMapper mapper,
             IUsuario_ProjetoService usuario_ProjetoService
-        ) : base(httpContextAccessor)
+        ) : base(httpContextAccessor, projetoRepository)
         {
             _projetoRepository = projetoRepository;
             _logService = logService;
             _mapper = mapper;
             _usuario_projetoService = usuario_ProjetoService;
-            _verificador = new Verificador<Projeto>(
-                _projetoRepository,
-                _usuario_projetoService,
-                UsuarioPermissao,
-                UsuarioId
-            );
         }
 
         public async Task<MensagemResponse> AdicionarColaboradores(
@@ -48,11 +39,16 @@ namespace Chronos.Services
             ColaboradoresRequest request
         )
         {
-            await _verificador.Id(projetoId);
+            await CheckSeIdExiste(projetoId);
             await _validatorColab.ValidateAndThrowAsync(request);
             foreach (int usuarioId in request.Usuarios)
             {
-                await _logService.LogAsync(nameof(ProjetoService), nameof(AdicionarColaboradores) + $" Id: {usuarioId}", projetoId);
+                await _logService.LogAsync(
+                    nameof(ProjetoService),
+                    nameof(AdicionarColaboradores) + $" Id: {usuarioId}",
+                    projetoId,
+                    UsuarioId
+                );
                 await _usuario_projetoService.CadastrarAsync(projetoId, usuarioId);
             }
             ;
@@ -71,11 +67,16 @@ namespace Chronos.Services
             ColaboradoresRequest request
         )
         {
-            await _verificador.Id(projetoId);
+            await CheckSeIdExiste(projetoId);
             await _validatorColab.ValidateAndThrowAsync(request);
             foreach (int usuarioId in request.Usuarios)
             {
-                await _logService.LogAsync(nameof(ProjetoService), nameof(InativarColaboradores), projetoId);
+                await _logService.LogAsync(
+                    nameof(ProjetoService),
+                    nameof(InativarColaboradores),
+                    projetoId,
+                    UsuarioId
+                );
                 await _usuario_projetoService.InativarColaborador(projetoId, usuarioId);
             }
             return new MensagemResponse()
@@ -90,10 +91,10 @@ namespace Chronos.Services
 
         public async Task<MensagemResponse> AlterarAsync(int id, ProjetoRequest request)
         {
-            var projeto = await _verificador.Id(id);
+            var projeto = await CheckSeIdExiste(id);
             await _validator.ValidateAndThrowAsync(request);
 
-            await _logService.LogAsync(nameof(ProjetoService), nameof(AlterarAsync), id);
+            await _logService.LogAsync(nameof(ProjetoService), nameof(AlterarAsync), id, UsuarioId);
 
             await _projetoRepository.AlterarAsync(_mapper.Map(request, projeto));
             return new MensagemResponse
@@ -108,7 +109,12 @@ namespace Chronos.Services
             await _validator.ValidateAndThrowAsync(request);
             var projeto = _mapper.Map<Projeto>(request);
 
-            await _logService.LogAsync(nameof(ProjetoService), nameof(CadastrarAsync), projeto.Id);
+            await _logService.LogAsync(
+                nameof(ProjetoService),
+                nameof(CadastrarAsync),
+                projeto.Id,
+                UsuarioId
+            );
 
             await _projetoRepository.CadastrarAsync(projeto);
             return new MensagemResponse
@@ -121,9 +127,9 @@ namespace Chronos.Services
 
         public async Task<MensagemResponse> DeletarAsync(int id)
         {
-            var projeto = await _verificador.Id(id);
+            var projeto = await CheckSeIdExiste(id);
 
-            await _logService.LogAsync(nameof(TarefaService), nameof(DeletarAsync), id);
+            await _logService.LogAsync(nameof(TarefaService), nameof(DeletarAsync), id, UsuarioId);
 
             await _projetoRepository.DeletarAsync(projeto);
             return new MensagemResponse
@@ -135,14 +141,14 @@ namespace Chronos.Services
 
         public async Task<ProjetoResponse> ObterPorIdAsync(int id)
         {
-            var projeto = await _verificador.Id(id);
+            var projeto = await CheckSeIdExiste(id);
             var result = _mapper.Map<ProjetoResponse>(projeto);
             return result;
         }
 
         public async Task<List<ProjetoResponse>> ObterPorUsuarioId(int usuarioId)
         {
-            await _verificador.Permissao(usuarioId);
+            await _usuario_projetoService.CheckPermissao(usuarioId);
             var projetos = await _projetoRepository.ObterPorUsuarioIdAsync(usuarioId);
 
             return _mapper.Map<List<ProjetoResponse>>(projetos);

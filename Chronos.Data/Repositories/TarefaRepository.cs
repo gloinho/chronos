@@ -16,6 +16,8 @@ namespace Chronos.Data.Repositories
                 .Where(p => p.Id == id)
                 .Include(p => p.Usuario_Projeto)
                 .ThenInclude(u => u.Projeto)
+                .Include(p => p.Usuario_Projeto)
+                .ThenInclude(p => p.Usuario)
                 .FirstOrDefaultAsync();
             return tarefa;
         }
@@ -25,7 +27,8 @@ namespace Chronos.Data.Repositories
             var tarefas = await _context.Tarefas
                 .Include(p => p.Usuario_Projeto)
                 .ThenInclude(u => u.Projeto)
-                .AsNoTracking()
+                .Include(p => p.Usuario_Projeto)
+                .ThenInclude(u => u.Usuario)
                 .ToListAsync();
             return tarefas;
         }
@@ -37,8 +40,8 @@ namespace Chronos.Data.Repositories
                 .Include(up => up.Tarefas)
                 .ThenInclude(t => t.Usuario_Projeto)
                 .ThenInclude(up => up.Projeto)
+                .Include(up => up.Usuario)
                 .SelectMany(t => t.Tarefas)
-                .AsNoTracking()
                 .ToListAsync();
             return tarefas;
         }
@@ -50,6 +53,7 @@ namespace Chronos.Data.Repositories
                 .Include(up => up.Tarefas)
                 .ThenInclude(t => t.Usuario_Projeto)
                 .ThenInclude(up => up.Projeto)
+                .Include(up => up.Usuario)
                 .SelectMany(
                     t =>
                         t.Tarefas.Where(
@@ -58,7 +62,6 @@ namespace Chronos.Data.Repositories
                                 && DateTime.Today == t.DataFinal.Value.Date
                         )
                 )
-                .AsNoTracking()
                 .ToListAsync();
             return tarefas;
         }
@@ -70,6 +73,7 @@ namespace Chronos.Data.Repositories
                 .Include(up => up.Tarefas)
                 .ThenInclude(t => t.Usuario_Projeto)
                 .ThenInclude(up => up.Projeto)
+                .Include(up => up.Usuario)
                 .SelectMany(
                     t =>
                         t.Tarefas.Where(
@@ -80,7 +84,6 @@ namespace Chronos.Data.Repositories
                                     == 0
                         )
                 )
-                .AsNoTracking()
                 .ToListAsync();
 
             return tarefas;
@@ -93,6 +96,7 @@ namespace Chronos.Data.Repositories
                 .Include(up => up.Tarefas)
                 .ThenInclude(t => t.Usuario_Projeto)
                 .ThenInclude(up => up.Projeto)
+                .Include(up => up.Usuario)
                 .SelectMany(
                     t =>
                         t.Tarefas.Where(
@@ -114,10 +118,9 @@ namespace Chronos.Data.Repositories
             var tarefas = await _context.Usuarios_Projetos
                 .Where(u => u.ProjetoId == projetoId)
                 .Include(p => p.Tarefas)
-                .ThenInclude(t => t.Usuario_Projeto)
-                .ThenInclude(up => up.Projeto)
-                .SelectMany(t => t.Tarefas)
-                .AsNoTracking()
+                .ThenInclude(p => p.Usuario_Projeto)
+                .ThenInclude(p => p.Usuario)
+                .SelectMany(p => p.Tarefas)
                 .ToListAsync();
             return tarefas;
         }

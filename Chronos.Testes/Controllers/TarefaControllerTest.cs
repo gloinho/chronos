@@ -4,7 +4,6 @@ using Chronos.Domain.Contracts.Response;
 using Chronos.Domain.Interfaces.Services;
 using Chronos.Testes.Settings;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Chronos.Testes.Controllers
 {
@@ -175,58 +174,19 @@ namespace Chronos.Testes.Controllers
         }
 
         [TestMethod]
-        public async Task TestObterTarefasDoDia()
+        public async Task TestObterTarefasDoUsuarioPorFiltro()
         {
             var response = _fixture.Create<List<TarefaResponse>>();
+            var usuario = _fixture.Create<Usuario>();
             _mockTarefaService
-                .Setup(mock => mock.ObterTarefasDoDia(It.IsAny<int>()))
+                .Setup(mock => mock.ObterTarefasPorFiltro(usuario.Id, It.IsAny<FiltroRequest>()))
                 .ReturnsAsync(response);
-
             var controller = new TarefaController(_mockTarefaService.Object);
 
-            var result = await controller.ObterTarefasDoDia(It.IsAny<int>());
-
-            Assert.IsNotNull(result);
-
-            var okResult = result as OkObjectResult;
-            Assert.IsNotNull(okResult);
-            var value = okResult.Value as List<TarefaResponse>;
-            Assert.IsNotNull(value);
-            Assert.AreEqual(response.Count, value.Count);
-        }
-
-        [TestMethod]
-        public async Task TestObterTarefasDoMes()
-        {
-            var response = _fixture.Create<List<TarefaResponse>>();
-            _mockTarefaService
-                .Setup(mock => mock.ObterTarefasDoMes(It.IsAny<int>()))
-                .ReturnsAsync(response);
-
-            var controller = new TarefaController(_mockTarefaService.Object);
-
-            var result = await controller.ObterTarefasDoMes(It.IsAny<int>());
-
-            Assert.IsNotNull(result);
-
-            var okResult = result as OkObjectResult;
-            Assert.IsNotNull(okResult);
-            var value = okResult.Value as List<TarefaResponse>;
-            Assert.IsNotNull(value);
-            Assert.AreEqual(response.Count, value.Count);
-        }
-
-        [TestMethod]
-        public async Task TestObterTarefasDaSemana()
-        {
-            var response = _fixture.Create<List<TarefaResponse>>();
-            _mockTarefaService
-                .Setup(mock => mock.ObterTarefasDaSemana(It.IsAny<int>()))
-                .ReturnsAsync(response);
-
-            var controller = new TarefaController(_mockTarefaService.Object);
-
-            var result = await controller.ObterTarefasDaSemana(It.IsAny<int>());
+            var result = await controller.ObterTarefasDoUsuarioPorFiltro(
+                usuario.Id,
+                It.IsAny<FiltroRequest>()
+            );
 
             Assert.IsNotNull(result);
 

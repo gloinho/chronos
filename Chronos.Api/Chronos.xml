@@ -140,25 +140,9 @@
             <returns></returns>
             <response code="200">Sucesso, e retorna uma lista de tarefas."  </response>
         </member>
-        <member name="M:Chronos.Api.Controllers.TarefaController.ObterTarefasDoDia(System.Int32)">
+        <member name="M:Chronos.Api.Controllers.TarefaController.ObterTarefasDoUsuarioPorFiltro(System.Int32,Chronos.Domain.Contracts.Request.FiltroRequest)">
             <summary>
-            Através dessa rota você será capaz de listar as tarefas de um usuário que foram finalizadas no dia.
-            </summary>
-            <param name="usuarioId"></param>
-            <returns></returns>
-            <response code="200">Sucesso, e retorna uma lista de tarefas." </response>
-        </member>
-        <member name="M:Chronos.Api.Controllers.TarefaController.ObterTarefasDoMes(System.Int32)">
-            <summary>
-            Através dessa rota você será capaz de listar as tarefas de um usuário que foram finalizadas no mês.
-            </summary>
-            <param name="usuarioId"></param>
-            <returns></returns>
-            <response code="200">Sucesso, e retorna uma lista de tarefas." </response>
-        </member>
-        <member name="M:Chronos.Api.Controllers.TarefaController.ObterTarefasDaSemana(System.Int32)">
-            <summary>
-            Através dessa rota você será capaz de listar as tarefas de um usuário que foram finalizadas na semana.
+            Através dessa rota você será capaz de listar as tarefas de um usuário a partir de um filtro.
             </summary>
             <param name="usuarioId"></param>
             <returns></returns>
@@ -171,6 +155,13 @@
             <param name="projetoId"></param>
             <returns></returns>
             <response code="200">Sucesso, e retorna uma lista de tarefas." </response>
+        </member>
+        <member name="M:Chronos.Api.Controllers.TogglController.ObterHorasToggl(Chronos.Domain.Contracts.Request.TogglDetailedRequest)">
+            <summary>
+            Através dessa rota você será capaz ver os registros de horas do Toggl e importa-los para o Chronos.
+            </summary>
+            <returns></returns>
+            <response code="200">Sucesso, e retorna as informações detalhadas do toggl </response>
         </member>
         <member name="M:Chronos.Api.Controllers.UsuarioController.CadastrarAsync(Chronos.Domain.Contracts.Request.UsuarioRequest)">
             <summary>

@@ -14,7 +14,11 @@ namespace Chronos.Services
         private readonly ILogService _logService;
         private readonly AppSettings _appSettings;
 
-        public AutenticacaoService(IUsuarioRepository usuarioRepository, AppSettings appSettings, ILogService logService)
+        public AutenticacaoService(
+            IUsuarioRepository usuarioRepository,
+            AppSettings appSettings,
+            ILogService logService
+        )
         {
             _usuarioRepository = usuarioRepository;
             _appSettings = appSettings;
@@ -41,9 +45,12 @@ namespace Chronos.Services
                 throw new BaseException(StatusException.NaoProcessado, "E-mail não confirmado.");
             }
             var token = Token.GenerateToken(usuario, _appSettings.SecurityKey);
-
-            await _logService.LogAsync(nameof(AutenticacaoService), nameof(Login), usuario.Id, usuario.Id);
-
+            await _logService.LogAsync(
+                nameof(AutenticacaoService),
+                nameof(Login),
+                usuario.Id,
+                usuario.Id
+            );
             return new MensagemResponse
             {
                 Codigo = StatusException.Nenhum,

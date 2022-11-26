@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Chronos.Services
 {
-    public class Usuario_ProjetoService : BaseService, IUsuario_ProjetoService
+    public class Usuario_ProjetoService : BaseService<Usuario_Projeto>, IUsuario_ProjetoService
     {
         private readonly IUsuario_ProjetoRepository _usuario_ProjetoRepository;
         private readonly IUsuarioRepository _usuarioRepository;
@@ -18,7 +18,7 @@ namespace Chronos.Services
             IUsuarioRepository usuarioRepository,
             IProjetoRepository projetoRepository,
             IHttpContextAccessor httpContextAccessor
-        ) : base(httpContextAccessor)
+        ) : base(httpContextAccessor, usuario_ProjetoRepository)
         {
             _usuario_ProjetoRepository = usuario_ProjetoRepository;
             _usuarioRepository = usuarioRepository;
@@ -81,7 +81,7 @@ namespace Chronos.Services
             return relacao;
         }
 
-        public async Task CheckPermissao(int usuario_projetoId)
+        public async Task CheckPermissaoRelacao(int usuario_projetoId)
         {
             var relacao = await _usuario_ProjetoRepository.ObterPorIdAsync(usuario_projetoId);
             if (
@@ -97,37 +97,43 @@ namespace Chronos.Services
             CheckSeEstaAtivo(relacao);
         }
 
+        public async Task CheckPermissao(int usuarioId)
+        {
+            await CheckSeUsuarioExiste(usuarioId);
+            if (UsuarioPermissao == PermissaoUtil.PermissaoColaborador && UsuarioId != usuarioId)
+            {
+                throw new BaseException(StatusException.NaoAutorizado, "Acesso não permitido.");
+            }
+        }
+
         public async Task<Usuario_Projeto> CheckSePodeAlterarTarefa(int projetoId, Tarefa tarefa)
         {
-            // Primeiro checar se o projeto existe:
-            await CheckSeProjetoExiste(projetoId);
-
-            // Depois obter a relação pela tarefa:
             var usuario_projeto = await _usuario_ProjetoRepository.ObterPorIdAsync(
                 tarefa.Usuario_ProjetoId
             );
-
-            // Se o usuário logado for admin, precisa checar se o dono da tarefa em que ele quer mudar faz parte do projeto em que ele quer colocar a tarefa
-            if (UsuarioPermissao == PermissaoUtil.PermissaoAdministrador)
-            {
-                var relacao = await CheckSeUsuarioFazParteDoProjeto(
-                    projetoId,
-                    usuario_projeto.UsuarioId
-                );
-                CheckSeEstaAtivo(relacao);
-                return relacao;
-            }
-            // Se o usuário logado for colaborador preciso checar SE o ID do usuário LOGADO é igual ao ID do usuário que existe no Usuario_Projeto da TAREFA.
-
-            if (UsuarioId != usuario_projeto.UsuarioId)
+            if (
+                UsuarioPermissao == PermissaoUtil.PermissaoColaborador
+                && usuario_projeto.UsuarioId != UsuarioId
+            )
             {
                 throw new BaseException(
                     StatusException.NaoAutorizado,
-                    "Não é possivel alterar tarefas de outros usuários."
+                    "Colaborador não pode interagir com tarefas de outros colaboradores."
                 );
             }
-            CheckSeEstaAtivo(usuario_projeto);
-            return usuario_projeto;
+            else if (
+                UsuarioPermissao == PermissaoUtil.PermissaoAdministrador
+                && usuario_projeto.UsuarioId != UsuarioId
+            )
+            {
+                var resultadoAdmin = await CheckSeUsuarioFazParteDoProjeto(
+                    projetoId,
+                    usuario_projeto.UsuarioId
+                );
+                return resultadoAdmin;
+            }
+            var resultado = await CheckSeUsuarioFazParteDoProjeto(projetoId, UsuarioId);
+            return resultado;
         }
 
         public async Task CheckSeUsuarioExiste(int usuarioId)
@@ -155,7 +161,7 @@ namespace Chronos.Services
             }
         }
 
-        private void CheckSeEstaAtivo(Usuario_Projeto usuario_projeto)
+        private static void CheckSeEstaAtivo(Usuario_Projeto usuario_projeto)
         {
             if (!usuario_projeto.Ativo)
             {
