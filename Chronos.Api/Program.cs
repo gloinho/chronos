@@ -1,4 +1,4 @@
-using Chronos.Api.Filters;
+﻿using Chronos.Api.Filters;
 using Chronos.Api.Handlers;
 using Chronos.Domain.Settings;
 using Chronos.IoC;
@@ -36,6 +36,21 @@ builder.Services.AddHttpClient();
 #region Swagger
 builder.Services.AddSwaggerGen(c =>
 {
+    c.SwaggerDoc(
+        "v1",
+        new OpenApiInfo()
+        {
+            Title = "⌛ Chronos ⌛",
+            Version = "v1",
+            Description = "Solução para gestão de horas em projetos Raro Labs.",
+            Contact = new OpenApiContact()
+            {
+                Name = "Repositório",
+                Url = new Uri("https://gitlab.com/gloinho/chronos")
+            },
+        }
+    );
+
     c.AddSecurityDefinition(
         "Bearer",
         new OpenApiSecurityScheme()
