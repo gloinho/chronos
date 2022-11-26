@@ -12,5 +12,6 @@ namespace Chronos.Domain.Contracts.Request
 
         [Required]
         public string Senha { get; set; }
+        public string? TogglId { get; set; }
     }
 }
