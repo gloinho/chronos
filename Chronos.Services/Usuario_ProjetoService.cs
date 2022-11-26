@@ -25,7 +25,7 @@ namespace Chronos.Services
             _projetoRepository = projetoRepository;
         }
 
-        public async Task CadastrarAsync(int usuarioId, int projetoId)
+        public async Task CadastrarAsync(int projetoId, int usuarioId)
         {
             await CheckSeUsuarioExiste(usuarioId);
             var relacao = await _usuario_ProjetoRepository.ObterAsync(

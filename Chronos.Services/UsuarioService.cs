@@ -19,8 +19,8 @@ namespace Chronos.Services
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly ILogService _logService;
         private readonly IEmailService _emailService;
-        private readonly UsuarioRequestValidator validator = new UsuarioRequestValidator();
-        private readonly NovaSenhaRequestValidator validatorNovaSenha =
+        private readonly UsuarioRequestValidator _validator = new UsuarioRequestValidator();
+        private readonly NovaSenhaRequestValidator _validatorNovaSenha =
             new NovaSenhaRequestValidator();
         private readonly AppSettings _appSettings;
         private readonly IMapper _mapper;
@@ -43,7 +43,7 @@ namespace Chronos.Services
 
         public async Task<MensagemResponse> CadastrarAsync(UsuarioRequest request)
         {
-            await validator.ValidateAndThrowAsync(request);
+            await _validator.ValidateAndThrowAsync(request);
             await CheckSeJaEstaCadastrado(request.Email);
             var user = _mapper.Map<Usuario>(request);
             var token = Token.GenerateTokenRequest(user, _appSettings.SecurityKey);
@@ -72,7 +72,7 @@ namespace Chronos.Services
         {
             CheckPermissao(id);
             var usuario = await CheckSeIdExiste(id);
-            await validator.ValidateAndThrowAsync(request);
+            await _validator.ValidateAndThrowAsync(request);
 
             await _logService.LogAsync(nameof(UsuarioService), nameof(AlterarAsync), id);
 
@@ -124,7 +124,7 @@ namespace Chronos.Services
         {
             var user = await _usuarioRepository.ObterAsync(u => u.Email == UsuarioEmail);
 
-            await validatorNovaSenha.ValidateAndThrowAsync(request);
+            await _validatorNovaSenha.ValidateAndThrowAsync(request);
 
             if (!BCrypt.Net.BCrypt.Verify(request.Codigo, user.CodigoSenhaToken))
             {
@@ -152,7 +152,9 @@ namespace Chronos.Services
                 BCrypt.Net.BCrypt.GenerateSalt()
             );
 
+            
             await _usuarioRepository.AlterarAsync(user);
+            await _logService.LogAsync(nameof(UsuarioService), nameof(AlterarSenha), user.Id, user.Id);
 
             return new MensagemResponse
             {
