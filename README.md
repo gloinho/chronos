@@ -106,9 +106,15 @@ Algumas outras bibliotecas externas utilizadas ao longo do desenvolvimento:
 
 # :hourglass: Modelagens
 ## Diagrama Entidade-Relacionamento
-![DER](../ReadMeAssets/chronos_der.jpg)
+![DER](/ReadMeAssets/chronos_der.drawio.png)
+- Um usuário pode ter zero ou vários (n-n) Projetos
+- Um Projeto pode ter zero ou vários(n-n) Usuários
+    - Tabela Auxiliar de Many-to-Many: Usuario_Projeto
+    - Um Usuario_Projeto tem um e apenas um (1-1) usuário e projeto.
+    - Um Usuario_Projeto pode ter zero ou várias (0-n) Tarefas.
+- Uma tarefa pertence a um e somente um Usuario_Projeto(1-1) (consequentemente a Tarefa está relacionada ao mesmo tempo com Usuário e Projeto)
 ## Diagrama de Classes
-- Para facilitar a visualização, acesse o [link para Draw.io](https://tinyurl.com/chronosclasses)
+- Para facilitar a visualização, acesse o [link para Draw.io](https://tinyurl.com/chronos-class-diagram)
 # :hourglass: Camadas da Aplicação
 ## Chronos.Api
 - Camada responsável por fazer a aplicação se comunicar diretamente com o domínio. Nela, são construídas as classes que serão necessárias para a aplicação. A construção dessas classes, feitas por meio de injeção de dependencias com o intuito de reduzir o acomplamento da aplicação, é realizado com o auxílio da camada de inversão de controle.  
@@ -256,9 +262,7 @@ Também são construidas as classes que irão interagir com o banco de dados, na
 - [/api/tarefa/{id}](./ReadMeAssets/endpoints.md#apitarefaid-put) `PUT` <sub>Edita uma tarefa.</sub>
 - [/api/tarefa/{id}](./ReadMeAssets/endpoints.md#apitarefa-get) `GET` <sub>Retorna uma tarefa pelo ID.</sub>
 - [/api/tarefa/usuario/{usuarioId}](./ReadMeAssets/endpoints.md#apitarefausuariousuarioid-get) `GET` <sub>Retorna todas as tarefas de um usuário.</sub>
-- [/api/tarefa/{usuarioId}/dia](./ReadMeAssets/endpoints.md#apitarefausuarioiddia-get) `GET` <sub>Lista todas as tarefas que iniciaram e terminaram no dia.</sub>
-- [/api/tarefa/{usuarioId}/semana](./ReadMeAssets/endpoints.md#apitarefausuarioidsemana-get) `GET` <sub>Lista todas as tarefas que iniciaram e terminaram na semana.</sub>
-- [/api/tarefa/{usuarioId}/mes](./ReadMeAssets/endpoints.md#apitarefausuarioidmes-get) `GET` <sub>Lista todas as tarefas que iniciaram e terminaram no mês.</sub>
+- [/api/tarefa/usuario/{usuarioId}/filter_by](./ReadMeAssets/endpoints.md#apitarefausuariousuarioidfilter_by-get) `GET` <sub>Retorna todas as tarefas de um usuário aplicando filtros de data.</sub>
 - [/api/tarefa/projeto/{projetoId}](./ReadMeAssets/endpoints.md#apitarefaprojetoprojetoid-get) `GET` <sub>Lista todas as tarefas de um projeto.</sub>
 
 ## Toggl Controller  
@@ -294,14 +298,19 @@ cd Chronos.Api
 ```bash
 # Rode a aplicação.
 dotnet run
+# Observações: 
+    # Usuário Administrador necessita ser previamente cadastrado no banco de dados.
 ``` 
+
 # :hourglass: Agradecimentos
 - Gostariamos de agradecer a todo suporte dado pela Raro Academy, aos instrutores que nos aguentaram e auxiliaram e aos monitores que estavam disponíveis para tirar nossas dúvidas.
 
 # :hourglass: Desenvolvedores
 ![avatar](https://images.weserv.nl/?url=https://avatars.githubusercontent.com/u/99846614?v=4&h=150&w=150&fit=cover&mask=circle&maxage=7d)
 ![avatar](https://images.weserv.nl/?url=https://avatars.githubusercontent.com/u/58056134?v=4&h=150&w=150&fit=cover&mask=circle&maxage=7d)
+![avatar](https://images.weserv.nl/?url=https://avatars.githubusercontent.com/u/119057135?v=4&h=150&w=150&fit=cover&mask=circle&maxage=7d)
 ![avatar](https://images.weserv.nl/?url=https://avatars.githubusercontent.com/u/113548967?v=4&h=150&w=150&fit=cover&mask=circle&maxage=7d)
+![avatar](https://images.weserv.nl/?url=https://avatars.githubusercontent.com/u/119057187?v=4&h=150&w=150&fit=cover&mask=circle&maxage=7d)
 
 
 

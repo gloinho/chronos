@@ -187,26 +187,10 @@
 - Response:  
 `List<TarefaResponse>`
 
-# /api/tarefa/{usuarioId}/dia <span style="color:cyan">GET</span>
-> Lista todas as tarefas que iniciaram e terminaram no dia.
+# /api/tarefa/usuario/{usuarioId}/filter_by <span style="color:cyan">GET</span>
+> Lista todas as tarefas de um usuário, aplicando filtros de datas
 > Permissões: Administradores e Colaboradores**.
-- Retorna apenas as tarefas do dia vinculadas ao usuario
-
-- Response:
-`List<TarefaResponse>`
-
-# /api/tarefa/{usuarioId}/mes <span style="color:cyan">GET</span>
-> Lista todas as tarefas que iniciaram e terminaram no mês.
-> Permissões: Administradores e Colaboradores**.
-- Retorna apenas as tarefas do mes vinculadas ao usuario
-
-- Response:
-`List<TarefaResponse>`
-
-# /api/tarefa/{usuarioId}/semana <span style="color:cyan">GET</span>
-> Lista todas as tarefas que iniciaram e terminaram na semana.
-> Permissões: Administradores e Colaboradores**.
-- Retorna apenas as tarefas do dia vinculadas ao usuario
+- **Colaboradores podem ver apenas suas tarefas.
 
 - Response:
 `List<TarefaResponse>`
@@ -219,5 +203,8 @@
 `List<TarefaResponse>`
 
 # /toggl/relatorio-de-horas <span style="color:cyan">GET</span>
->
->
+> Endpoint de integração com o toggl. Lista todas os reports detalhados de acordo com o Id do Workspace, Toggl Token do usuário, filtros de dados e importa os dados que ainda não estão no banco de dados.
+> Permissões: Administradores.
+
+- Response:
+`TogglDetailedResponse`
