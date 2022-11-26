@@ -207,7 +207,7 @@ Também são construidas as classes que irão interagir com o banco de dados, na
 
 **Shared**
 - Token.cs &rarr; classe que gera JsonWebToken, este que é utilizado nas requisições como bearer para a autenticação na plataforma.
-- Verificador.cs &rarr; classe helper para auxiliar em métodos que são repetidos ao longo de certos serviços, como verificar se um registro existe e checar a permissão de acesso a certa request.
+
 ## Chronos.Services
 - Camada que aplica as regras de negócio impostas pelo cliente e implementa a lógica dos serviços que a aplicação irá prover. Nela, são definidas validações para a transferência de dados dos contratos e permissões personalizadas que serão utilizadas pelos controllers.
 
@@ -279,6 +279,7 @@ Também são construidas as classes que irão interagir com o banco de dados, na
 - [x] Criar tarefas e associa-las a projetos
 - [x] Iniciar e parar tarefas
 - [x] Editar e excluir tarefas
+- [x] Ver e importar tarefas e projetos a partir dos dados do Toggl
 
 # :hourglass: Desafios e Proximos Passos
 - [ ] Possibilitar a total integração da gestão de horas da raro, não dependendo do Toggl.
