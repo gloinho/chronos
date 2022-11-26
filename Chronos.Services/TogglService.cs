@@ -1,5 +1,6 @@
 ﻿using Chronos.Domain.Contracts.Request;
 using Chronos.Domain.Contracts.Response;
+using Chronos.Domain.Entities;
 using Chronos.Domain.Exceptions;
 using Chronos.Domain.Interfaces.Repository;
 using Chronos.Domain.Interfaces.Services;
@@ -14,14 +15,17 @@ namespace Chronos.Services
     {
         private readonly TogglSettings _togglSettings;
         private readonly IUsuarioRepository _usuarioRepository;
-        private readonly IProjetoService _projetoService;
-        private readonly ITarefaService _tarefaService;
-        public TogglService(TogglSettings togglSettings, IUsuarioRepository usuarioRepository, IProjetoService projetoService, ITarefaService tarefaService)
+        private readonly IProjetoRepository _projetoRepository;
+        private readonly ITarefaRepository _tarefaRepository;
+        private readonly IUsuario_ProjetoRepository _usuarioProjetoRepository;
+        public TogglService(TogglSettings togglSettings, IUsuarioRepository usuarioRepository, IProjetoRepository projetoRepository,
+            ITarefaRepository tarefaRepository, IUsuario_ProjetoRepository usuarioProjetoRepository)
         {
             _togglSettings = togglSettings;
             _usuarioRepository = usuarioRepository;
-            _projetoService = projetoService;
-            _tarefaService = tarefaService;
+            _projetoRepository = projetoRepository;
+            _tarefaRepository = tarefaRepository;
+            _usuarioProjetoRepository = usuarioProjetoRepository;
         }
         public async Task<TogglDetailedResponse> ObterHorasToggl(TogglDetailedRequest request)
         {
@@ -61,26 +65,45 @@ namespace Chronos.Services
 
         public async Task CadastrarHorasToggl(TogglDetailedResponse toggl)
         {
-            var usuarioTogg = toggl.data.FirstOrDefault()?.user;
-            var usuarioChronos = await _usuarioRepository.ObterAsync(u => u.Nome == usuarioTogg);
+            var usuarioTogg = toggl.data.FirstOrDefault()?.uid;
+            var usuarioChronos = await _usuarioRepository.ObterAsync(u => u.TogglId == usuarioTogg.ToString());
 
-            if(usuarioChronos == null)
+            if (usuarioChronos == null)
             {
-                throw new BaseException(StatusException.NaoEncontrado, "Usuario não cadastrado, favor realizar cadastro");
+                throw new BaseException(StatusException.NaoEncontrado, "Usuario não cadastrado, favor realizar cadastro com mesmo nome cadastrado no Toggl");
             }
 
-            foreach(var dados in toggl.data)
+            foreach (var dados in toggl.data)
             {
-                var tarefa = new TarefaRequest
+                var find = await _projetoRepository.ObterAsync(p => p.Nome == dados.project);
+
+                var usuarioProjeto = new Usuario_Projeto();
+
+                if (find == null)
                 {
-                    ProjetoId = 1,// alterar
+                    Projeto novoProjeto = new();
+                    await _projetoRepository.CadastrarAsync(novoProjeto);
+
+                    usuarioProjeto.ProjetoId = novoProjeto.Id;
+                    usuarioProjeto.UsuarioId = usuarioChronos.Id;
+                }
+                else
+                {
+                    usuarioProjeto.ProjetoId = find.Id;
+                    usuarioProjeto.UsuarioId = usuarioChronos.Id;
+                }
+
+                await _usuarioProjetoRepository.CadastrarAsync(usuarioProjeto);
+
+                var tarefa = new Tarefa
+                {
+                   Usuario_ProjetoId = usuarioProjeto.Id,
                     Descricao = dados.description,
                     DataInicial = dados.start,
                     DataFinal = dados.end
                 };
 
-                await _tarefaService.CadastrarAsync(tarefa);
-
+                await _tarefaRepository.CadastrarAsync(tarefa);
             }
         }
     }

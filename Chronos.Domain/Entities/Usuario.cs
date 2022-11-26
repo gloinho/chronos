@@ -12,4 +12,5 @@ public class Usuario : BaseEntity
     public string? ConfirmacaoToken { get; set; } = null;
     public string? CodigoSenhaToken { get; set; } = null;
     public virtual ICollection<Usuario_Projeto> Projetos { get; set; }
+    public string? TogglId { get; set; }
 }
