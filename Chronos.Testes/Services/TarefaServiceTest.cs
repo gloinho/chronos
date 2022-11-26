@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Chronos.Domain.Contracts.Request;
 using Chronos.Domain.Exceptions;
 using Chronos.Domain.Interfaces.Services;
 using Chronos.Services;
@@ -299,7 +300,7 @@ namespace Chronos.Testes.Services
                 _mapper
             );
 
-            var result = await service.ObterTarefasDoDia(usuario.Id);
+            var result = await service.ObterTarefasPorFiltro(usuario.Id, FiltroRequest.Dia);
             Assert.AreEqual(tarefas.Count, result.Count);
         }
 
@@ -319,7 +320,7 @@ namespace Chronos.Testes.Services
                 _mapper
             );
 
-            var result = await service.ObterTarefasDoMes(usuario.Id);
+            var result = await service.ObterTarefasPorFiltro(usuario.Id, FiltroRequest.Mes);
             Assert.AreEqual(tarefas.Count, result.Count);
         }
 
@@ -339,7 +340,7 @@ namespace Chronos.Testes.Services
                 _mapper
             );
 
-            var result = await service.ObterTarefasDaSemana(usuario.Id);
+            var result = await service.ObterTarefasPorFiltro(usuario.Id, FiltroRequest.Semana);
             Assert.AreEqual(tarefas.Count, result.Count);
         }
 

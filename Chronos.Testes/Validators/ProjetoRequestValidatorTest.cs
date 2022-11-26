@@ -41,7 +41,7 @@ namespace Chronos.Testes.Validators
         public async Task TestDataFimMenorQueDataInicio()
         {
             var request = ProjetoToContractFaker.GetRequest();
-            request.DataInicio = request.DataFim.Value.AddDays(2);
+            request.DataInicio = request.DataFim.AddDays(2);
             var result = await _validator.TestValidateAsync(request);
             result.ShouldHaveValidationErrorFor(p => p.DataFim);
         }

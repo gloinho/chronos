@@ -69,41 +69,18 @@ namespace Chronos.Api.Controllers
         }
 
         /// <summary>
-        /// Através dessa rota você será capaz de listar as tarefas de um usuário que foram finalizadas no dia.
+        /// Através dessa rota você será capaz de listar as tarefas de um usuário a partir de um filtro.
         /// </summary>
         /// <param name="usuarioId"></param>
         /// <returns></returns>
         /// <response code="200">Sucesso, e retorna uma lista de tarefas." </response>
-        [HttpGet("{usuarioId}/dia")]
-        public async Task<IActionResult> ObterTarefasDoDia([FromRoute] int usuarioId)
+        [HttpGet("usuario/{usuarioId}/filter_by")]
+        public async Task<IActionResult> ObterTarefasDoUsuarioPorFiltro(
+            [FromRoute] int usuarioId,
+            [FromQuery] FiltroRequest filter_by
+        )
         {
-            var response = await _tarefaService.ObterTarefasDoDia(usuarioId);
-            return Ok(response);
-        }
-
-        /// <summary>
-        /// Através dessa rota você será capaz de listar as tarefas de um usuário que foram finalizadas no mês.
-        /// </summary>
-        /// <param name="usuarioId"></param>
-        /// <returns></returns>
-        /// <response code="200">Sucesso, e retorna uma lista de tarefas." </response>
-        [HttpGet("{usuarioId}/mes")]
-        public async Task<IActionResult> ObterTarefasDoMes([FromRoute] int usuarioId)
-        {
-            var response = await _tarefaService.ObterTarefasDoMes(usuarioId);
-            return Ok(response);
-        }
-
-        /// <summary>
-        /// Através dessa rota você será capaz de listar as tarefas de um usuário que foram finalizadas na semana.
-        /// </summary>
-        /// <param name="usuarioId"></param>
-        /// <returns></returns>
-        /// <response code="200">Sucesso, e retorna uma lista de tarefas." </response>
-        [HttpGet("{usuarioId}/semana")]
-        public async Task<IActionResult> ObterTarefasDaSemana([FromRoute] int usuarioId)
-        {
-            var response = await _tarefaService.ObterTarefasDaSemana(usuarioId);
+            var response = await _tarefaService.ObterTarefasPorFiltro(usuarioId, filter_by);
             return Ok(response);
         }
 

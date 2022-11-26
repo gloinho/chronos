@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
@@ -16,10 +17,15 @@ var connectionString = builder.Configuration.GetConnectionString("ChronosDb");
 
 #region Filters
 
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add(typeof(ExceptionFilter));
-});
+builder.Services
+    .AddControllers(options =>
+    {
+        options.Filters.Add(typeof(ExceptionFilter));
+    })
+    .AddJsonOptions(
+        options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter())
+    );
+;
 #endregion
 
 #region HttpContext
@@ -64,7 +70,6 @@ builder.Services.AddSwaggerGen(c =>
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 
     c.IncludeXmlComments(xmlPath);
-
 });
 
 #endregion

@@ -75,7 +75,8 @@ namespace Chronos.Services
             return new MensagemResponse()
             {
                 Codigo = StatusException.Nenhum,
-                Mensagens = new List<string> { "Tarefa cadastrada com sucesso." }
+                Mensagens = new List<string> { "Tarefa cadastrada com sucesso." },
+                Detalhe = $"Id: {tarefa.Id}"
             };
         }
 
@@ -90,6 +91,13 @@ namespace Chronos.Services
                 Codigo = StatusException.Nenhum,
                 Mensagens = new List<string>() { "Deletado com Sucesso" }
             };
+        }
+
+        public async Task<List<TarefaResponse>> ObterTodosAsync()
+        {
+            var tarefas = await _tarefaRepository.ObterTodosAsync();
+            var response = ObterHorasTotais(tarefas);
+            return response;
         }
 
         public async Task<TarefaResponse> ObterPorIdAsync(int id)
@@ -108,34 +116,30 @@ namespace Chronos.Services
             return response;
         }
 
-        public async Task<List<TarefaResponse>> ObterTodosAsync()
+        public async Task<List<TarefaResponse>> ObterTarefasPorFiltro(
+            int usuarioId,
+            FiltroRequest request
+        )
         {
-            var tarefas = await _tarefaRepository.ObterTodosAsync();
-            var response = ObterHorasTotais(tarefas);
-            return response;
-        }
-
-        public async Task<List<TarefaResponse>> ObterTarefasDoDia(int usuarioId)
-        {
-            await _usuario_ProjetoService.CheckPermissao(usuarioId);
-            var tarefas = await _tarefaRepository.GetTarefasDia(usuarioId);
-            var response = ObterHorasTotais(tarefas);
-            return response;
-        }
-
-        public async Task<List<TarefaResponse>> ObterTarefasDoMes(int usuarioId)
-        {
-            await _usuario_ProjetoService.CheckPermissao(usuarioId);
-            var tarefas = await _tarefaRepository.GetTarefasMes(usuarioId);
-            var response = ObterHorasTotais(tarefas);
-            return response;
-        }
-
-        public async Task<List<TarefaResponse>> ObterTarefasDaSemana(int usuarioId)
-        {
-            await _usuario_ProjetoService.CheckPermissao(usuarioId);
-            var tarefas = await _tarefaRepository.GetTarefasSemana(usuarioId);
-            var response = ObterHorasTotais(tarefas);
+            List<TarefaResponse> response = null;
+            switch (request)
+            {
+                case FiltroRequest.Dia:
+                {
+                    response = await ObterTarefasDoDia(usuarioId);
+                    break;
+                }
+                case FiltroRequest.Semana:
+                {
+                    response = await ObterTarefasDaSemana(usuarioId);
+                    break;
+                }
+                case FiltroRequest.Mes:
+                {
+                    response = await ObterTarefasDoMes(usuarioId);
+                    break;
+                }
+            }
             return response;
         }
 
@@ -193,6 +197,30 @@ namespace Chronos.Services
             await _logService.LogAsync(nameof(TarefaService), nameof(StopTarefa), id, UsuarioId);
             await _tarefaRepository.AlterarAsync(tarefa);
             var response = ObterHorasTotais(tarefa);
+            return response;
+        }
+
+        private async Task<List<TarefaResponse>> ObterTarefasDoDia(int usuarioId)
+        {
+            await _usuario_ProjetoService.CheckPermissao(usuarioId);
+            var tarefas = await _tarefaRepository.GetTarefasDia(usuarioId);
+            var response = ObterHorasTotais(tarefas);
+            return response;
+        }
+
+        private async Task<List<TarefaResponse>> ObterTarefasDoMes(int usuarioId)
+        {
+            await _usuario_ProjetoService.CheckPermissao(usuarioId);
+            var tarefas = await _tarefaRepository.GetTarefasMes(usuarioId);
+            var response = ObterHorasTotais(tarefas);
+            return response;
+        }
+
+        private async Task<List<TarefaResponse>> ObterTarefasDaSemana(int usuarioId)
+        {
+            await _usuario_ProjetoService.CheckPermissao(usuarioId);
+            var tarefas = await _tarefaRepository.GetTarefasSemana(usuarioId);
+            var response = ObterHorasTotais(tarefas);
             return response;
         }
 

@@ -53,19 +53,20 @@ namespace Chronos.Services
                 user.Senha,
                 BCrypt.Net.BCrypt.GenerateSalt()
             );
-            await _usuarioRepository.CadastrarAsync(user);
             await _emailService.Send(
                 request.Email,
                 "Confirmação de Email Chronos",
                 $"Conclua a configuração da sua nova Conta Chronos com o token: {token}"
             );
+            await _usuarioRepository.CadastrarAsync(user);
             return new MensagemResponse
             {
                 Codigo = StatusException.Nenhum,
                 Mensagens = new List<string>
                 {
                     "Enviamos um token para seu email. Por favor, faça a confirmação."
-                }
+                },
+                Detalhe = $"Id: {user.Id}"
             };
         }
 
