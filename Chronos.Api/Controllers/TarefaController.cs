@@ -32,6 +32,7 @@ namespace Chronos.Api.Controllers
         /// Através dessa rota você será capaz de listar as tarefas de um usuário a partir de um filtro.
         /// </summary>
         /// <param name="usuarioId"></param>
+        /// <param name="filter_by"></param>
         /// <returns></returns>
         /// <response code="200">Sucesso, e retorna uma lista de tarefas." </response>
         [HttpGet("usuario/{usuarioId}/filter_by")]
