@@ -65,7 +65,7 @@ namespace Chronos.Services
 
         public async Task<TogglDetailedResponse> CadastrarHorasToggl(TogglDetailedResponse toggl)
         {
-            var usuarioTogg = toggl.data.FirstOrDefault()?.uid;
+            var usuarioTogg = toggl.Data.FirstOrDefault()?.Uid;
             var usuarioChronos = await _usuarioRepository.ObterAsync(u => u.TogglId == usuarioTogg.ToString());
 
             if (usuarioChronos == null)
@@ -75,15 +75,15 @@ namespace Chronos.Services
 
             toggl.Mensagens = new List<string>();
 
-            foreach (var dados in toggl.data)
+            foreach (var dados in toggl.Data)
             {
-                if (dados.project == null)
+                if (dados.Project == null)
                 {
-                    toggl.Mensagens.Add($"O nome do projeto da tarefa id: {dados.id}, não pode ser nulo");
+                    toggl.Mensagens.Add($"O nome do projeto da tarefa id: {dados.Id}, não pode ser nulo");
                 }
                 else
                 {
-                    var find = await _projetoRepository.ObterAsync(p => p.Nome == dados.project);
+                    var find = await _projetoRepository.ObterAsync(p => p.Nome == dados.Project);
 
                     var usuarioProjeto = new Usuario_Projeto();
 
@@ -91,7 +91,7 @@ namespace Chronos.Services
 
                     if (find == null)
                     {
-                        Projeto novoProjeto = new() { Nome = dados.project };
+                        Projeto novoProjeto = new() { Nome = dados.Project };
 
                         await _projetoRepository.CadastrarAsync(novoProjeto);
 
@@ -115,27 +115,27 @@ namespace Chronos.Services
                         var tarefa = new Tarefa
                         {
                             Usuario_ProjetoId = usuarioProjeto.Id,
-                            Descricao = dados.description,
-                            DataInicial = dados.start,
-                            DataFinal = dados.end,
-                            TogglId = dados.id.ToString()
+                            Descricao = dados.Description,
+                            DataInicial = dados.Start,
+                            DataFinal = dados.End,
+                            TogglId = dados.Id.ToString()
                         };
 
                         await _tarefaRepository.CadastrarAsync(tarefa);
                     }
                     else
                     {
-                        var tarefaFind = await _tarefaRepository.ObterAsync(t => t.TogglId == dados.id.ToString());
+                        var tarefaFind = await _tarefaRepository.ObterAsync(t => t.TogglId == dados.Id.ToString());
 
                         if (tarefaFind == null)
                         {
                             var tarefa = new Tarefa
                             {
                                 Usuario_ProjetoId = usuarioProjetoFind.Id,
-                                Descricao = dados.description,
-                                DataInicial = dados.start,
-                                DataFinal = dados.end,
-                                TogglId = dados.id.ToString()
+                                Descricao = dados.Description,
+                                DataInicial = dados.Start,
+                                DataFinal = dados.End,
+                                TogglId = dados.Id.ToString()
                             };
 
                             await _tarefaRepository.CadastrarAsync(tarefa);
