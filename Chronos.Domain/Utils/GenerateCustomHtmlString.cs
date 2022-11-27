@@ -47,7 +47,7 @@
                     $"<h2 class='header-info'>Olá {nome},</h2>" +
 
                     "<p class='text-info'>" +
-                      $"Aqui está o código: <b>{codigo}</b> e o token:  <b>{token}</b> para recuperar seu acesso!" +
+                      $"Aqui está o código: <b>{codigo}</b> e o token:  <b>{token}</b> para resetar sua senha!" +
                       "</p>" +
 
 
