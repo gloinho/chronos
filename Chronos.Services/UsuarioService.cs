@@ -178,10 +178,12 @@ namespace Chronos.Services
 
             await _usuarioRepository.AlterarAsync(user);
 
+            var emailRecuperacao = GenerateCustomHtmlString.CreateEnvioResetarSenhaHtml(user.Nome, codigo, token);
+
             await _emailService.Send(
                 request.Email,
                 "Recuperação de Senha Chronos",
-                $"Codigo: {codigo}, Token: {token}"
+                emailRecuperacao
             );
 
             return new MensagemResponse
