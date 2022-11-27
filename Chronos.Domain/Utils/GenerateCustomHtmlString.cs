@@ -13,12 +13,12 @@
                   "</head>" +
                   "<body>" +
                     "<div class='header'>" +
-                      "<img src='https://toppng.com/uploads/preview/hourglass-png-115539900289hejiiuvih.png'/>" +
+                      "<img src='https://cdn.dribbble.com/users/715283/screenshots/4699059/logo-anim00.gif'/>" +
                     "</div>" +
                     $"<h2 class='header-info'>Olá {nome},</h2>" +
 
                     "<p class='text-info'>" +
-                      $"Aqui está o token para configuração da sua nova conta Chronos! {token} " +
+                      $"Aqui está o token para configuração da sua nova conta Chronos! <b>{token}</b> " +
                       "</p>" +                   
 
                     
