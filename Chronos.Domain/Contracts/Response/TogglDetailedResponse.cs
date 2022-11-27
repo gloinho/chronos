@@ -1,43 +1,69 @@
-﻿namespace Chronos.Domain.Contracts.Response
+﻿using System.Text.Json.Serialization;
+
+namespace Chronos.Domain.Contracts.Response
 {
     public class TogglDetailedResponse
     {
-        //public ulong total_grand { get; set; }
-        //public ulong total_billable { get; set; }
-        //public ulong total_count { get; set; }
-        //public ulong per_page { get; set; }
-        //public Total_Currencies[] total_currencies { get; set; }
-
         public List<string> Mensagens { get; set; }
-        public Data[] data { get; set; }
+
+        [JsonPropertyName("data")]
+        public Data[] Data { get; set; }
     }
-
-    //public class Total_Currencies
-    //{
-    //    public string currency { get; set; }
-    //    public float amount { get; set; }
-    //}
-
     public class Data
     {
-        public ulong id { get; set; }
-        public ulong? pid { get; set; }
-        public ulong? tid { get; set; }
-        public ulong uid { get; set; }
-        public string description { get; set; }
-        public DateTime start { get; set; }
-        public DateTime end { get; set; }
-        public DateTime updated { get; set; }
-        public int dur { get; set; }
-        public string user { get; set; }
-        public bool use_stop { get; set; }
-        public string client { get; set; }
-        public string project { get; set; }
-        public string task { get; set; }
-        public float billable { get; set; }
-        public bool is_billable { get; set; }
-        public string cur { get; set; }
-        public string[] tags { get; set; }
+        [JsonPropertyName("id")]
+        public ulong Id { get; set; }
+
+        [JsonPropertyName("pid")]
+        public ulong? Pid { get; set; }
+
+        [JsonPropertyName("tid")]
+        public ulong? Tid { get; set; }
+
+        [JsonPropertyName("uid")]
+        public ulong Uid { get; set; }
+
+        [JsonPropertyName("description")]
+        public string Description { get; set; }
+
+        [JsonPropertyName("start")]
+        public DateTime Start { get; set; }
+
+        [JsonPropertyName("end")]
+        public DateTime End { get; set; }
+
+        [JsonPropertyName("updated")]
+        public DateTime Updated { get; set; }
+
+        [JsonPropertyName("dur")]
+        public int Dur { get; set; }
+
+        [JsonPropertyName("user")]
+        public string User { get; set; }
+
+        [JsonPropertyName("use_stop")]
+        public bool UseStop { get; set; }
+
+        [JsonPropertyName("client")]
+        public string Client { get; set; }
+
+        [JsonPropertyName("project")]
+        public string Project { get; set; }
+
+        [JsonPropertyName("task")]
+        public string Task { get; set; }
+
+        [JsonPropertyName("billable")]
+        public float Billable { get; set; }
+
+        [JsonPropertyName("is_billable")]
+        public bool IsBillable { get; set; }
+
+        [JsonPropertyName("cur")]
+        public string Cur { get; set; }
+
+        [JsonPropertyName("tags")]
+        public string[] Tags { get; set; }
     }
 
 }

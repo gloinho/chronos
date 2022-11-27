@@ -1,11 +1,14 @@
 ﻿using Chronos.Domain.Contracts.Request;
 using Chronos.Domain.Contracts.Response;
 using Chronos.Domain.Interfaces.Services;
+using Chronos.Domain.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chronos.Api.Controllers
 {
     [ApiController]
+    [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
     [Route("api/[controller]")]
     public class TogglController : ControllerBase
     {
@@ -22,11 +25,13 @@ namespace Chronos.Api.Controllers
         /// <returns></returns>
         /// <response code="200">Sucesso, e retorna as informações detalhadas do toggl </response>
         [HttpGet("importar")]
-        public async Task<TogglDetailedResponse> ObterHorasToggl(
+        public async Task<ActionResult<TogglDetailedResponse>> ObterHorasToggl(
             [FromQuery] TogglDetailedRequest request
         )
         {
-            return await _togglService.ObterHorasToggl(request);
+            var response = await _togglService.ObterHorasToggl(request);
+
+            return Ok(response);
         }
     }
 }
