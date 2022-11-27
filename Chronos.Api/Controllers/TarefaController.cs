@@ -16,46 +16,6 @@ namespace Chronos.Api.Controllers
         }
 
         /// <summary>
-        /// Através dessa rota você será capaz de iniciar uma tarefa.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        /// <response code="200">Retorna a tarefa que foi iniciada.</response>
-        [HttpPatch("{id}/start")]
-        public async Task<IActionResult> StartTarefa([FromRoute] int id)
-        {
-            var response = await _tarefaService.StartTarefa(id);
-            return Ok(response);
-        }
-
-        /// <summary>
-        /// Através dessa rota você será capaz de finalizar uma tarefa.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        /// <response code="200">Retorna a tarefa que foi finalizada.</response>
-        [HttpPatch("{id}/stop")]
-        public async Task<IActionResult> StopTarefa([FromRoute] int id)
-        {
-            var response = await _tarefaService.StopTarefa(id);
-            return Ok(response);
-        }
-
-        /// <summary>
-        /// Através dessa rota você será capaz de deletar uma tarefa.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        /// <response code="200">Sucesso, e retorna mensagem de sucesso.  </response>
-        [HttpDelete("{id}")]
-        [ProducesResponseType(200)]
-        public override async Task<IActionResult> DeletarAsync([FromRoute] int id)
-        {
-            var response = await _tarefaService.DeletarAsync(id);
-            return Ok(response);
-        }
-
-        /// <summary>
         /// Através dessa rota você será capaz de listar as tarefas de um usuário.
         /// </summary>
         /// <param name="usuarioId"></param>
@@ -96,5 +56,47 @@ namespace Chronos.Api.Controllers
             var response = await _tarefaService.ObterTarefasDoProjeto(projetoId);
             return Ok(response);
         }
+
+        /// <summary>
+        /// Através dessa rota você será capaz de iniciar uma tarefa.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <response code="200">Retorna a tarefa que foi iniciada.</response>
+        [HttpPatch("{id}/start")]
+        public async Task<IActionResult> StartTarefa([FromRoute] int id)
+        {
+            var response = await _tarefaService.StartTarefa(id);
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Através dessa rota você será capaz de finalizar uma tarefa.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <response code="200">Retorna a tarefa que foi finalizada.</response>
+        [HttpPatch("{id}/stop")]
+        public async Task<IActionResult> StopTarefa([FromRoute] int id)
+        {
+            var response = await _tarefaService.StopTarefa(id);
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Através dessa rota você será capaz de deletar uma tarefa.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <response code="200">Sucesso, e retorna mensagem de sucesso.  </response>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        public override async Task<IActionResult> DeletarAsync([FromRoute] int id)
+        {
+            var response = await _tarefaService.DeletarAsync(id);
+            return Ok(response);
+        }
+
+
     }
 }

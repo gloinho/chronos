@@ -52,25 +52,6 @@ namespace Chronos.Api.Controllers
         }
 
         /// <summary>
-        /// Através dessa rota você será capaz de inativar um colaborador em um projeto.
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        /// <response code="200">Sucesso, e retorna mensagem de sucesso. </response>
-        [HttpDelete("{id}/colaboradores")]
-        [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
-        [ProducesResponseType(200)]
-        public async Task<IActionResult> InativarColaboradoresAsync(
-            [FromRoute] int id,
-            [FromBody] ColaboradoresRequest request
-        )
-        {
-            var response = await _projetoService.InativarColaboradores(id, request);
-            return Ok(response);
-        }
-
-        /// <summary>
         /// Através dessa rota você será capaz de buscar um projeto pelo Id.
         /// </summary>
         /// <param name="id"></param>
@@ -115,6 +96,25 @@ namespace Chronos.Api.Controllers
         )
         {
             var response = await _projetoService.AlterarAsync(id, request);
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Através dessa rota você será capaz de inativar um colaborador em um projeto.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <response code="200">Sucesso, e retorna mensagem de sucesso. </response>
+        [HttpDelete("{id}/colaboradores")]
+        [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> InativarColaboradoresAsync(
+            [FromRoute] int id,
+            [FromBody] ColaboradoresRequest request
+        )
+        {
+            var response = await _projetoService.InativarColaboradores(id, request);
             return Ok(response);
         }
     }

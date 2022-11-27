@@ -19,21 +19,6 @@ namespace Chronos.Api.Controllers
         }
 
         /// <summary>
-        /// Através dessa rota você será capaz de mudar a permissão de um Usuario.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="permissao"></param>
-        /// <returns></returns>
-        /// <response code="200">   </response>
-        [HttpPatch("{id}")]
-        [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
-        public async Task<IActionResult> MudarPermissao([FromRoute] int id, [FromBody] Permissao permissao)
-        {
-            var response = await _usuarioService.MudarPermissao(id, permissao);
-            return Ok(response);
-        }
-
-        /// <summary>
         /// Através dessa rota você será capaz de cadastrar um usuário.
         /// </summary>
         /// <returns></returns>
@@ -71,6 +56,21 @@ namespace Chronos.Api.Controllers
         public async Task<IActionResult> AlterarSenha([FromBody] NovaSenhaRequest request)
         {
             var response = await _usuarioService.AlterarSenha(request);
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Através dessa rota você será capaz de mudar a permissão de um Usuario.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="permissao"></param>
+        /// <returns></returns>
+        /// <response code="200">   </response>
+        [HttpPatch("{id}")]
+        [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
+        public async Task<IActionResult> MudarPermissao([FromRoute] int id, [FromBody] Permissao permissao)
+        {
+            var response = await _usuarioService.MudarPermissao(id, permissao);
             return Ok(response);
         }
     }
