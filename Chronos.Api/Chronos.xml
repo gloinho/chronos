@@ -163,6 +163,15 @@
             <returns></returns>
             <response code="200">Sucesso, e retorna as informações detalhadas do toggl </response>
         </member>
+        <member name="M:Chronos.Api.Controllers.UsuarioController.MudarPermissao(System.Int32,Chronos.Domain.Entities.Enums.Permissao)">
+            <summary>
+            Através dessa rota você será capaz de mudar a permissão de um Usuario.
+            </summary>
+            <param name="id"></param>
+            <param name="permissao"></param>
+            <returns></returns>
+            <response code="200">   </response>
+        </member>
         <member name="M:Chronos.Api.Controllers.UsuarioController.CadastrarAsync(Chronos.Domain.Contracts.Request.UsuarioRequest)">
             <summary>
             Através dessa rota você será capaz de cadastrar um usuário.

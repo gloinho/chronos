@@ -70,6 +70,13 @@
 - Response:  
 `List<ProjetoResponse>` 
 
+# /api/usuario/{id} <span style="color:turquoise">PATCH</span> 
+> Muda permissão de um usuario.  
+> Permissões: Administradores.
+ 
+- Response:
+`MensagemResponse` 
+
 # /api/usuario <span style="color:green">POST</span> 
 > Cadastra um usuário.
 > Permissões: Allow Anonymous.
