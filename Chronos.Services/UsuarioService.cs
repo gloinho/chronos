@@ -2,6 +2,7 @@ using AutoMapper;
 using Chronos.Domain.Contracts.Request;
 using Chronos.Domain.Contracts.Response;
 using Chronos.Domain.Entities;
+using Chronos.Domain.Entities.Enums;
 using Chronos.Domain.Exceptions;
 using Chronos.Domain.Interfaces.Repository;
 using Chronos.Domain.Interfaces.Services;
@@ -41,6 +42,42 @@ namespace Chronos.Services
             _emailService = emailService;
             _appSettings = appSettings;
             _mapper = mapper;
+        }
+
+        public async Task<MensagemResponse> MudarPermissao(int id, Permissao permissao)
+        {
+            var usuario = await CheckSeIdExiste(id);
+
+            switch(usuario.Permissao)
+            {
+                case Permissao.Administrador:
+                    {
+                        if(permissao == Permissao.Administrador)
+                        {
+                            throw new BaseException(StatusException.NaoProcessado, new List<string> { "Usuario ja é Administrador." });
+                        }
+                        usuario.Permissao = permissao;
+                        break;
+                    }
+                case Permissao.Colaborador:
+                    {
+                        if (permissao == Permissao.Colaborador)
+                        {
+                            throw new BaseException(StatusException.NaoProcessado, new List<string> { "Usuario ja é colaborador." });
+                        }
+                        usuario.Permissao = permissao;
+                        break;
+                    }
+            }
+
+            await _usuarioRepository.AlterarAsync(usuario);
+
+            return new MensagemResponse()
+            {
+                Codigo = StatusException.Nenhum,
+                Mensagens = new List<string> { "Permissão alterada com sucesso"}
+            };
+
         }
 
         public async Task<MensagemResponse> CadastrarAsync(UsuarioRequest request)
@@ -217,5 +254,7 @@ namespace Chronos.Services
             }
             return usuario;
         }
+
+
     }
 }

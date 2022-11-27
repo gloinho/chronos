@@ -1,6 +1,8 @@
 using Chronos.Domain.Contracts.Request;
 using Chronos.Domain.Contracts.Response;
 using Chronos.Domain.Entities;
+using Chronos.Domain.Entities.Enums;
+using Chronos.Domain.Utils;
 
 namespace Chronos.Domain.Interfaces.Services
 {
@@ -8,5 +10,6 @@ namespace Chronos.Domain.Interfaces.Services
     {
         Task<MensagemResponse> AlterarSenha(NovaSenhaRequest request);
         Task<MensagemResponse> EnviarCodigoResetSenha(ResetSenhaRequest request);
+        Task<MensagemResponse> MudarPermissao(int id, Permissao permissao);
     }
 }

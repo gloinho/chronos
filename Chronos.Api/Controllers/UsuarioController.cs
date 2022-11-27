@@ -1,6 +1,7 @@
 using Chronos.Domain.Contracts.Request;
 using Chronos.Domain.Contracts.Response;
 using Chronos.Domain.Entities;
+using Chronos.Domain.Entities.Enums;
 using Chronos.Domain.Interfaces.Services;
 using Chronos.Domain.Utils;
 using Microsoft.AspNetCore.Authorization;
@@ -15,6 +16,21 @@ namespace Chronos.Api.Controllers
         public UsuarioController(IUsuarioService usuarioService) : base(usuarioService)
         {
             _usuarioService = usuarioService;
+        }
+
+        /// <summary>
+        /// Através dessa rota você será capaz de mudar a permissão de um Usuario.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="permissao"></param>
+        /// <returns></returns>
+        /// <response code="200">   </response>
+        [HttpPatch("{id}")]
+        [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
+        public async Task<IActionResult> MudarPermissao([FromRoute] int id, [FromBody] Permissao permissao)
+        {
+            var response = await _usuarioService.MudarPermissao(id, permissao);
+            return Ok(response);
         }
 
         /// <summary>

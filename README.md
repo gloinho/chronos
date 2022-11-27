@@ -248,6 +248,7 @@ Também são construidas as classes que irão interagir com o banco de dados, na
 - [/api/projeto/usuario/{usuarioId}](./ReadMeAssets/endpoints.md#apiprojetousuariousuarioid-get) `GET` <sub>Lista todos os projetos que um usuário participa.</sub>
 
 ## Usuario Controller 
+- [/api/usuario/{id}](./ReadMeAssets/endpoints.md#apiusuarioid-patch)  `PATCH` <sub>Muda a permissão de um Usuario.</sub>
 - [/api/usuario](./ReadMeAssets/endpoints.md#apiusuario-post)  `POST` <sub>Cadastra um usuário.</sub>
 - [/api/usuario](./ReadMeAssets/endpoints.md#apiusuario-get) `GET` <sub>Lista todos os usuários.</sub>
 - [/api/usuario/{id}](./ReadMeAssets/endpoints.md#apiusuarioid-delete) `DELETE` <sub>Remove um usuário.</sub>
