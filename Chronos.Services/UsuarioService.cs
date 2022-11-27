@@ -7,6 +7,7 @@ using Chronos.Domain.Interfaces.Repository;
 using Chronos.Domain.Interfaces.Services;
 using Chronos.Domain.Settings;
 using Chronos.Domain.Shared;
+using Chronos.Domain.Utils;
 using Chronos.Services.Validators;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
@@ -53,10 +54,11 @@ namespace Chronos.Services
                 user.Senha,
                 BCrypt.Net.BCrypt.GenerateSalt()
             );
+            var emailToken = GenerateCustomHtmlString.CreateEnvioTokenHtml(request.Nome, token);
             await _emailService.Send(
                 request.Email,
                 "Confirmação de Email Chronos",
-                $"Conclua a configuração da sua nova Conta Chronos com o token: {token}"
+                emailToken
             );
             await _usuarioRepository.CadastrarAsync(user);
             return new MensagemResponse
