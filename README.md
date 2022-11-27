@@ -116,7 +116,7 @@ Algumas outras bibliotecas externas utilizadas ao longo do desenvolvimento:
     - Um Usuario_Projeto pode ter zero ou várias (0-n) Tarefas.
 - Uma tarefa pertence a um e somente um Usuario_Projeto(1-1) (consequentemente a Tarefa está relacionada ao mesmo tempo com Usuário e Projeto)
 ## Diagrama de Classes
-- Para facilitar a visualização, acesse o [link para Draw.io](https://tinyurl.com/chronos-class-diagram)
+- Para facilitar a visualização, acesse o [link para Draw.io](https://app.diagrams.net/?libs=general;uml#Agloinho%2Fexercicio-semana-4%2Fmain%2Fchronos_class.drawio)
 # :hourglass: Camadas da Aplicação
 ## Chronos.Api
 - Camada responsável por fazer a aplicação se comunicar diretamente com o domínio. Nela, são construídas as classes que serão necessárias para a aplicação. A construção dessas classes, feitas por meio de injeção de dependencias com o intuito de reduzir o acomplamento da aplicação, é realizado com o auxílio da camada de inversão de controle.  

@@ -23,6 +23,7 @@ namespace Chronos.Api.Controllers
         /// <summary>
         /// Através dessa rota você será capaz ver os registros de horas do Toggl e importa-los para o Chronos.
         /// </summary>
+        /// <param name="request"></param>
         /// <returns></returns>
         /// <response code="200">Sucesso, e retorna as informações detalhadas do toggl </response>
         [HttpGet("importar")]

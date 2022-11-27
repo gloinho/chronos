@@ -60,12 +60,12 @@ namespace Chronos.Api.Controllers
         }
 
         /// <summary>
-        /// Através dessa rota você será capaz de mudar a permissão de um Usuario.
+        /// Através dessa rota você será capaz de alterar a permissão de um Usuario.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="permissao"></param>
         /// <returns></returns>
-        /// <response code="200">   </response>
+        /// <response code="200">Sucesso, e retorna a mensagem "Permissão alterada com sucesso"  </response>
         [HttpPatch("{id}")]
         [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
         public async Task<IActionResult> MudarPermissao([FromRoute] int id, [FromBody] Permissao permissao)
