@@ -42,6 +42,35 @@ namespace Chronos.Api.Controllers
         }
 
         /// <summary>
+        /// Através dessa rota você será capaz de buscar uma listagem de registros
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Sucesso, e retorna uma lista de elementos</response>
+        [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
+        [HttpGet()]
+        [ProducesResponseType(200)]
+        public virtual async Task<IActionResult> ObterTodosAsync()
+        {
+            var response = await _service.ObterTodosAsync();
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Através dessa rota você será capaz de buscar um registro pelo Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <response code="200">Sucesso, e retorna o elemento encontrado via ID</response>
+        [Authorize]
+        [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        public virtual async Task<IActionResult> ObterPorIdAsync([FromRoute] int id)
+        {
+            var response = await _service.ObterPorIdAsync(id);
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Através dessa rota você será capaz de alterar um registro do banco
         /// </summary>
         /// <returns></returns>
@@ -73,33 +102,6 @@ namespace Chronos.Api.Controllers
             return Ok(response);
         }
 
-        /// <summary>
-        /// Através dessa rota você será capaz de buscar uma listagem de registros
-        /// </summary>
-        /// <returns></returns>
-        /// <response code="200">Sucesso, e retorna uma lista de elementos</response>
-        [Authorize(Roles = PermissaoUtil.PermissaoAdministrador)]
-        [HttpGet()]
-        [ProducesResponseType(200)]
-        public virtual async Task<IActionResult> ObterTodosAsync()
-        {
-            var response = await _service.ObterTodosAsync();
-            return Ok(response);
-        }
 
-        /// <summary>
-        /// Através dessa rota você será capaz de buscar um registro pelo Id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        /// <response code="200">Sucesso, e retorna o elemento encontrado via ID</response>
-        [Authorize]
-        [HttpGet("{id}")]
-        [ProducesResponseType(200)]
-        public virtual async Task<IActionResult> ObterPorIdAsync([FromRoute] int id)
-        {
-            var response = await _service.ObterPorIdAsync(id);
-            return Ok(response);
-        }
     }
 }
