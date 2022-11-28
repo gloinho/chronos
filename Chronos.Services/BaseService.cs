@@ -11,18 +11,14 @@ namespace Chronos.Services
     {
         public readonly int? UsuarioId;
         public readonly string UsuarioPermissao;
-<<<<<<< HEAD
         public readonly string UsuarioCodigo;
         public readonly string UsuarioEmail;
         private readonly IBaseRepository<T> _repository;
-=======
->>>>>>> origin/main
 
         public BaseService(IHttpContextAccessor httpContextAccessor, IBaseRepository<T> repository)
         {
             UsuarioId = httpContextAccessor.HttpContext.GetClaim(ClaimTypes.NameIdentifier).ToInt();
             UsuarioPermissao = httpContextAccessor.HttpContext.GetClaim(ClaimTypes.Role);
-<<<<<<< HEAD
             UsuarioCodigo = httpContextAccessor.HttpContext.GetClaim(ClaimTypes.NameIdentifier);
             UsuarioEmail = httpContextAccessor.HttpContext.GetClaim(ClaimTypes.Email);
             _repository = repository;
@@ -36,8 +32,6 @@ namespace Chronos.Services
                 throw new BaseException(StatusException.NaoEncontrado, $"Id {id} não cadastrado.");
             }
             return entity;
-=======
->>>>>>> origin/main
         }
     }
 }

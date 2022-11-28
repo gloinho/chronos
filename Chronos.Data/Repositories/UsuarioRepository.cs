@@ -15,15 +15,5 @@ namespace Chronos.Data.Repositories
             usuario.Confirmado = true;
             await AlterarAsync(usuario);
         }
-
-        public async Task<Usuario> GetPorEmail(string email)
-        {
-            return await base._context.Usuarios.FirstOrDefaultAsync(user => user.Email == email);
-        }
-
-        public async Task<Usuario> GetPorToken(string token)
-        {
-            return await base._context.Usuarios.FirstOrDefaultAsync(user => user.ConfirmacaoToken == token);
-        }
     }
 }

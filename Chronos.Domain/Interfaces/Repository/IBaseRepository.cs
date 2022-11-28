@@ -1,3 +1,5 @@
+using System.Linq.Expressions;
+
 namespace Chronos.Domain.Interfaces.Repository
 {
     public interface IBaseRepository<T> where T : class
@@ -6,6 +8,7 @@ namespace Chronos.Domain.Interfaces.Repository
         Task<T> AlterarAsync(T entidade);
         Task<ICollection<T>> ObterTodosAsync();
         Task<T> ObterPorIdAsync(int id);
-        Task<T> DeletarAsync(T entidade);
+        Task DeletarAsync(T entidade);
+        Task<T> ObterAsync(Expression<Func<T, bool>> expression);
     }
 }
