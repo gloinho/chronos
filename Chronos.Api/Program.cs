@@ -1,4 +1,4 @@
-using Chronos.Api.Filters;
+﻿using Chronos.Api.Filters;
 using Chronos.Api.Handlers;
 using Chronos.Domain.Settings;
 using Chronos.IoC;
@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using System.Text.Json.Serialization;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,10 +17,15 @@ var connectionString = builder.Configuration.GetConnectionString("ChronosDb");
 
 #region Filters
 
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add(typeof(ExceptionFilter));
-});
+builder.Services
+    .AddControllers(options =>
+    {
+        options.Filters.Add(typeof(ExceptionFilter));
+    })
+    .AddJsonOptions(
+        options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter())
+    );
+;
 #endregion
 
 #region HttpContext
@@ -29,6 +35,21 @@ builder.Services.AddHttpContextAccessor();
 #region Swagger
 builder.Services.AddSwaggerGen(c =>
 {
+    c.SwaggerDoc(
+        "v1",
+        new OpenApiInfo()
+        {
+            Title = "⌛ Chronos ⌛",
+            Version = "v1",
+            Description = "Solução para gestão de horas em projetos Raro Labs.",
+            Contact = new OpenApiContact()
+            {
+                Name = "Repositório",
+                Url = new Uri("https://gitlab.com/gloinho/chronos")
+            },
+        }
+    );
+
     c.AddSecurityDefinition(
         "Bearer",
         new OpenApiSecurityScheme()
@@ -58,6 +79,14 @@ builder.Services.AddSwaggerGen(c =>
             }
         }
     );
+<<<<<<< HEAD
+
+    var xmlFile = "Chronos.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+    c.IncludeXmlComments(xmlPath);
+=======
+>>>>>>> origin/main
 });
 
 #endregion
