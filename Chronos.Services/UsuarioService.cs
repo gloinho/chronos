@@ -54,7 +54,7 @@ namespace Chronos.Services
                     {
                         if(permissao == Permissao.Administrador)
                         {
-                            throw new BaseException(StatusException.NaoProcessado, new List<string> { "Usuario ja é Administrador." });
+                            throw new BaseException(StatusException.NaoProcessado, new List<string> {"Usuario ja é Administrador."});
                         }
                         usuario.Permissao = permissao;
                         break;
@@ -75,7 +75,7 @@ namespace Chronos.Services
             return new MensagemResponse()
             {
                 Codigo = StatusException.Nenhum,
-                Mensagens = new List<string> { "Permissão alterada com sucesso"}
+                Mensagens = new List<string> {"Permissão alterada com sucesso."}
             };
 
         }
@@ -112,7 +112,9 @@ namespace Chronos.Services
         public async Task<MensagemResponse> AlterarAsync(int id, UsuarioRequest request)
         {
             await _usuario_ProjetoService.CheckPermissao(id);
+
             var usuario = await CheckSeIdExiste(id);
+
             await _validator.ValidateAndThrowAsync(request);
 
             await _logService.LogAsync(nameof(UsuarioService), nameof(AlterarAsync), id, UsuarioId);
@@ -121,7 +123,9 @@ namespace Chronos.Services
                 request.Senha,
                 BCrypt.Net.BCrypt.GenerateSalt()
             );
+
             await _usuarioRepository.AlterarAsync(_mapper.Map(request, usuario));
+
             return new MensagemResponse
             {
                 Codigo = StatusException.Nenhum,

@@ -121,6 +121,7 @@
             Através dessa rota você será capaz de listar as tarefas de um usuário a partir de um filtro.
             </summary>
             <param name="usuarioId"></param>
+            <param name="filter_by"></param>
             <returns></returns>
             <response code="200">Sucesso, e retorna uma lista de tarefas." </response>
         </member>
@@ -160,6 +161,7 @@
             <summary>
             Através dessa rota você será capaz ver os registros de horas do Toggl e importa-los para o Chronos.
             </summary>
+            <param name="request"></param>
             <returns></returns>
             <response code="200">Sucesso, e retorna as informações detalhadas do toggl </response>
         </member>
@@ -186,12 +188,12 @@
         </member>
         <member name="M:Chronos.Api.Controllers.UsuarioController.MudarPermissao(System.Int32,Chronos.Domain.Entities.Enums.Permissao)">
             <summary>
-            Através dessa rota você será capaz de mudar a permissão de um Usuario.
+            Através dessa rota você será capaz de alterar a permissão de um Usuario.
             </summary>
             <param name="id"></param>
             <param name="permissao"></param>
             <returns></returns>
-            <response code="200">   </response>
+            <response code="200">Sucesso, e retorna a mensagem "Permissão alterada com sucesso"  </response>
         </member>
     </members>
 </doc>

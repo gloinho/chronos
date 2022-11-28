@@ -38,6 +38,132 @@ namespace Chronos.Testes.Services
         }
 
         [TestMethod]
+        public async Task TestTornarUsuarioAdministradorEmColaborador()
+        {
+            var usuario = UsuarioFaker.GetUsuario();
+
+            usuario.Permissao = Permissao.Administrador;
+
+
+            var claims = ClaimConfig.Get(usuario.Id, usuario.Email, Permissao.Administrador);
+
+            _mockHttpContextAccessor.Setup(mock => mock.HttpContext.User.Claims).Returns(claims);
+
+            _mockUsuarioRepository.Setup(mock => mock.ObterPorIdAsync(usuario.Id)).ReturnsAsync(usuario);
+
+            _mockUsuarioRepository.Setup(mock => mock.AlterarAsync(usuario)).ReturnsAsync(It.IsAny<Usuario>());
+
+            var service = new UsuarioService(
+                _mockUsuario_ProjetoService.Object,
+                _mockUsuarioRepository.Object,
+                _mockLogService.Object,
+                _mockEmailService.Object,
+                _appSettings,
+                _mapper,
+                _mockHttpContextAccessor.Object
+            );
+
+            var result = await service.MudarPermissao(usuario.Id, Permissao.Colaborador);
+            Assert.AreEqual("Permissão alterada com sucesso.", result.Mensagens[0]);
+        }
+
+        [TestMethod]
+        public async Task TestTornarAdministradorUmUsuarioQueJaPossueEssaPermissao()
+        {
+            var usuario = UsuarioFaker.GetUsuario();
+
+            usuario.Permissao = Permissao.Administrador;
+
+
+            var claims = ClaimConfig.Get(usuario.Id, usuario.Email, Permissao.Administrador);
+
+            _mockHttpContextAccessor.Setup(mock => mock.HttpContext.User.Claims).Returns(claims);
+
+            _mockUsuarioRepository.Setup(mock => mock.ObterPorIdAsync(usuario.Id)).ReturnsAsync(usuario);
+
+            _mockUsuarioRepository.Setup(mock => mock.AlterarAsync(usuario)).ReturnsAsync(It.IsAny<Usuario>());
+
+            var service = new UsuarioService(
+                _mockUsuario_ProjetoService.Object,
+                _mockUsuarioRepository.Object,
+                _mockLogService.Object,
+                _mockEmailService.Object,
+                _appSettings,
+                _mapper,
+                _mockHttpContextAccessor.Object
+            );
+
+            var result = await Assert.ThrowsExceptionAsync<BaseException>(
+                             () => service.MudarPermissao(usuario.Id, Permissao.Administrador)
+                         );
+            Assert.AreEqual("Usuario ja é Administrador.", result.Mensagens[0]);
+
+        }
+
+        [TestMethod]
+        public async Task TestTornarUsuarioColaboradorEmAdministrador()
+        {
+            var usuario = UsuarioFaker.GetUsuario();
+
+            usuario.Permissao = Permissao.Colaborador;
+
+
+            var claims = ClaimConfig.Get(usuario.Id, usuario.Email, Permissao.Administrador);
+
+            _mockHttpContextAccessor.Setup(mock => mock.HttpContext.User.Claims).Returns(claims);
+
+            _mockUsuarioRepository.Setup(mock => mock.ObterPorIdAsync(usuario.Id)).ReturnsAsync(usuario);
+
+            _mockUsuarioRepository.Setup(mock => mock.AlterarAsync(usuario)).ReturnsAsync(It.IsAny<Usuario>());
+
+            var service = new UsuarioService(
+                _mockUsuario_ProjetoService.Object,
+                _mockUsuarioRepository.Object,
+                _mockLogService.Object,
+                _mockEmailService.Object,
+                _appSettings,
+                _mapper,
+                _mockHttpContextAccessor.Object
+            );
+
+            var result = await service.MudarPermissao(usuario.Id, Permissao.Administrador);
+            Assert.AreEqual("Permissão alterada com sucesso.", result.Mensagens[0]);
+        }
+
+        [TestMethod]
+        public async Task TestTornarColaboradorUmUsuarioQueJaPossueEssaPermissao()
+        {
+            var usuario = UsuarioFaker.GetUsuario();
+
+            usuario.Permissao = Permissao.Colaborador;
+
+
+            var claims = ClaimConfig.Get(usuario.Id, usuario.Email, Permissao.Administrador);
+
+            _mockHttpContextAccessor.Setup(mock => mock.HttpContext.User.Claims).Returns(claims);
+
+            _mockUsuarioRepository.Setup(mock => mock.ObterPorIdAsync(usuario.Id)).ReturnsAsync(usuario);
+
+            _mockUsuarioRepository.Setup(mock => mock.AlterarAsync(usuario)).ReturnsAsync(It.IsAny<Usuario>());
+
+            var service = new UsuarioService(
+                _mockUsuario_ProjetoService.Object,
+                _mockUsuarioRepository.Object,
+                _mockLogService.Object,
+                _mockEmailService.Object,
+                _appSettings,
+                _mapper,
+                _mockHttpContextAccessor.Object
+            );
+
+            var result = await Assert.ThrowsExceptionAsync<BaseException>(
+                             () => service.MudarPermissao(usuario.Id, Permissao.Colaborador)
+                         );
+            Assert.AreEqual("Usuario ja é colaborador.", result.Mensagens[0]);
+
+        }
+
+        [TestMethod]
         public async Task TestCadastrarAsync()
         {
             var request = UsuarioToContractFaker.GetRequest();
