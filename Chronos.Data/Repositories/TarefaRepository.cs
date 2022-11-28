@@ -10,8 +10,9 @@ namespace Chronos.Data.Repositories
         public TarefaRepository(ApplicationDbContext manutencaoContext) : base(manutencaoContext)
         { }
 
-        public override async Task<Tarefa> ObterPorIdAsync(int id)
+        public async Task<List<Usuario_Projeto>> GetTarefasDia(int usuarioId)
         {
+<<<<<<< HEAD
             var tarefa = await _context.Tarefas
                 .Where(p => p.Id == id)
                 .Include(p => p.Usuario_Projeto)
@@ -36,21 +37,31 @@ namespace Chronos.Data.Repositories
         public async Task<List<Tarefa>> ObterPorUsuarioIdAsync(int usuarioId)
         {
             var tarefas = await _context.Usuarios_Projetos
+=======
+            var tarefas = await base._context.Usuarios_Projetos
+>>>>>>> origin/main
                 .Where(up => up.UsuarioId == usuarioId)
+                .Include(up => up.Projeto)
                 .Include(up => up.Tarefas)
+<<<<<<< HEAD
                 .ThenInclude(t => t.Usuario_Projeto)
                 .ThenInclude(up => up.Projeto)
                 .Include(up => up.Usuario)
                 .SelectMany(t => t.Tarefas)
+=======
+                .Where(t => t.DataInclusao == DateTime.Today)
+>>>>>>> origin/main
                 .ToListAsync();
             return tarefas;
         }
 
-        public async Task<List<Tarefa>> GetTarefasDia(int usuarioId)
+        public async Task<List<Usuario_Projeto>> GetTarefasMes(int usuarioId)
         {
-            var tarefas = await _context.Usuarios_Projetos
+            var tarefas = await base._context.Usuarios_Projetos
                 .Where(up => up.UsuarioId == usuarioId)
+                .Include(up => up.Projeto)
                 .Include(up => up.Tarefas)
+<<<<<<< HEAD
                 .ThenInclude(t => t.Usuario_Projeto)
                 .ThenInclude(up => up.Projeto)
                 .Include(up => up.Usuario)
@@ -62,15 +73,20 @@ namespace Chronos.Data.Repositories
                                 && DateTime.Today == t.DataFinal.Value.Date
                         )
                 )
+=======
+                .Where(t => t.DataInclusao.Month == DateTime.Today.Month)
+>>>>>>> origin/main
                 .ToListAsync();
             return tarefas;
         }
 
-        public async Task<List<Tarefa>> GetTarefasSemana(int usuarioId)
+        public async Task<List<Usuario_Projeto>> GetTarefasProjeto(int projetoId)
         {
-            var tarefas = await _context.Usuarios_Projetos
-                .Where(up => up.UsuarioId == usuarioId)
+            var tarefas = await base._context.Usuarios_Projetos
+                .Where(up => up.ProjetoId == projetoId)
+                .Include(up => up.Projeto)
                 .Include(up => up.Tarefas)
+<<<<<<< HEAD
                 .ThenInclude(t => t.Usuario_Projeto)
                 .ThenInclude(up => up.Projeto)
                 .Include(up => up.Usuario)
@@ -109,12 +125,15 @@ namespace Chronos.Data.Repositories
                                 ) == 0
                         )
                 )
+=======
+>>>>>>> origin/main
                 .ToListAsync();
             return tarefas;
         }
 
-        public async Task<List<Tarefa>> GetTarefasProjeto(int projetoId)
+        public Task<List<Usuario_Projeto>> GetTarefasSemana(int usuarioId)
         {
+<<<<<<< HEAD
             var tarefas = await _context.Usuarios_Projetos
                 .Where(u => u.ProjetoId == projetoId)
                 .Include(p => p.Tarefas)
@@ -123,6 +142,9 @@ namespace Chronos.Data.Repositories
                 .SelectMany(p => p.Tarefas)
                 .ToListAsync();
             return tarefas;
+=======
+            throw new NotImplementedException();
+>>>>>>> origin/main
         }
     }
 }

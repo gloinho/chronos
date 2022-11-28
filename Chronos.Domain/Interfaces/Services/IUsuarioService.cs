@@ -8,8 +8,11 @@ namespace Chronos.Domain.Interfaces.Services
 {
     public interface IUsuarioService : IBaseService<UsuarioRequest, UsuarioResponse>
     {
+<<<<<<< HEAD
         Task<MensagemResponse> AlterarSenha(NovaSenhaRequest request);
         Task<MensagemResponse> EnviarCodigoResetSenha(ResetSenhaRequest request);
         Task<MensagemResponse> MudarPermissao(int id, Permissao permissao);
+=======
+>>>>>>> origin/main
     }
 }

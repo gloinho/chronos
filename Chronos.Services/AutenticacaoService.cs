@@ -27,17 +27,14 @@ namespace Chronos.Services
 
         public async Task<MensagemResponse> Login(LoginRequest request)
         {
-            var usuario = await _usuarioRepository.ObterAsync(u => u.Email == request.Email);
+            var usuario = await _usuarioRepository.GetPorEmail(request.Email);
             if (usuario == null)
             {
-                throw new BaseException(
-                    StatusException.NaoEncontrado,
-                    "Usuário não cadastrado, ou email incorreto."
-                );
+                throw new BaseException(StatusException.NaoEncontrado, "Usuário não cadastrado, ou email incorreto.");
             }
             if (!BCrypt.Net.BCrypt.Verify(request.Senha, usuario.Senha))
             {
-                throw new BaseException(StatusException.NaoProcessado, "Senha incorreta.");
+                throw new BaseException(StatusException.Erro, "Senha incorreta.");
             }
             ;
             if (!usuario.Confirmado)
@@ -45,6 +42,7 @@ namespace Chronos.Services
                 throw new BaseException(StatusException.NaoProcessado, "E-mail não confirmado.");
             }
             var token = Token.GenerateToken(usuario, _appSettings.SecurityKey);
+<<<<<<< HEAD
             await _logService.LogAsync(
                 nameof(AutenticacaoService),
                 nameof(Login),
@@ -54,24 +52,24 @@ namespace Chronos.Services
             return new MensagemResponse
             {
                 Codigo = StatusException.Nenhum,
+=======
+            return new MensagemResponse { 
+                Codigo = StatusException.Nenhum, 
+>>>>>>> origin/main
                 Mensagens = new List<string> { token },
                 Detalhe = "Token para autenticação na plataforma."
-            };
+             };
         }
 
         public async Task<MensagemResponse> Confirmar(string token)
         {
-            var usuario = await _usuarioRepository.ObterAsync(u => u.ConfirmacaoToken == token);
+            var usuario = await _usuarioRepository.GetPorToken(token);
             if (usuario == null)
             {
-                throw new BaseException(StatusException.NaoProcessado, "Token inválido.");
+                throw new BaseException(StatusException.NaoEncontrado, "Token inválido.");
             }
             await _usuarioRepository.Confirmar(usuario);
-            return new MensagemResponse
-            {
-                Codigo = StatusException.Nenhum,
-                Mensagens = new List<string> { "Usuário Confirmado com sucesso." }
-            };
+            return new MensagemResponse { Codigo= StatusException.Nenhum,Mensagens=new List<string> { "Usuário Confirmado com sucesso." } };
         }
     }
 }

@@ -21,6 +21,7 @@ namespace Chronos.Api.Filters
                 response.Detalhe =
                     $"{context.Exception?.Message} | {context.Exception?.InnerException?.Message}";
             }
+<<<<<<< HEAD
             else
             {
                 response.Codigo = StatusException.Erro;
@@ -30,6 +31,9 @@ namespace Chronos.Api.Filters
             }
 
             if (context.Exception is FluentValidation.ValidationException)
+=======
+            if(context.Exception is FluentValidation.ValidationException)
+>>>>>>> origin/main
             {
                 var infoex = (FluentValidation.ValidationException)context.Exception;
                 response.Codigo = StatusException.FormatoIncorreto;
@@ -43,5 +47,6 @@ namespace Chronos.Api.Filters
             OnException(context);
             return Task.CompletedTask;
         }
+
     }
 }

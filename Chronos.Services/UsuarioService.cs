@@ -18,18 +18,22 @@ namespace Chronos.Services
     public class UsuarioService : BaseService<Usuario>, IUsuarioService
     {
         private readonly IUsuarioRepository _usuarioRepository;
+<<<<<<< HEAD
         private readonly IUsuario_ProjetoService _usuario_ProjetoService;
         private readonly ILogService _logService;
         private readonly IEmailService _emailService;
         private readonly UsuarioRequestValidator _validator = new();
         private readonly NovaSenhaRequestValidator _validatorNovaSenha = new();
+=======
+        private readonly IEmailService _emailService;
+        private readonly UsuarioRequestValidator validator = new UsuarioRequestValidator();
+>>>>>>> origin/main
         private readonly AppSettings _appSettings;
         private readonly IMapper _mapper;
 
         public UsuarioService(
             IUsuario_ProjetoService usuario_ProjetoService,
             IUsuarioRepository usuarioRepository,
-            ILogService logService,
             IEmailService emailService,
             AppSettings appSettings,
             IMapper mapper,
@@ -38,7 +42,6 @@ namespace Chronos.Services
         {
             _usuario_ProjetoService = usuario_ProjetoService;
             _usuarioRepository = usuarioRepository;
-            _logService = logService;
             _emailService = emailService;
             _appSettings = appSettings;
             _mapper = mapper;
@@ -101,16 +104,21 @@ namespace Chronos.Services
             return new MensagemResponse
             {
                 Codigo = StatusException.Nenhum,
+<<<<<<< HEAD
                 Mensagens = new List<string>
                 {
                     "Enviamos um token para seu email. Por favor, faça a confirmação."
                 },
                 Detalhe = $"Id: {user.Id}"
+=======
+                Mensagens = new List<string> { "Enviamos um token para seu email. Por favor, faça a confirmação." }
+>>>>>>> origin/main
             };
         }
 
         public async Task<MensagemResponse> AlterarAsync(int id, UsuarioRequest request)
         {
+<<<<<<< HEAD
             await _usuario_ProjetoService.CheckPermissao(id);
 
             var usuario = await CheckSeIdExiste(id);
@@ -124,6 +132,12 @@ namespace Chronos.Services
                 BCrypt.Net.BCrypt.GenerateSalt()
             );
 
+=======
+            CheckPermissao(id);
+            var usuario = await CheckSeIdExiste(id);
+            await validator.ValidateAndThrowAsync(request);
+            usuario.DataAlteracao = DateTime.Now;
+>>>>>>> origin/main
             await _usuarioRepository.AlterarAsync(_mapper.Map(request, usuario));
 
             return new MensagemResponse
@@ -136,9 +150,12 @@ namespace Chronos.Services
         public async Task<MensagemResponse> DeletarAsync(int id)
         {
             var usuario = await CheckSeIdExiste(id);
+<<<<<<< HEAD
 
             await _logService.LogAsync(nameof(UsuarioService), nameof(DeletarAsync), id, UsuarioId);
 
+=======
+>>>>>>> origin/main
             await _usuarioRepository.DeletarAsync(usuario);
             return new MensagemResponse
             {
@@ -158,13 +175,11 @@ namespace Chronos.Services
         public async Task<List<UsuarioResponse>> ObterTodosAsync()
         {
             var usuarios = await _usuarioRepository.ObterTodosAsync();
-            var usuariosOrdenados = _mapper
-                .Map<List<UsuarioResponse>>(usuarios)
-                .OrderBy(u => u.Nome)
-                .ToList();
+            var usuariosOrdenados = _mapper.Map<List<UsuarioResponse>>(usuarios).OrderBy(u => u.Nome).ToList();
             return usuariosOrdenados;
         }
 
+<<<<<<< HEAD
         public async Task<MensagemResponse> AlterarSenha(NovaSenhaRequest request)
         {
             var user = await _usuarioRepository.ObterAsync(u => u.Email == UsuarioEmail);
@@ -237,15 +252,18 @@ namespace Chronos.Services
             };
         }
 
+=======
+>>>>>>> origin/main
         private async Task CheckSeJaEstaCadastrado(string email)
         {
-            var user = await _usuarioRepository.ObterAsync(u => u.Email == email);
+            var user = await _usuarioRepository.GetPorEmail(email);
             if (user != null)
             {
                 throw new BaseException(StatusException.Erro, "E-mail já cadastrado");
             }
         }
 
+<<<<<<< HEAD
         private async Task<Usuario> CheckSeEmailExiste(string email)
         {
             var usuario = await _usuarioRepository.ObterAsync(u => u.Email == email);
@@ -255,10 +273,28 @@ namespace Chronos.Services
                     StatusException.NaoEncontrado,
                     $"Usuário com o email {email} não cadastrado."
                 );
+=======
+        private async Task<Usuario> CheckSeIdExiste(int id)
+        {
+            var usuario = await _usuarioRepository.ObterPorIdAsync(id);
+            if (usuario == null)
+            {
+                throw new BaseException(StatusException.NaoEncontrado, $"Usuário com o id {id} não cadastrado.");
+>>>>>>> origin/main
             }
             return usuario;
         }
 
+<<<<<<< HEAD
 
+=======
+        private void CheckPermissao(int id)
+        {
+            if (UsuarioPermissao == PermissaoUtil.PermissaoColaborador && id != UsuarioId)
+            {
+                throw new BaseException(StatusException.NaoAutorizado, $"Colaborador não pode acessar.");
+            }
+        }
+>>>>>>> origin/main
     }
 }

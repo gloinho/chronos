@@ -10,7 +10,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<Usuario_Projeto> Usuarios_Projetos { get; set; }
     public DbSet<Tarefa> Tarefas { get; set; }
     public DbSet<Projeto> Projetos { get; set; }
-    public DbSet<Log> Logs { get; set; }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
 
