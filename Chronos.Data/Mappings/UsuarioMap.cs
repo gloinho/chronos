@@ -17,5 +17,6 @@ public class UsuarioMap : IEntityTypeConfiguration<Usuario>
                 prop => prop.ToString(),
                 prop => (Permissao)Enum.Parse(typeof(Permissao), prop)
             );
+
     }
 }
